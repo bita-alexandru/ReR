@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "nodemonConfig": {
-    "ignore": []
+    "ignore": ["./views"]
   },
   "scripts": {
     "watch": "nodemon",
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "mongoose": "^5.9.17",
     "nodemon": "^2.0.4"
   }
 }
