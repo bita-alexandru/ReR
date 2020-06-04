@@ -1,3 +1,1 @@
-npm init -y
-npm i nodemon
-npm i mongoose
+https://trello.com/b/fdTSmCt9/rer
