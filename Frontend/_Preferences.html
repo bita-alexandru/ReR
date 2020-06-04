@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <title>#nbsp;</title>
+</head>
+
+<div class="card">
+    <form>
+        <div class="row mb-1">
+            <div class="col-3">
+                Sport
+            </div>
+            <div class="col-6">
+                <input type="checkbox" id="sport" name="sport" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-3">
+                Animale
+            </div>
+            <div class="col-6">
+                <input onchange="toggleDependentCheckbox('animale', 'zebra')" type="checkbox" id="animale" name="animale" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-3">
+                Zebra
+            </div>
+            <div class="col-6">
+                <input type="checkbox" disabled id="zebra" name="zebra" />
+            </div>
+        </div>
+    </form>
+</div>
