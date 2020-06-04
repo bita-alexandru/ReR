@@ -10,39 +10,38 @@
   <!-- <meta name="author" content="SitePoint"> -->
 
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="gridstyle.css">
 
 </head>
-
 <body>
   <script src="scripts.js"></script>
 
-  <div class="header">
-    <div class="logo-container ml-1 mt-1">
+  <div class="row">
+    <div class="col-2 offset-1 center">
       <h1>LOGO</h1>
     </div>
   </div>
 
+  <div class="row">
+    <div class="offset-1 col-2">
+      <div class="sidebar">
+        <div class="w-75">
+          <div onclick="loadPage('_Home.html')" class="btn center">Home</div>
+          <div onclick="loadPage('_Preferences.html')" class="btn center">Preferences</div>
+          <div onclick="loadPage('_Account.html')" class="btn center">Account</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-7 ml-1">
+      <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto;">
 
-  <div class="sidebar ml-1 mt-1">
-    <ul>
-      <li><a href="#"> Feed </a></li>
-      <li><a href="#"> Preferences </a></li>
-      <li><a href="#"> Account </a></li>
-
-    </ul>
-
+      </div>
+    </div>
   </div>
-
-
-
-
-
-
-
-
-
-
 
 </body>
 
+<script>
+  loadPage('_Home.html');
+</script>
 </html>
