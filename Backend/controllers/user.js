@@ -1,11 +1,11 @@
 const http = require('http');
-const userModel = require('../models/user');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const userModel = require('../models/user');
 const feedView = require('../views/feed');
 const preferencesView = require('../views/preferences');
 const accountView = require('../views/account');
-const bcrypt = require('bcrypt');
-
+const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
     if (data.method === 'POST') {
@@ -16,17 +16,16 @@ function register(data, response) {
 
             userModel.findOne({ username: username }, (err, user) => {
                 if (err) {
-                    response.writeHead(500, { 'Content-type': 'text/html' });
-                    response.end('<center><h1>500 Internal Server Error</h1></center>');
+                    httpErrorView.internalServerError(data, response);
                 } else {
                     if (user) {
-                        response.writeHead(409, { 'Content-type': 'text/html' });
-                        response.end('<center><h1>409 Conflict</h1></center>');
+                        httpErrorView.conflict(data, response);
                     } else {
                         const saltRounds = 13;
+
                         bcrypt.hash(password, saltRounds, (err, hash) => {
                             if (err) {
-                                console.log("error " + err);
+                                httpErrorView.internalServerError(data, response);
                             } else {
                                 const User = new userModel({
                                     _id: mongoose.Types.ObjectId(),
@@ -35,8 +34,7 @@ function register(data, response) {
                                 });
                                 User.save((err, result) => {
                                     if (err) {
-                                        response.writeHead(500, { 'Content-type': 'text/html' });
-                                        response.end('<center><h1>500 Internal Server Error</h1></center>');
+                                        httpErrorView.internalServerError(data, response);
                                     } else {
                                         response.writeHead(200, { 'Content-type': 'text/json' });
                                         response.end(JSON.stringify(values));
@@ -48,13 +46,11 @@ function register(data, response) {
                 }
             });
         } catch {
-            response.writeHead(400, { 'Content-type': 'text/html' });
-            response.end('<center><h1>400 Bad Request</h1></center>');
+            httpErrorView.badRequest(data, response);
         }
 
     } else {
-        response.writeHead(400, { 'Content-type': 'text/html' });
-        response.end('<center><h1>400 Bad Request</h1></center>');
+        httpErrorView.badRequest(data, response);
     }
 }
 
