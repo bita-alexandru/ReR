@@ -2,7 +2,8 @@ const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const userController = require('./user');
-const viewController = require('./view');
+const assetView = require('../views/asset');
+const notFoundView = require('../views/not_found');
 
 let server = http.createServer((request, response) => {
     let parsedUrl = url.parse(request.url, true);
@@ -32,16 +33,14 @@ let server = http.createServer((request, response) => {
             'payload': buffer
         };
 
-        let file = __dirname + `/../views/${trimmedPath}`;
-
         if (trimmedPath.startsWith('assets/')) {
             if (trimmedPath.endsWith('.css')) {
-                viewController.getCSS(file, response, 200);
+                assetView.getCSS(data, response);
             }
             else if (trimmedPath.endsWith('.js')) {
-                viewController.getJS(file, response, 200);
+                assetView.getJS(data, response);
             } else if (trimmedPath.endsWith('.ico')) {
-                //viewController.getICO(file, response, 200);
+                //assetView.getICO(data, response);
             }
         } else {
             handler(data, response);
@@ -64,9 +63,7 @@ const router = {
     '': userController.feed,
     'preferences': userController.preferences,
     'not_found': function notFound(data, response) {
-        let file = __dirname + '/../views/not_found.html';
-
-        viewController.getHTML(file, response, 404);
+        notFoundView.notFound(data, response);
     }
 };
 

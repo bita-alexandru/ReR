@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "nodemonConfig": {
-    "ignore": ["./views"]
+    "ignore": [
+      "./views"
+    ]
   },
   "scripts": {
     "watch": "nodemon",

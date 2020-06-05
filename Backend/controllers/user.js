@@ -1,6 +1,8 @@
 const http = require('http');
-const viewController = require('./view');
 const user = require('../models/user');
+const feedView = require('../views/feed');
+const preferencesView = require('../views/preferences');
+const accountView = require('../views/account');
 
 function register(data, response) {
     response.end();
@@ -15,9 +17,7 @@ function logout(data, response) {
 }
 
 function account(data, response) {
-    let file = __dirname + '/../views/account.html';
-
-    viewController.getHTML(file, response, 200);
+    accountView.account(data, response);
 }
 
 function deleteAccount(data, response) {
@@ -25,15 +25,11 @@ function deleteAccount(data, response) {
 }
 
 function feed(data, response) {
-    let file = __dirname + '/../views/feed.html';
-
-    viewController.getHTML(file, response, 200);
+    feedView.feed(data, response);
 }
 
 function preferences(data, response) {
-    let file = __dirname + '/../views/preferences.html';
-
-    viewController.getHTML(file, response, 200);
+    preferencesView.preferences(data, response);
 }
 
 module.exports = { register, login, logout, account, deleteAccount, feed, preferences };
