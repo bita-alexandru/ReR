@@ -7,5 +7,5 @@
 ```
 HOST=localhost
 PORT=1234
-DB_USER=tw-rer
-DB_PASS=tw-rer```
+DB_USER=root
+DB_PASS=toor```
