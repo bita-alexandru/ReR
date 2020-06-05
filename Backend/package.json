@@ -1,7 +1,7 @@
 {
   "name": "rer",
   "version": "1.0.0",
-  "description": "",
+  "description": "```\r HOST=localhost\r PORT=1234\r DB_USER=root\r DB_PASS=toor\r ```",
   "main": "index.js",
   "nodemonConfig": {
     "ignore": [
@@ -16,8 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.9.17",
+    "mongoose": "^5.9.18",
     "nodemon": "^2.0.4"
   }
 }

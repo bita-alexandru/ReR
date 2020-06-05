@@ -6,6 +6,7 @@ const feedView = require('../views/feed');
 const preferencesView = require('../views/preferences');
 const accountView = require('../views/account');
 const httpErrorView = require('../views/http_error');
+const success = require('../controllers/success');
 
 function register(data, response) {
     if (data.method === 'POST') {
@@ -19,7 +20,7 @@ function register(data, response) {
                     httpErrorView.internalServerError(data, response);
                 } else {
                     if (user) {
-                        httpErrorView.conflict(data, response);
+                        success.success(response, 409);
                     } else {
                         const saltRounds = 13;
 
@@ -36,8 +37,7 @@ function register(data, response) {
                                     if (err) {
                                         httpErrorView.internalServerError(data, response);
                                     } else {
-                                        response.writeHead(200, { 'Content-type': 'text/json' });
-                                        response.end(JSON.stringify(values));
+                                        success.success(response, 200);
                                     }
                                 });
                             }
@@ -55,7 +55,39 @@ function register(data, response) {
 }
 
 function login(data, response) {
-    response.end();
+    if (data.method === 'POST') {
+        try {
+            const values = JSON.parse(data.payload);
+            const username = values.username;
+            const password = values.password;
+
+            userModel.findOne({ username: username }, (err, user) => {
+                if (err) {
+                    httpErrorView.internalServerError(data, response);
+                } else {
+                    if (user) {
+                        bcrypt.compare(password, user.password, (err, result) => {
+                            if (err) {
+                                httpErrorView.internalServerError(data, response);
+                            } else {
+                                if (result) {
+                                    success.success(response, 409);
+                                } else {
+                                    success.success(response, 200);
+                                }
+                            }
+                        });
+                    } else {
+                        success.success(response, 401);
+                    }
+                }
+            });
+        } catch{
+            httpErrorView.badRequest(data, response);
+        }
+    } else {
+        httpErrorView.badRequest(data, response);
+    }
 }
 
 function logout(data, response) {

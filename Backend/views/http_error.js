@@ -15,21 +15,6 @@ function notFound(data, response) {
     });
 }
 
-function conflict(data, response) {
-    const file = __dirname + '/../public/conflict.html';
-
-    fs.readFile(file, (err, content) => {
-        if (err) {
-            console.log(`Error at reading <${file}>`);
-            internalServerError(data, response);
-        } else {
-            response.writeHead(409, { 'Content-type': 'text/html' });
-            response.write(content);
-            response.end();
-        }
-    });
-}
-
 function internalServerError(data, response) {
     const file = __dirname + '/../public/internal_server_error.html';
 
@@ -62,4 +47,4 @@ function badRequest(data, response) {
     });
 }
 
-module.exports = { badRequest, notFound, conflict, internalServerError };
+module.exports = { badRequest, notFound, internalServerError };
