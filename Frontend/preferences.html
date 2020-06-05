@@ -1,0 +1,90 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <title>Preferences</title>
+
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/gridstyle.css">
+  <script src="assets/scripts.js"></script>
+
+</head>
+
+<body>
+
+  <div class="row">
+    <div class="col-2 offset-1 center">
+      <h1>LOGO</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="offset-1 col-2">
+      <div class="sidebar">
+        <div class="w-75">
+          <ul style="list-style: none;">
+            <li>
+              <a href="/feed" style="text-decoration: none;">
+                <div>Feed</div>
+              </a>
+            </li>
+            <li>
+              <a href="/preferences" style="text-decoration: none;">
+                <div>Preferences</div>
+              </a>
+            </li>
+            <li>
+              <a href="/account" style="text-decoration: none;">
+                <div>Account</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-7 ml-1">
+      <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto;">
+        <div>
+          <div class="card">
+            <form>
+              <div class="row mb-1">
+                <div class="col-3">
+                  Sport
+                </div>
+                <div class="col-6">
+                  <input type="checkbox" id="sport" name="sport" />
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-3">
+                  plpl?
+                </div>
+                <div class="col-6">
+                  <input onchange="toggleDependentCheckbox('animale', 'zebra')" type="checkbox" id="animale"
+                    name="animale" />
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-3">
+                  pzdpzd.
+                </div>
+                <div class="col-6">
+                  <input type="checkbox" disabled id="zebra" name="zebra" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+
+
+</html>

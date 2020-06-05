@@ -1,0 +1,153 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Account</title>
+
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/gridstyle.css">
+    <script src="assets/scripts.js"></script>
+
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-2 offset-1 center">
+            <h1>LOGO</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="offset-1 col-2">
+            <div class="sidebar">
+                <div class="w-75">
+                    <ul style="list-style: none;">
+                        <li>
+                            <a href="/feed" style="text-decoration: none;">
+                              <div>Feed</div>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="/preferences" style="text-decoration: none;">
+                              <div>Preferences</div>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="/account" style="text-decoration: none;">
+                              <div>Account</div>
+                            </a>
+                          </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-7 ml-1">
+            <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto;">
+                <div class="card">
+                    <form>
+                        <div class="row">
+                            <h3>Create Account</h3>
+                        </div>
+
+                        <div class="row mb-1">
+
+                            <div class="col-3 label-form">
+                                Username:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="text" id="registerUsername" name="registerUsername" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-3 label-form">
+                                Password:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="password" id="registerPassowrd"
+                                    name="registerPassowrd" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-3 label-form">
+                                Confirm Password:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="password" id="confirmedPassword"
+                                    name="confirmedPassword" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="offset-9 col-2">
+                                <input class="form-control" type="submit" id="register" value="Register" />
+                            </div>
+                        </div>
+                        <hr />
+                    </form>
+
+                    <form>
+                        <div class="row">
+                            <h3>Login</h3>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-3 label-form">
+                                Username:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="text" id="loginUsername" name="loginUsername" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-3 label-form">
+                                Password:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="password" id="loginPassword" name="loginPassword" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="offset-9 col-2">
+                                <input class="form-control" type="submit" id="login" value="Login" />
+                            </div>
+                        </div>
+                        <hr />
+                    </form>
+
+                    <form>
+                        <div class="row">
+                            <h3>Delete Account</h3>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-3 label-form">
+                                Password:
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" type="text" id="deletePassword" name="DeleteAccount" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="offset-9 col-2">
+                                <input class="form-control" type="submit" id="deleteAccount" value="Delete Account" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+
+
+</html>
