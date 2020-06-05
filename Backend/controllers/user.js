@@ -71,9 +71,9 @@ function login(data, response) {
                                 httpErrorView.internalServerError(data, response);
                             } else {
                                 if (result) {
-                                    success.success(response, 409);
-                                } else {
                                     success.success(response, 200);
+                                } else {
+                                    success.success(response, 409);
                                 }
                             }
                         });
