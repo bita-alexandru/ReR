@@ -9,3 +9,5 @@ HOST=localhost
 PORT=1234
 DB_USER=root
 DB_PASS=toor```
+
+Bobitza a fost aici
