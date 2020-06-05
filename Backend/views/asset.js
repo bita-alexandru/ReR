@@ -1,5 +1,5 @@
 const fs = require('fs');
-const notFoundView = require('./not_found');
+const httpErrorView = require('./http_error');
 
 function getHTML(data, response) {
     const file = __dirname + `/../public/${data.trimmedPath}`;
@@ -7,13 +7,12 @@ function getHTML(data, response) {
     fs.readFile(file, (err, content) => {
         if (err) {
             console.log(`Error at reading <${file}>`);
-            notFoundView.notFound(data, response);
+            httpErrorView.notFound(data, response);
         } else {
             response.writeHead(200, { 'Content-type': 'text/html' });
             response.write(content);
+            response.end();
         }
-
-        response.end();
     });
 }
 
@@ -23,13 +22,13 @@ function getCSS(data, response) {
     fs.readFile(file, (err, content) => {
         if (err) {
             console.log(`Error at reading <${file}>`);
-            notFoundView.notFound(data, response);
+            response.writeHead(404);
+            response.end();
         } else {
             response.writeHead(200, { 'Content-type': 'text/css' });
             response.write(content);
+            response.end();
         }
-
-        response.end();
     });
 }
 
@@ -39,13 +38,13 @@ function getJS(data, response) {
     fs.readFile(file, (err, content) => {
         if (err) {
             console.log(`Error at reading <${file}>`);
-            notFoundView.notFound(data, response);
+            response.writeHead(404);
+            response.end();
         } else {
             response.writeHead(200, { 'Content-type': 'text/javascript' });
             response.write(content);
+            response.end();
         }
-
-        response.end();
     });
 }
 
@@ -55,13 +54,13 @@ function getICO(data, response) {
     fs.readFile(file, (err, content) => {
         if (err) {
             console.log(`Error at reading <${file}>`);
-            notFoundView.notFound(data, response);
+            response.writeHead(404);
+            response.end();
         } else {
             response.writeHead(200, { 'Content-type': 'image/x-icon' });
             response.write(content);
+            response.end();
         }
-
-        response.end();
     });
 }
 

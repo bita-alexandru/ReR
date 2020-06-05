@@ -3,7 +3,7 @@ const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const userController = require('./user');
 const assetView = require('../views/asset');
-const notFoundView = require('../views/not_found');
+const httpErrorView = require('../views/http_error');
 
 let server = http.createServer((request, response) => {
     let parsedUrl = url.parse(request.url, true);
@@ -40,7 +40,7 @@ let server = http.createServer((request, response) => {
             else if (trimmedPath.endsWith('.js')) {
                 assetView.getJS(data, response);
             } else if (trimmedPath.endsWith('.ico')) {
-                //assetView.getICO(data, response);
+                assetView.getICO(data, response);
             }
         } else {
             handler(data, response);
@@ -63,7 +63,7 @@ const router = {
     '': userController.feed,
     'preferences': userController.preferences,
     'not_found': function notFound(data, response) {
-        notFoundView.notFound(data, response);
+        httpErrorView.notFound(data, response);
     }
 };
 
