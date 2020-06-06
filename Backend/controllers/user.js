@@ -1,9 +1,8 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const userModel = require('../models/user');
-const httpErrorView = require('../views/http_error');
 const success = require('./success');
-
+let users = {'u1':'andrei'};
 function register(data, response) {
     if (data.method === 'POST') {
         try {
@@ -13,7 +12,7 @@ function register(data, response) {
 
             userModel.findOne({ username: username }, (err, user) => {
                 if (err) {
-                    httpErrorView.internalServerError(data, response);
+                    success.success(response, 500);
                 } else {
                     if (user) {
                         success.success(response, 409);
@@ -22,7 +21,7 @@ function register(data, response) {
 
                         bcrypt.hash(password, saltRounds, (err, hash) => {
                             if (err) {
-                                httpErrorView.internalServerError(data, response);
+                                success.success(response, 500);
                             } else {
                                 const User = new userModel({
                                     _id: mongoose.Types.ObjectId(),
@@ -31,7 +30,7 @@ function register(data, response) {
                                 });
                                 User.save((err, result) => {
                                     if (err) {
-                                        httpErrorView.internalServerError(data, response);
+                                        success.success(response, 500);
                                     } else {
                                         success.success(response, 200);
                                     }
@@ -42,11 +41,11 @@ function register(data, response) {
                 }
             });
         } catch {
-            httpErrorView.badRequest(data, response);
+            success.success(response, 400);
         }
 
     } else {
-        httpErrorView.badRequest(data, response);
+        success.success(response, 400);
     }
 }
 
@@ -59,12 +58,12 @@ function login(data, response) {
 
             userModel.findOne({ username: username }, (err, user) => {
                 if (err) {
-                    httpErrorView.internalServerError(data, response);
+                    success.success(response, 500);
                 } else {
                     if (user) {
                         bcrypt.compare(password, user.password, (err, result) => {
                             if (err) {
-                                httpErrorView.internalServerError(data, response);
+                                success.success(response, 500);
                             } else {
                                 if (result) {
                                     success.success(response, 200);
@@ -79,16 +78,13 @@ function login(data, response) {
                 }
             });
         } catch{
-            httpErrorView.badRequest(data, response);
+            success.success(response, 400);
         }
     } else {
-        httpErrorView.badRequest(data, response);
+        success.success(response, 400);
     }
 }
 
-function logout(data, response) {
-    response.end();
-}
 
 function deleteAccount(data, response) {
     response.end();
@@ -106,4 +102,4 @@ function setPreferences(data, response) {
     response.end();
 }
 
-module.exports = { register, login, logout, deleteAccount, getFeed, getPreferences, setPreferences };
+module.exports = { register, login, deleteAccount, getFeed, getPreferences, setPreferences };
