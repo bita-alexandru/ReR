@@ -1,73 +1,118 @@
 
 .ml-1{
-    margin-left:  5%;
+  margin-left:  5%;
 }
 
 .mt-1{
-    margin-top: .25%;
+  margin-top: .25%;
 }
 
+.mb-1{
+margin-bottom: 1.25rem;
+}
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-    font-family: 'Josefin Sans', sans-serif;
-  }
+.p-1{
+padding: 1rem;
+}
+
+.w-100{
+width: 100%;
+}
 
 body{
-    background-color: #f3f5f9;
- }
-
-
-.header{
-    width: 100%;
-    height: 100px;
-    display: block;
-
+  background-color: #f3f5f9;
 }
 
-.logo-container{
-    height: 100%;
-    width: 200px;
-    display: table;
-    float: left;
-
+.blur{
+opacity: 0.5;
+filter: blur(10px);
 }
 
-.logo-container h1{
-    color: black;
-    height: 100%;
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
+.blur:hover{
+opacity:1;
+filter: blur(0px);
 }
 
 .sidebar{
-  width: 200px;
-  background: #99738E;
-  padding: 20px 0px;
-  position: fixed;
-  
+width: 100%;
+background-color: #99738E;
+font-family: 'Josefin Sans', sans-serif;
+color:lightgray;;
 }
 
+.sidebar ul{
+  padding-left: 0px;
+  }
+
 .sidebar ul li{
-    padding: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    border-top: 1px solid rgba(255,255,255,0.05);
+height: 60px;
+border-bottom: 1px solid rgba(0,0,0,0.05);
+border-top: 1px solid rgba(255,255,255,0.05); 
 }
 
 .sidebar ul li a{
-    color: #bdb8d7;
-    display: block;
+color: #bdb8d7;
+display: block;
+height: 100%;
+
+}
+
+.sidebar ul li a div{
+  padding: 20px;
+  vertical-align: middle;
+  text-align: center;
   }
+
+.btn:focus{
+outline: none;
+}
 
 .sidebar ul li:hover{
-    background-color: rgb(173, 126, 160);
-  }
+background-color: rgb(173, 126, 160);
+}
 
 .sidebar ul li:hover a{
-    color: #fff;
-  }
+color: #fff;
+}
+
+.center{
+text-align: center;
+}
+
+.btn{
+background-color: #99738E;
+width: 100%;
+min-height: 25px;
+margin-bottom: 1px;
+border: 0px;
+align-items:flex-start;
+align-content: center;
+padding: 1rem;
+cursor: pointer;
+}
+
+.btn a{
+font-size: 1.25rem;
+text-decoration: none;
+}
+
+.btn:hover{
+  background-color: rgb(173, 126, 160);
+  color: #fff;
+}
+
+
+.card{
+  border: 1px solid rgba(0,0,0,.125);
+  padding: 1.25rem;
+  border-radius: 0.25rem;
+  margin-bottom: 10px;
+}
+
+.card a{
+font-size: 1.5rem;
+}
+
+.form-control{
+width:100%;
+}

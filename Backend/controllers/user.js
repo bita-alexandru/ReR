@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const userModel = require('../models/user');
 const success = require('./success');
 let users = {'u1':'andrei'};
+
 function register(data, response) {
     if (data.method === 'POST') {
         try {
