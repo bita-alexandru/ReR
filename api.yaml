@@ -243,8 +243,8 @@ paths:
                 type: object
                 properties:
                   success:
-                    type: string
                     default: 'false'
+                    type: boolean
                 required:
                   - success
         '409':
