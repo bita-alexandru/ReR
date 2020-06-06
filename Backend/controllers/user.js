@@ -1,12 +1,8 @@
-const http = require('http');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const userModel = require('../models/user');
-const feedView = require('../views/feed');
-const preferencesView = require('../views/preferences');
-const accountView = require('../views/account');
 const httpErrorView = require('../views/http_error');
-const success = require('../controllers/success');
+const success = require('./success');
 
 function register(data, response) {
     if (data.method === 'POST') {
@@ -94,21 +90,20 @@ function logout(data, response) {
     response.end();
 }
 
-function account(data, response) {
-
-    accountView.account(data, response);
-}
-
 function deleteAccount(data, response) {
     response.end();
 }
 
-function feed(data, response) {
-    feedView.feed(data, response);
+function getFeed(data, response) {
+    response.end();
 }
 
-function preferences(data, response) {
-    preferencesView.preferences(data, response);
+function getPreferences(data, response) {
+    response.end();
 }
 
-module.exports = { register, login, logout, account, deleteAccount, feed, preferences };
+function setPreferences(data, response) {
+    response.end();
+}
+
+module.exports = { register, login, logout, deleteAccount, getFeed, getPreferences, setPreferences };
