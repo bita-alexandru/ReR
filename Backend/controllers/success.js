@@ -11,4 +11,9 @@ function success(response, status) {
     response.end(JSON.stringify(message));
 }
 
-module.exports = { success };
+function content(response, content) {
+    response.writeHead(200, { 'Content-type': 'text/json' });
+    response.end(JSON.stringify(content));
+}
+
+module.exports = { success, content };
