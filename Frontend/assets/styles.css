@@ -1,0 +1,118 @@
+
+.ml-1{
+  margin-left:  5%;
+}
+
+.mt-1{
+  margin-top: .25%;
+}
+
+.mb-1{
+margin-bottom: 1.25rem;
+}
+
+.p-1{
+padding: 1rem;
+}
+
+.w-100{
+width: 100%;
+}
+
+body{
+  background-color: #f3f5f9;
+}
+
+.blur{
+opacity: 0.5;
+filter: blur(10px);
+}
+
+.blur:hover{
+opacity:1;
+filter: blur(0px);
+}
+
+.sidebar{
+width: 100%;
+background-color: #99738E;
+font-family: 'Josefin Sans', sans-serif;
+color:lightgray;;
+}
+
+.sidebar ul{
+  padding-left: 0px;
+  }
+
+.sidebar ul li{
+height: 60px;
+border-bottom: 1px solid rgba(0,0,0,0.05);
+border-top: 1px solid rgba(255,255,255,0.05); 
+}
+
+.sidebar ul li a{
+color: #bdb8d7;
+display: block;
+height: 100%;
+
+}
+
+.sidebar ul li a div{
+  padding: 20px;
+  vertical-align: middle;
+  text-align: center;
+  }
+
+.btn:focus{
+outline: none;
+}
+
+.sidebar ul li:hover{
+background-color: rgb(173, 126, 160);
+}
+
+.sidebar ul li:hover a{
+color: #fff;
+}
+
+.center{
+text-align: center;
+}
+
+.btn{
+background-color: #99738E;
+width: 100%;
+min-height: 25px;
+margin-bottom: 1px;
+border: 0px;
+align-items:flex-start;
+align-content: center;
+padding: 1rem;
+cursor: pointer;
+}
+
+.btn a{
+font-size: 1.25rem;
+text-decoration: none;
+}
+
+.btn:hover{
+  background-color: rgb(173, 126, 160);
+  color: #fff;
+}
+
+
+.card{
+  border: 1px solid rgba(0,0,0,.125);
+  padding: 1.25rem;
+  border-radius: 0.25rem;
+  margin-bottom: 10px;
+}
+
+.card a{
+font-size: 1.5rem;
+}
+
+.form-control{
+width:100%;
+}
