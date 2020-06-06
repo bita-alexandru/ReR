@@ -1,13 +1,9 @@
-const http = require('http');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const userModel = require('../models/user');
-const feedView = require('../views/feed');
-const preferencesView = require('../views/preferences');
-const accountView = require('../views/account');
 const httpErrorView = require('../views/http_error');
-const success = require('../controllers/success');
-
+const success = require('./success');
+let users = {'u1':'andrei'};
 function register(data, response) {
     if (data.method === 'POST') {
         try {
@@ -17,7 +13,7 @@ function register(data, response) {
 
             userModel.findOne({ username: username }, (err, user) => {
                 if (err) {
-                    httpErrorView.internalServerError(data, response);
+                    success.success(response, 500);
                 } else {
                     if (user) {
                         success.success(response, 409);
@@ -26,7 +22,7 @@ function register(data, response) {
 
                         bcrypt.hash(password, saltRounds, (err, hash) => {
                             if (err) {
-                                httpErrorView.internalServerError(data, response);
+                                success.success(response, 500);
                             } else {
                                 const User = new userModel({
                                     _id: mongoose.Types.ObjectId(),
@@ -35,7 +31,7 @@ function register(data, response) {
                                 });
                                 User.save((err, result) => {
                                     if (err) {
-                                        httpErrorView.internalServerError(data, response);
+                                        success.success(response, 500);
                                     } else {
                                         success.success(response, 200);
                                     }
@@ -46,11 +42,11 @@ function register(data, response) {
                 }
             });
         } catch {
-            httpErrorView.badRequest(data, response);
+            success.success(response, 400);
         }
 
     } else {
-        httpErrorView.badRequest(data, response);
+        success.success(response, 400);
     }
 }
 
@@ -63,17 +59,17 @@ function login(data, response) {
 
             userModel.findOne({ username: username }, (err, user) => {
                 if (err) {
-                    httpErrorView.internalServerError(data, response);
+                    success.success(response, 500);
                 } else {
                     if (user) {
                         bcrypt.compare(password, user.password, (err, result) => {
                             if (err) {
-                                httpErrorView.internalServerError(data, response);
+                                success.success(response, 500);
                             } else {
                                 if (result) {
-                                    success.success(response, 409);
-                                } else {
                                     success.success(response, 200);
+                                } else {
+                                    success.success(response, 409);
                                 }
                             }
                         });
@@ -83,32 +79,36 @@ function login(data, response) {
                 }
             });
         } catch{
-            httpErrorView.badRequest(data, response);
+            success.success(response, 400);
         }
     } else {
-        httpErrorView.badRequest(data, response);
+        success.success(response, 400);
     }
 }
 
-function logout(data, response) {
-    response.end();
-}
-
-function account(data, response) {
-
-    accountView.account(data, response);
-}
 
 function deleteAccount(data, response) {
+    if(data.method === 'DELETE'){
+        try{
+            const values = JSON.parse(data.payload);
+            const authToken = data.headers.authToken;
+            const password = values.password;
+
+            if()
+        }
+    }
+}
+
+function getFeed(data, response) {
     response.end();
 }
 
-function feed(data, response) {
-    feedView.feed(data, response);
+function getPreferences(data, response) {
+    response.end();
 }
 
-function preferences(data, response) {
-    preferencesView.preferences(data, response);
+function setPreferences(data, response) {
+    response.end();
 }
 
-module.exports = { register, login, logout, account, deleteAccount, feed, preferences };
+module.exports = { register, login, deleteAccount, getFeed, getPreferences, setPreferences };

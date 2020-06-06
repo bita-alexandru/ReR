@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const pagerController = require('./pager');
 const userController = require('./user');
 const assetView = require('../views/asset');
 const httpErrorView = require('../views/http_error');
@@ -55,13 +56,16 @@ let server = http.createServer((request, response) => {
 });
 
 const router = {
+    '': pagerController.index,
+    'preferences': pagerController.preferences,
+    'account': pagerController.account,
+    'get_feed': userController.getFeed,
+    'get_preferences': userController.getPreferences,
+    'set_preferences': userController.setPreferences,
     'register': userController.register,
     'login': userController.login,
     'logout': userController.logout,
-    'account': userController.account,
     'delete_account': userController.deleteAccount,
-    '': userController.feed,
-    'preferences': userController.preferences,
     'not_found': function notFound(data, response) {
         httpErrorView.notFound(data, response);
     }
