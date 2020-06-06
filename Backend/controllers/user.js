@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const userModel = require('../models/user');
 const success = require('./success');
-let users = {'u1':'andrei'};
+const jwt = require('jsonwebtoken');
+
 function register(data, response) {
     if (data.method === 'POST') {
         try {
@@ -50,6 +51,7 @@ function register(data, response) {
 }
 
 function login(data, response) {
+
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
@@ -66,9 +68,19 @@ function login(data, response) {
                                 success.success(response, 500);
                             } else {
                                 if (result) {
+                                    const token = jwt.sign({
+                                        userId: user._id,
+                                        userName: user.username
+                                    },
+                                        process.env.AUTH_TOKEN,
+                                        {
+                                            expiresIn: "1h"
+                                        }
+                                    );
+                                    response.setHeader('Auth-Token', token);
                                     success.success(response, 200);
                                 } else {
-                                    success.success(response, 409);
+                                    success.success(response, 401);
                                 }
                             }
                         });
@@ -87,7 +99,58 @@ function login(data, response) {
 
 
 function deleteAccount(data, response) {
-    response.end();
+    if (data.method === 'DELETE') {
+        try {
+            const values = JSON.parse(data.payload);
+            const authToken = data.headers['auth-token'];
+            const password = values.password;
+            const username = jwt.decode(authToken, process.env.AUTH_TOKEN).userName;
+
+            try {
+                jwt.verify(authToken, process.env.AUTH_TOKEN, (err, decoded) => {
+                    if (err) {
+                        success.success(response, 500);
+                    } else {
+                        if (decoded) {
+                            userModel.findOne({ username: username }, (err, user) => {
+                                if (err) {
+                                    success.success(response, 500);
+                                } else {
+                                    if (user) {
+                                        bcrypt.compare(password, user.password, (err, result) => {
+                                            if (err) {
+                                                success.success(response, 500);
+                                            } else {
+                                                if (result) {
+                                                    user.deleteOne({ username: username }, (err) => {
+                                                        if (err) {
+                                                            success.success(response, 500);
+                                                        } else {
+                                                            success.success(response, 200);
+                                                        }
+                                                    })
+                                                } else {
+                                                    success.success(response, 401);
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        success.success(response, 401);
+                                    }
+                                }
+                            });
+                        } else {
+                            success.success(response, 401);
+                        }
+                    }
+                });
+            } catch  {
+                success.success(response, 401);
+            }
+        } catch{
+            success.success(response, 400);
+        }
+    }
 }
 
 function getFeed(data, response) {
