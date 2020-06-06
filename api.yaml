@@ -456,17 +456,18 @@ paths:
   /:
     get:
       summary: GET Feed Page
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                description: content
       operationId: get-index
       description: Return the static file corresponding to feed.html
       tags:
         - page_content
-      requestBody:
-        content:
-          text/html:
-            schema:
-              type: string
-              description: content
     parameters: []
   /account:
     get:
@@ -477,18 +478,12 @@ paths:
           content:
             text/html:
               schema:
-                type: object
-                properties: {}
+                type: string
+                description: content
       operationId: get-account
       description: Return the static file corresponding to account.html
       tags:
         - page_content
-      requestBody:
-        content:
-          text/html:
-            schema:
-              type: string
-              description: content
   /preferences:
     get:
       summary: GET  Preferences Page
@@ -498,18 +493,12 @@ paths:
           content:
             text/html:
               schema:
-                type: object
-                properties: {}
+                type: string
+                description: content
       operationId: get-preferences
       description: Return the static file corresponding to preferences.html
       tags:
         - page_content
-      requestBody:
-        content:
-          text/html:
-            schema:
-              type: string
-              description: content
 components:
   schemas:
     user:
