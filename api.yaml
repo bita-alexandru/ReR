@@ -74,12 +74,6 @@ paths:
           in: header
           name: Auth-Token
           required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
   /set_preferences:
     parameters: []
     put:
@@ -462,18 +456,17 @@ paths:
   /:
     get:
       summary: GET Feed Page
-      responses:
-        '200':
-          description: OK
-          content:
-            text/html:
-              schema:
-                type: object
-                properties: {}
+      responses: {}
       operationId: get-index
       description: Return the static file corresponding to feed.html
       tags:
         - page_content
+      requestBody:
+        content:
+          text/html:
+            schema:
+              type: string
+              description: content
     parameters: []
   /account:
     get:
@@ -490,6 +483,12 @@ paths:
       description: Return the static file corresponding to account.html
       tags:
         - page_content
+      requestBody:
+        content:
+          text/html:
+            schema:
+              type: string
+              description: content
   /preferences:
     get:
       summary: GET  Preferences Page
@@ -505,12 +504,18 @@ paths:
       description: Return the static file corresponding to preferences.html
       tags:
         - page_content
+      requestBody:
+        content:
+          text/html:
+            schema:
+              type: string
+              description: content
 components:
   schemas:
     user:
       title: user
       type: object
-      description: ''
+      description: provided via POST /register and stored into the database
       properties:
         _id:
           type: string
@@ -562,3 +567,4 @@ components:
         - source
       x-tags:
         - model
+      description: provided via public APIs and stored into the database
