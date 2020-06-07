@@ -15,9 +15,11 @@ let server = http.createServer((request, response) => {
 
     let decoder = new StringDecoder('utf-8');
     let buffer = '';
-
     request.on('data', (data) => {
         buffer += decoder.write(data);
+        if (request.method === 'POST') {
+            buffer = convertBodyToJSON(buffer);
+        }
     });
 
     request.on('end', () => {
@@ -35,7 +37,7 @@ let server = http.createServer((request, response) => {
             'headers': headers,
             'payload': buffer
         };
-
+        
         if (trimmedPath.startsWith('assets/')) {
             if (trimmedPath.endsWith('.css')) {
                 assetView.getCSS(data, response);
@@ -57,5 +59,16 @@ let server = http.createServer((request, response) => {
     });
 
 });
+
+function convertBodyToJSON(data) {
+    let property;
+    let myJson = {};
+    let properties = data.slice(data.indexOf('?') + 1).split('&');
+    for (let i = 0; i < properties.length; i++) {
+        property = properties[i].split('=');
+        myJson[property[0]] = property[1];
+    }
+    return JSON.stringify(myJson);
+}
 
 module.exports = { server };
