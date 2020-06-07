@@ -22,7 +22,7 @@ const routes = {
     'delete_account': userController.deleteAccount,
 
     // serve admin operations
-    'admin/set_resource': adminUtil.setResource
+    'admin/set_resource': adminUtil.manageResource
 };
 
 module.exports = { routes };

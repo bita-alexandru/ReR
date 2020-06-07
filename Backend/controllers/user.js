@@ -35,7 +35,7 @@ function register(data, response) {
                                             username: username,
                                             password: hash,
                                             preferredDomains: preferences.default_domains,
-                                            preferredSites: preferences.website
+                                            preferredSites: preferences.default_websites
                                         },
                                         err => {
                                             if (err) {
@@ -65,7 +65,7 @@ function login(data, response) {
             const username = values.username;
             const password = values.password;
 
-            userModel.findOne({ username: username }, 'username password', (err, user) => {
+            userModel.findOne({ username: username }, '_id username password', (err, user) => {
                 if (err) {
                     responder.status(response, 500);
                 } else {
@@ -84,7 +84,8 @@ function login(data, response) {
                                             expiresIn: "1h"
                                         }
                                     );
-                                    response.setHeader('Auth-Token', token);
+
+                                    response.setHeader('set-cookie', `token=${token}`);
                                     responder.status(response, 200);
                                 } else {
                                     responder.status(response, 401);
@@ -113,7 +114,7 @@ function deleteAccount(data, response) {
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
-                    responder.status(response, 500);
+                    responder.status(response, 401);
                 } else {
                     if (decoded) {
                         const username = decoded.userName;
@@ -169,14 +170,13 @@ function getFeed(data, response) {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
                         } else { // found the requested resources
-                            console.log(resources);
                             responder.content(response, resources);
                         }
-                    }
+                    }   
                 );
             } else { // user is authenticated
                 userModel.findOne( // get user's preferred domains and websites
-                    { username: decoded.userName }, 'preferredDomains preferredWebsites', (err, user) => {
+                    { username: decoded.userName }, 'preferredDomains preferredSites', (err, user) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
                         } else { // found the requested domains and websites
@@ -205,7 +205,7 @@ function getPreferences(data, response) {
         const token = data.headers['auth-token']
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
-            if (err) {
+            if (err) { // user is anonymous
                 const default_domains = preferences.default_domains;
                 const default_websites = preferences.default_websites;
                 const content = {
@@ -214,12 +214,11 @@ function getPreferences(data, response) {
                 };
 
                 responder.content(response, content);
-            } else {
-                console.log('else');
+            } else { // user is authenticated
                 if (decoded) {
                     const username = decoded.userName;
 
-                    userModel.findOne({ username: username }, 'username', (err, user) => {
+                    userModel.findOne({ username: username }, 'preferredSites preferredDomains', (err, user) => {
                         if (err) {
                             responder.status(response, 500);
                         } else {
@@ -262,7 +261,7 @@ function setPreferences(data, response) {
                 else {
                     if (decoded) {
                         const username = decoded.userName;
-                    
+
                         userModel.findOne(
                             { username: username },
                             (err, user) => {

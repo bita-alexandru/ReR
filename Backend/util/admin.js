@@ -1,22 +1,42 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
-const responde = require('./responder');
+const responder = require('./responder');
 
-function getUser(data, response) {
+let usableFeed = true;
+let usablePreference = true;
+let usableAccount = true;
+let usableGetFeed = true;
+let usableGetPreferences = true;
+let usableSetPreferences = true;
+let usableRegister = true;
+let usableLogin = true;
+let usableDeleteAccount = true;
 
-}
+function isAdmin(data, callback) {
+    try {
+        const token = data.headers['auth-token'];
 
-function getUsers(data, response) {
-
-}
-
-function getResource(data, response) {
-
-}
-
-function getResources(data, response) {
-
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
+            if (err) {
+                callback(500);
+            } else {
+                if (!decoded) {
+                    callback(500);
+                } else {
+                    if (decoded.userName === 'admin') {
+                        callback(200);
+                    } else {
+                        callback(401);
+                    }
+                }
+            }
+        });
+    } catch {
+        callback(400);
+    }
 }
 
 function exportUsers(data, response) {
@@ -27,79 +47,144 @@ function exportResources(data, response) {
 
 }
 
-function setUser(data, response) {
+function manageUser(data, response) {
 
 }
 
-function setResource(data, response) {
-    if (data.method === 'POST') {
-        try {
-            const values = JSON.parse(data.payload);
-
-            resourceModel.create( // create and store a new resource
-                {
-                    _id: mongoose.Types.ObjectId(),
-                    title: values.title,
-                    description: values.description,
-                    domains: values.domains,
-                    source: values.source,
-                    date: values.date,
-                    image: values.image
-                }, 
-                (err) => {
-                    if(err) { // something went wrong, perhaps an internal error
-                        responder.status(response,500);
-                    } else { // resource created & stored successfully
-                        responder.status(response, 200);
-                    }
+function manageResource(data, response) {
+    isAdmin(data, result => {
+        if (result === 200) {
+            if (data.method === 'POST') {
+                try {
+                    const values = JSON.parse(data.payload);
+                    
+                    resourceModel.create( // create and store a new resource
+                        {
+                            _id: mongoose.Types.ObjectId(),
+                            title: values.title,
+                            description: values.description,
+                            domains: values.domains,
+                            source: values.source,
+                            date: values.date,
+                            image: values.image
+                        },
+                        (err) => {
+                            if (err) { // something went wrong, perhaps an internal error
+                                responder.status(response, 500);
+                            } else { // resource created & stored successfully
+                                responder.status(response, 200);
+                            }
+                        }
+                    );
+                } catch {
+                    console.log('invalid json')
+                    responder.status(response, 400);
                 }
-            );
-        } catch {
-            responder.status(response, 400);
+            } else {
+                console.log('not post')
+                responder.status(response, 400);
+            }
+        } else {
+            responder.status(response, result);
         }
-    } else {
-        responder.status(response, 400);
+    });
+}
+
+function toggleFeed(data, response) {
+    try {
+        usableFeed = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
     }
 }
 
-function toggleFeed(option) {
-
+function togglePreferences(data, response) {
+    try {
+        usablePreference = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function togglePreferences(option) {
-
+function toggleAccount(data, response) {
+    try {
+        usableAccount = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleAccount(option) {
-
+function toggleLogin(data, response) {
+    try {
+        usableLogin = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleLogin(option) {
-
+function toggleRegister(data, response) {
+    try {
+        usableRegister = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleRegister(option) {
-
+function toggleDeleteAccount(data, response) {
+    try {
+        usableDeleteAccount = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleDeleteAccount(option) {
-
+function toggleGetFeed(data, response) {
+    try {
+        usableGetFeed = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleGetFeed(option) {
-
+function toggleGetPreferences(data, response) {
+    try {
+        usableGetPreferences = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleGetPreferences(option) {
-
+function toggleSetPreferences(data, response) {
+    try {
+        usableSetPreferences = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleSetPreferences(option) {
-
+function toggleDeleteAccount(data, response) {
+    try {
+        usableDeleteAccount = JSON.parse(data.payload).option;
+        responder.status(response, 200);
+    } catch {
+        responder.status(response, 500);
+    }
 }
 
-function toggleDeleteAccount(option) {
-
-}
-
-module.exports = { setResource };
+module.exports = {
+    usableFeed, usablePreference, usableAccount, usableGetFeed,
+    usableGetPreferences, usableSetPreferences, usableRegister, usableLogin, usableDeleteAccount,
+    exportUsers, exportResources,
+    manageUser, manageResource,
+    toggleFeed, togglePreferences, toggleAccount,
+    toggleGetFeed, toggleGetPreferences, toggleSetPreferences, toggleRegister, toggleLogin, toggleDeleteAccount
+};
