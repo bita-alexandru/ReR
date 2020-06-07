@@ -6,13 +6,33 @@ const resourceModel = require('../models/resource');
 const responder = require('../util/responder');
 const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
+const adminUtil = require('../util/admin');
+const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
+    if (adminUtil.usables.usableRegister === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
+            const confirm_password = values.confirm_password;
+
+            if (inputValidator.username(username) === false ||
+                inputValidator.password(password) === false || inputValidator.password(confirm_password)) {
+                responder.status(response, 400);
+                return;
+            }
+
+            if (password !== confirm_password) {
+                responder.status(response, 400);
+                return;
+            }
+
             userModel.findOne( // check if username is already used
                 { username: username }, 'username',
                 (err, user) => {
@@ -58,11 +78,21 @@ function register(data, response) {
 }
 
 function login(data, response) {
+    if (adminUtil.usables.usableLogin === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
+
+            // if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+            //     responder.status(response, 400);
+            //     return;
+            // }
 
             userModel.findOne({ username: username }, '_id username password', (err, user) => {
                 if (err) {
@@ -105,6 +135,11 @@ function login(data, response) {
 }
 
 function deleteAccount(data, response) {
+    if (adminUtil.usables.usableDeleteAccount === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'DELETE') {
         try {
             const values = JSON.parse(data.payload);
@@ -158,6 +193,11 @@ function deleteAccount(data, response) {
 }
 
 function getFeed(data, response) {
+    if (adminUtil.usables.usableGetFeed === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'GET') {
         const token = data.headers['auth-token'];
 
@@ -171,7 +211,7 @@ function getFeed(data, response) {
                         } else { // found the requested resources
                             responder.content(response, resources);
                         }
-                    }   
+                    }
                 );
             } else { // user is authenticated
                 userModel.findOne( // get user's preferred domains and websites
@@ -200,6 +240,11 @@ function getFeed(data, response) {
 }
 
 function getPreferences(data, response) {
+    if (adminUtil.usables.usableGetPreferences === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'GET') {
         const token = data.headers['auth-token']
 
@@ -246,6 +291,11 @@ function getPreferences(data, response) {
 }
 
 function setPreferences(data, response) {
+    if (adminUtil.usables.usableSetPreferences === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'PUT') {
         try {
             const token = data.headers['auth-token']

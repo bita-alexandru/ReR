@@ -48,6 +48,7 @@ let server = http.createServer((request, response) => {
                 assetView.getICO(data, response);
             }
         } else {
+            console.log(handler);
             handler(data, response);
         }
 

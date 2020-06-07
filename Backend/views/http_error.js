@@ -62,4 +62,4 @@ function badRequest(data, response) {
     });
 }
 
-module.exports = { badRequest, notFound, internalServerError };
+module.exports = { badRequest, notFound, internalServerError, serviceUnavailable };
