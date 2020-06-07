@@ -32,6 +32,21 @@ function internalServerError(data, response) {
     });
 }
 
+function serviceUnavailable(data, response) {
+    const file = __dirname + '/../public/service_unavailable.html';
+
+    fs.readFile(file, (err, content) => {
+        if (err) {
+            console.log(`Error at reading <${file}>`);
+            internalServerError(data, response);
+        } else {
+            response.writeHead(503, { 'Content-type': 'text/html' });
+            response.write(content);
+            response.end();
+        }
+    });
+}
+
 function badRequest(data, response) {
     const file = __dirname + '/../public/bad_request.html';
 
