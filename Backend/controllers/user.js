@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const userModel = require('../models/user');
-const success = require('./success');
 const jwt = require('jsonwebtoken');
-const default_preference = require('./default_preferences');
+const userModel = require('../models/user');
+const resourceModel = require('../models/resource');
+const responder = require('../util/responder');
+const preferences = require('../util/available_preferences');
+const inputValidator = require('../util/input_validator');
 
 function register(data, response) {
     if (data.method === 'POST') {
@@ -12,63 +14,65 @@ function register(data, response) {
             const username = values.username;
             const password = values.password;
 
-            userModel.findOne({ username: username }, (err, user) => {
-                if (err) {
-                    success.success(response, 500);
-                } else {
-                    if (user) {
-                        success.success(response, 409);
+            userModel.findOne( // check if username is already used
+                { username: username }, 'username',
+                (err, user) => {
+                    if (err) { // something went wrong, perhaps an internal error
+                        responder.status(response, 500);
                     } else {
-                        const saltRounds = 13;
+                        if (user) { // username is already used
+                            responder.status(response, 409);
+                        } else { // username is available
+                            const saltRounds = 13;
 
-                        bcrypt.hash(password, saltRounds, (err, hash) => {
-                            if (err) {
-                                success.success(response, 500);
-                            } else {
-                                const User = new userModel({
-                                    _id: mongoose.Types.ObjectId(),
-                                    username: username,
-                                    password: hash,
-                                    preferredDomains: default_preference.domains(),
-                                    preferredSites: default_preference.websites()
-                                });
-                                User.save((err, result) => {
-                                    if (err) {
-                                        success.success(response, 500);
-                                    } else {
-                                        success.success(response, 200);
-                                    }
-                                });
-                            }
-                        });
+                            bcrypt.hash(password, saltRounds, (err, hash) => { // encrypt the password
+                                if (err) {
+                                    responder.status(response, 500); // something went wrong, perhaps an internal error
+                                } else {
+                                    userModel.create( // create and store a new user
+                                        {
+                                            _id: mongoose.Types.ObjectId(),
+                                            username: username,
+                                            password: hash,
+                                            preferredDomains: preferences.default_domains,
+                                            preferredSites: preferences.website
+                                        },
+                                        err => {
+                                            if (err) {
+                                                responder.status(response, 500);
+                                            } else {
+                                                responder.status(response, 200);
+                                            }
+                                        }
+                                    );
+                                }
+                            });
+                        }
                     }
-                }
-            });
-        } catch {
-            success.success(response, 400);
+                });
+        } catch { // payload is not a valid json
+            responder.status(response, 400);
         }
-
-    } else {
-        success.success(response, 400);
+    } else { // not a valid method, bad request
+        responder.status(response, 400);
     }
 }
 
 function login(data, response) {
-
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
 
-            userModel.findOne({ username: username }, (err, user) => {
+            userModel.findOne({ username: username }, 'username password', (err, user) => {
                 if (err) {
-                    success.success(response, 500);
+                    responder.status(response, 500);
                 } else {
                     if (user) {
                         bcrypt.compare(password, user.password, (err, result) => {
                             if (err) {
-                                success.success(response, 500);
+                                responder.status(response, 500);
                             } else {
                                 if (result) {
                                     const token = jwt.sign({
@@ -81,22 +85,22 @@ function login(data, response) {
                                         }
                                     );
                                     response.setHeader('Auth-Token', token);
-                                    success.success(response, 200);
+                                    responder.status(response, 200);
                                 } else {
-                                    success.success(response, 401);
+                                    responder.status(response, 401);
                                 }
                             }
                         });
                     } else {
-                        success.success(response, 401);
+                        responder.status(response, 401);
                     }
                 }
             });
         } catch{
-            success.success(response, 400);
+            responder.status(response, 400);
         }
     } else {
-        success.success(response, 400);
+        responder.status(response, 400);
     }
 }
 
@@ -104,79 +108,120 @@ function deleteAccount(data, response) {
     if (data.method === 'DELETE') {
         try {
             const values = JSON.parse(data.payload);
-            const authToken = data.headers['auth-token'];
+            const token = data.headers['auth-token'];
             const password = values.password;
-            jwt.verify(authToken, process.env.AUTH_TOKEN, (err, decoded) => {
+
+            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
-                    success.success(response, 500);
+                    responder.status(response, 500);
                 } else {
                     if (decoded) {
                         const username = decoded.userName;
-                        userModel.findOne({ username: username }, (err, user) => {
+                        userModel.findOne({ username: username }, 'password', (err, user) => {
                             if (err) {
-                                success.success(response, 500);
+                                responder.status(response, 500);
                             } else {
                                 if (user) {
                                     bcrypt.compare(password, user.password, (err, result) => {
                                         if (err) {
-                                            success.success(response, 500);
+                                            responder.status(response, 500);
                                         } else {
                                             if (result) {
                                                 user.deleteOne({ username: username }, (err) => {
                                                     if (err) {
-                                                        success.success(response, 500);
+                                                        responder.status(response, 500);
                                                     } else {
-                                                        success.success(response, 200);
+                                                        responder.status(response, 200);
                                                     }
                                                 })
                                             } else {
-                                                success.success(response, 401);
+                                                responder.status(response, 401);
                                             }
                                         }
                                     });
                                 } else {
-                                    success.success(response, 401);
+                                    responder.status(response, 401);
                                 }
                             }
                         });
                     } else {
-                        success.success(response, 401);
+                        responder.status(response, 401);
                     }
                 }
             });
         } catch{
-            success.success(response, 400);
+            responder.status(response, 400);
         }
+    } else {
+        responder.status(response, 400);
     }
 }
 
 function getFeed(data, response) {
-    response.end();
+    if (data.method === 'GET') {
+        const token = data.headers['auth-token'];
+
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
+            if (err) { // user is anonymous
+                resourceModel.find( // get resources based on the default domains and websites
+                    { domains: { $in: preferences.default_domains }, source: { $in: preferences.default_websites } },
+                    (err, resources) => {
+                        if (err) { // something went wrong, perhaps an internal error
+                            responder.status(response, 500);
+                        } else { // found the requested resources
+                            console.log(resources);
+                            responder.content(response, resources);
+                        }
+                    }
+                );
+            } else { // user is authenticated
+                userModel.findOne( // get user's preferred domains and websites
+                    { username: decoded.userName }, 'preferredDomains preferredWebsites', (err, user) => {
+                        if (err) { // something went wrong, perhaps an internal error
+                            responder.status(response, 500);
+                        } else { // found the requested domains and websites
+                            resourceModel.find( // get resources 
+                                { domains: { $in: user.preferredDomains }, source: { $in: user.preferredSites } },
+                                (err, resources) => { // get resources based on their selection of domains and websites
+                                    if (err) { // something went wrong, perhaps an internal error
+                                        responder.status(response, 500);
+                                    } else { // found the requested resources
+                                        responder.content(response, resources);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    } else { // not a valid method, bad request
+        responder.status(response, 400);
+    }
 }
 
 function getPreferences(data, response) {
     if (data.method === 'GET') {
-        const authToken = data.headers['auth-token']
+        const token = data.headers['auth-token']
 
-        jwt.verify(authToken, process.env.AUTH_TOKEN, (err, decoded) => {
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
-                console.log('err');
-                const default_domains = default_preference.domains();
-                const default_websites = default_preference.websites();
+                const default_domains = preferences.default_domains;
+                const default_websites = preferences.default_websites;
                 const content = {
                     'websites': default_websites,
                     'domains': default_domains
                 };
-                success.content(response, content);
+
+                responder.content(response, content);
             } else {
                 console.log('else');
                 if (decoded) {
-                    //for user who are logged in 
                     const username = decoded.userName;
 
-                    userModel.findOne({ username: username }, (err, user) => {
+                    userModel.findOne({ username: username }, 'username', (err, user) => {
                         if (err) {
-                            success.success(response, 500);
+                            responder.status(response, 500);
                         } else {
                             if (user) {
                                 const websites = user.preferredSites;
@@ -186,24 +231,73 @@ function getPreferences(data, response) {
                                     'domains': domains
                                 };
 
-                                success.content(response, content);
+                                responder.content(response, content);
                             } else {
-                                success.success(response, 401);
+                                responder.status(response, 401);
                             }
                         }
                     })
                 } else {
-                    success.success(response, 500);
+                    responder.status(response, 500);
                 }
             }
         });
     } else {
-        success.success(response, 400);
+        responder.status(response, 400);
     }
 }
 
 function setPreferences(data, response) {
-    response.end();
+    if (data.method === 'PUT') {
+        try {
+            const token = data.headers['auth-token']
+            const values = JSON.parse(data.payload);
+            const websites = values.websites;
+            const domains = values.domains;
+
+            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
+                if (err) {
+                    responder.status(response, 401);
+                }
+                else {
+                    if (decoded) {
+                        const username = decoded.userName;
+                    
+                        userModel.findOne(
+                            { username: username },
+                            (err, user) => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    if (user) {
+                                        user.preferredDomains = inputValidator.domains(domains);
+                                        user.preferredSites = inputValidator.websites(websites);
+
+                                        user.save(err => {
+                                            if (err) {
+                                                responder.status(response, 500);
+                                            } else {
+                                                responder.status(response, 200);
+                                            }
+                                        });
+                                    } else {
+                                        responder.status(response, 401);
+                                    }
+                                }
+                            }
+                        );
+                    } else {
+                        responder.status(response, 401);
+                    }
+                }
+            });
+        } catch {
+            responder.status(response, 400);
+        }
+
+    } else {
+        responder.status(response, 400);
+    }
 }
 
 module.exports = { register, login, deleteAccount, getFeed, getPreferences, setPreferences };

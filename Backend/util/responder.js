@@ -1,4 +1,4 @@
-function success(response, status) {
+function status(response, status) {
     let message = {
         'success': false
     };
@@ -16,4 +16,4 @@ function content(response, content) {
     response.end(JSON.stringify(content));
 }
 
-module.exports = { success, content };
+module.exports = { status, content };

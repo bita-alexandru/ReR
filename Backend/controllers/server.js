@@ -1,10 +1,8 @@
 const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
-const pagerController = require('./pager');
-const userController = require('./user');
 const assetView = require('../views/asset');
-const httpErrorView = require('../views/http_error');
+const router = require('../util/router');
 
 let server = http.createServer((request, response) => {
     let parsedUrl = url.parse(request.url, true);
@@ -25,7 +23,11 @@ let server = http.createServer((request, response) => {
     request.on('end', () => {
         buffer += decoder.end();
 
-        let handler = typeof (router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : router['not_found'];
+        let handler =
+            typeof (router.routes[trimmedPath]) !== 'undefined' ?
+                router.routes[trimmedPath] :
+                router.routes['not_found'];
+
         let data = {
             'trimmedPath': trimmedPath,
             'queryString': queryString,
@@ -54,21 +56,5 @@ let server = http.createServer((request, response) => {
     });
 
 });
-
-const router = {
-    '': pagerController.index,
-    'preferences': pagerController.preferences,
-    'account': pagerController.account,
-    'get_feed': userController.getFeed,
-    'get_preferences': userController.getPreferences,
-    'set_preferences': userController.setPreferences,
-    'register': userController.register,
-    'login': userController.login,
-    'logout': userController.logout,
-    'delete_account': userController.deleteAccount,
-    'not_found': function notFound(data, response) {
-        httpErrorView.notFound(data, response);
-    }
-};
 
 module.exports = { server };
