@@ -6,12 +6,12 @@ const resourceModel = require('../models/resource');
 const responder = require('../util/responder');
 const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
-const httpErrorView = require('../views/http_error');
 const adminUtil = require('../util/admin');
+const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
     if (adminUtil.usableRegister == false) {
-        httpErrorView.serverUnavailable(data, response);
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 

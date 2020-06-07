@@ -174,40 +174,67 @@ function toggleRegister(data, response) {
 }
 
 function toggleDeleteAccount(data, response) {
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableDeleteAccount = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 
-    try {
-        usableDeleteAccount = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
 }
 
 function toggleGetFeed(data, response) {
-    try {
-        usableGetFeed = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableGetFeed = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
+
 }
 
 function toggleGetPreferences(data, response) {
-    try {
-        usableGetPreferences = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableGetPreferences = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
+
 }
 
 function toggleSetPreferences(data, response) {
-    try {
-        usableSetPreferences = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableSetPreferences = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
+
 }
 
 module.exports = {
