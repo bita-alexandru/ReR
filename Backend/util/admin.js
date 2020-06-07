@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
-const responde = require('./responder');
+const responder = require('./responder');
 
 function getUser(data, response) {
 
