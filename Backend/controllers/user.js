@@ -10,7 +10,7 @@ const adminUtil = require('../util/admin');
 const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
-    if (adminUtil.usableRegister == false) {
+    if (adminUtil.usables.usableRegister === false) {
         httpErrorView.serviceUnavailable(data, response);
         return;
     }
@@ -66,8 +66,8 @@ function register(data, response) {
 }
 
 function login(data, response) {
-    if (adminUtil.usableLogin == false) {
-        httpErrorView.serverUnavailable(data, response);
+    if (adminUtil.usables.usableLogin === false) {
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 
@@ -118,8 +118,8 @@ function login(data, response) {
 }
 
 function deleteAccount(data, response) {
-    if (adminUtil.usableDeleteAccount == false) {
-        httpErrorView.serverUnavailable(data, response);
+    if (adminUtil.usables.usableDeleteAccount === false) {
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 
@@ -176,8 +176,8 @@ function deleteAccount(data, response) {
 }
 
 function getFeed(data, response) {
-    if (adminUtil.usableGetFeed == false) {
-        httpErrorView.serverUnavailable(data, response);
+    if (adminUtil.usables.usableGetFeed === false) {
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 
@@ -223,8 +223,8 @@ function getFeed(data, response) {
 }
 
 function getPreferences(data, response) {
-    if (adminUtil.usableGetPreferences == false) {
-        httpErrorView.serverUnavailable(data, response);
+    if (adminUtil.usables.usableGetPreferences === false) {
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 
@@ -274,8 +274,8 @@ function getPreferences(data, response) {
 }
 
 function setPreferences(data, response) {
-    if (adminUtil.usableSetPreferences == false) {
-        httpErrorView.serverUnavailable(data, response);
+    if (adminUtil.usables.usableSetPreferences === false) {
+        httpErrorView.serviceUnavailable(data, response);
         return;
     }
 

@@ -22,7 +22,25 @@ const routes = {
     'delete_account': userController.deleteAccount,
 
     // serve admin operations
-    'admin/set_resource': adminUtil.manageResource
+    'admin/export/users': adminUtil.exportUsers,
+    'admin/export/resources': adminUtil.exportResources,
+    'admin/get/user': adminUtil.manageUser,
+    'admin/get/resource': adminUtil.manageResource,
+    'admin/create/user': adminUtil.manageUser,
+    'admin/create/resource': adminUtil.manageResource,
+    'admin/update/user': adminUtil.manageUser,
+    'admin/update/resource': adminUtil.manageResource,
+    'admin/delete/user': adminUtil.manageUser,
+    'admin/delete/resource': adminUtil.manageResource,
+    'admin/toggle/feed': adminUtil.usables.toggleFeed,
+    'admin/toggle/preferences': adminUtil.usables.togglePreferences,
+    'admin/toggle/account': adminUtil.usables.toggleAccount,
+    'admin/toggle/get_feed': adminUtil.usables.toggleGetFeed,
+    'admin/toggle/get_preferences': adminUtil.usables.togglePreferences,
+    'admin/toggle/set_preferences': adminUtil.usables.toggleSetPreferences,
+    'admin/toggle/register': adminUtil.usables.toggleRegister,
+    'admin/toggle/login': adminUtil.usables.toggleLogin,
+    'admin/toggle/delete_account': adminUtil.usables.toggleDeleteAccount
 };
 
 module.exports = { routes };

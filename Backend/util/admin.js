@@ -5,15 +5,162 @@ const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
 
-let usableFeed = true;
-let usablePreference = true;
-let usableAccount = true;
-let usableGetFeed = true;
-let usableGetPreferences = true;
-let usableSetPreferences = true;
-let usableRegister = true;
-let usableLogin = true;
-let usableDeleteAccount = true;
+let usables = {
+    usableFeed: true,
+    usablePreferences: true,
+    usableAccount: true,
+    usableGetFeed: true,
+    usableGetPreferences: true,
+    usableSetPreferences: true,
+    usableRegister: true,
+    usableLogin: true,
+    usableDeleteAccount: true,
+
+    toggleFeed: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableFeed = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                    console.log('admin' + usables.usableFeed);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    togglePreferences: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usablePreference = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleAccount: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableAccount = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleLogin: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableLogin = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleRegister: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableRegister = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleDeleteAccount: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableDeleteAccount = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleGetFeed: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableGetFeed = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleGetPreferences: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableGetPreferences = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleSetPreferences: function (data, response) {
+        isAdmin(data, result => {
+            if (result === 200) {
+                try {
+                    const option = JSON.parse(data.payload).option;
+                    usables.usableSetPreferences = typeof (option) === 'boolean' ? option : (result = 400);
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    }
+};
 
 function isAdmin(data, callback) {
     try {
@@ -21,7 +168,7 @@ function isAdmin(data, callback) {
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
-                callback(500);
+                callback(401);
             } else {
                 if (!decoded) {
                     callback(500);
@@ -51,14 +198,6 @@ function manageUser(data, response) {
 
 }
 
-// isAdmin(data, result => {
-//     if (result === 200) {
-//         // continut
-//     } else {
-//         responder.status(response, result);
-//     }
-// });
-
 function manageResource(data, response) {
     isAdmin(data, result => {
         if (result === 200) {
@@ -76,11 +215,11 @@ function manageResource(data, response) {
                             date: values.date,
                             image: values.image
                         },
-                        (err) => {
+                        err => {
                             if (err) { // something went wrong, perhaps an internal error
-                                responder.status(response, 500);
+                                responder.status(response, 400);
                             } else { // resource created & stored successfully
-                                responder.status(response, 200);
+                                responder.status(response, result);
                             }
                         }
                     );
@@ -98,150 +237,8 @@ function manageResource(data, response) {
     });
 }
 
-function toggleFeed(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableFeed = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-}
-
-function togglePreferences(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usablePreference = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-}
-
-function toggleAccount(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableAccount = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-}
-
-function toggleLogin(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableLogin = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-}
-
-function toggleRegister(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableRegister = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-}
-
-function toggleDeleteAccount(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableDeleteAccount = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-
-}
-
-function toggleGetFeed(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableGetFeed = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-
-}
-
-function toggleGetPreferences(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableGetPreferences = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-
-}
-
-function toggleSetPreferences(data, response) {
-    isAdmin(data, result => {
-        if (result === 200) {
-            try {
-                usableSetPreferences = JSON.parse(data.payload).option;
-                responder.status(response, 200);
-            } catch {
-                responder.status(response, 500);
-            }
-        } else {
-            responder.status(response, result);
-        }
-    });
-
-}
-
 module.exports = {
-    usableFeed, usablePreference, usableAccount, usableGetFeed,
-    usableGetPreferences, usableSetPreferences, usableRegister, usableLogin, usableDeleteAccount,
+    usables,
     exportUsers, exportResources,
     manageUser, manageResource,
-    toggleFeed, togglePreferences, toggleAccount,
-    toggleGetFeed, toggleGetPreferences, toggleSetPreferences, toggleRegister, toggleLogin, toggleDeleteAccount
 };
