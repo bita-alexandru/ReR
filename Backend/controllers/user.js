@@ -6,8 +6,15 @@ const resourceModel = require('../models/resource');
 const responder = require('../util/responder');
 const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
+const httpErrorView = require('../views/http_error');
+const adminUtil = require('../util/admin');
 
 function register(data, response) {
+    if (adminUtil.usableRegister == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
@@ -59,6 +66,11 @@ function register(data, response) {
 }
 
 function login(data, response) {
+    if (adminUtil.usableLogin == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
@@ -106,6 +118,11 @@ function login(data, response) {
 }
 
 function deleteAccount(data, response) {
+    if (adminUtil.usableDeleteAccount == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'DELETE') {
         try {
             const values = JSON.parse(data.payload);
@@ -159,6 +176,11 @@ function deleteAccount(data, response) {
 }
 
 function getFeed(data, response) {
+    if (adminUtil.usableGetFeed == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'GET') {
         const token = data.headers['auth-token'];
 
@@ -172,7 +194,7 @@ function getFeed(data, response) {
                         } else { // found the requested resources
                             responder.content(response, resources);
                         }
-                    }   
+                    }
                 );
             } else { // user is authenticated
                 userModel.findOne( // get user's preferred domains and websites
@@ -201,6 +223,11 @@ function getFeed(data, response) {
 }
 
 function getPreferences(data, response) {
+    if (adminUtil.usableGetPreferences == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'GET') {
         const token = data.headers['auth-token']
 
@@ -247,6 +274,11 @@ function getPreferences(data, response) {
 }
 
 function setPreferences(data, response) {
+    if (adminUtil.usableSetPreferences == false) {
+        httpErrorView.serverUnavailable(data, response);
+        return;
+    }
+
     if (data.method === 'PUT') {
         try {
             const token = data.headers['auth-token']

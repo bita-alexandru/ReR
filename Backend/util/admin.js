@@ -51,13 +51,21 @@ function manageUser(data, response) {
 
 }
 
+// isAdmin(data, result => {
+//     if (result === 200) {
+//         // continut
+//     } else {
+//         responder.status(response, result);
+//     }
+// });
+
 function manageResource(data, response) {
     isAdmin(data, result => {
         if (result === 200) {
             if (data.method === 'POST') {
                 try {
                     const values = JSON.parse(data.payload);
-                    
+
                     resourceModel.create( // create and store a new resource
                         {
                             _id: mongoose.Types.ObjectId(),
@@ -91,51 +99,82 @@ function manageResource(data, response) {
 }
 
 function toggleFeed(data, response) {
-    try {
-        usableFeed = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableFeed = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function togglePreferences(data, response) {
-    try {
-        usablePreference = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usablePreference = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function toggleAccount(data, response) {
-    try {
-        usableAccount = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableAccount = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function toggleLogin(data, response) {
-    try {
-        usableLogin = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableLogin = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function toggleRegister(data, response) {
-    try {
-        usableRegister = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
+    isAdmin(data, result => {
+        if (result === 200) {
+            try {
+                usableRegister = JSON.parse(data.payload).option;
+                responder.status(response, 200);
+            } catch {
+                responder.status(response, 500);
+            }
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function toggleDeleteAccount(data, response) {
+
     try {
         usableDeleteAccount = JSON.parse(data.payload).option;
         responder.status(response, 200);
@@ -165,15 +204,6 @@ function toggleGetPreferences(data, response) {
 function toggleSetPreferences(data, response) {
     try {
         usableSetPreferences = JSON.parse(data.payload).option;
-        responder.status(response, 200);
-    } catch {
-        responder.status(response, 500);
-    }
-}
-
-function toggleDeleteAccount(data, response) {
-    try {
-        usableDeleteAccount = JSON.parse(data.payload).option;
         responder.status(response, 200);
     } catch {
         responder.status(response, 500);
