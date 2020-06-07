@@ -50,10 +50,10 @@ let server = http.createServer((request, response) => {
             handler(data, response);
         }
 
-        console.log(`${method}: ${trimmedPath}`);
-        console.log('query: ' + JSON.stringify(queryString, null, " "));
-        console.log('headers: ' + JSON.stringify(headers, null, " "));
-        console.log('payload: ' + buffer);
+        // console.log(`${method}: ${trimmedPath}`);
+        // console.log('query: ' + JSON.stringify(queryString, null, " "));
+        // console.log('headers: ' + JSON.stringify(headers, null, " "));
+        // console.log('payload: ' + buffer);
     });
 
 });

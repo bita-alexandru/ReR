@@ -2,12 +2,11 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const preferences = require('./available_preferences');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
 const preferences = require('../util/available_preferences')
-
+const cookieParser = require('../util/cookie_parser');
 
 let usables = {
     usableFeed: true,
@@ -168,8 +167,8 @@ let usables = {
 
 function isAdmin(data, callback) {
     try {
-        const token = data.headers['auth-token'];
-
+        const token = cookieParser.parse(data)['token'];
+        
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
                 callback(401);
@@ -186,6 +185,7 @@ function isAdmin(data, callback) {
             }
         });
     } catch {
+        console.log(3);
         callback(400);
     }
 }
@@ -259,8 +259,8 @@ function exportResources(data, response) {
 }
 
 function manageUser(data, response) {
-    // isAdmin(data, result => {
-        // if (result === 200) {
+    isAdmin(data, result => {
+        if (result === 200) {
             if (data.method === 'POST') {
                 try {
                     const values = JSON.parse(data.payload);
@@ -279,11 +279,11 @@ function manageUser(data, response) {
                                     preferredDomains: preferences.default_domains,
                                     preferredSites: preferences.default_websites
                                 },
-                                err => {
+                                (err, user) => {
                                     if (err) {
                                         responder.status(response, 500);
                                     } else {
-                                        responder.status(response, 200);
+                                        responder.content(response, user);
                                     }
                                 }
                             );
@@ -297,7 +297,7 @@ function manageUser(data, response) {
                     const values = JSON.parse(data.payload);
                     const username = values.username;
 
-                    userModel.find({ username: username }, 'username', (err, user) => {
+                    userModel.find({ username: username }, (err, user) => {
                         if (err) {
                             responder.status(response, 500);
                         }
@@ -306,22 +306,11 @@ function manageUser(data, response) {
                                 userModel.find(
                                     { username: username },
                                     { password: 0 },
-                                    (err, resources) => {
+                                    (err, users) => {
                                         if (err) { // something went wrong, perhaps an internal error
                                             responder.status(response, 500);
                                         } else {
-                                            const date = new Date();
-                                            const file = 'User_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
-
-                                            fs.writeFile(
-                                                file,
-                                                JSON.stringify(resources, null, " "), err => {
-                                                    if (err) {
-                                                        responder.status(response, 500);
-                                                    } else {
-                                                        responder.status(response, 200);
-                                                    }
-                                                });
+                                            responder.content(response, users);
                                         }
                                     }
                                 );
@@ -339,7 +328,7 @@ function manageUser(data, response) {
                     const values = JSON.parse(data.payload);
                     const username = values.username;
 
-                    userModel.find({ username: username }, 'username', (err, user) => {
+                    userModel.find({ username: username }, (err, user) => {
                         if (err) {
                             responder.status(response, 500);
                         } else {
@@ -376,22 +365,23 @@ function manageUser(data, response) {
                                     user.preferredSites = values.preferredSites;
                                 }
                                 user.save();
-                                responder.status(response, 200);
+                                responder.content(response, user);
                             }
                             else {
                                 responder.status(response, 500);
                             }
                         }
                     });
-                    responder.status(response, 200);
                 } catch{
                     responder.status(response, 400);
                 }
+            } else {
+                responder.status(response, 400);
             }
-        // } else {
-            // responder.status(response, result);
-        // }
-    // })x  ;
+        } else {
+            responder.status(response, result);
+        }
+    });
 }
 
 function manageResource(data, response) {
@@ -426,10 +416,45 @@ function manageResource(data, response) {
             } else if (data.method === 'GET') {
                 try {
                     const values = JSON.parse(data.payload);
-                    const domains = values.domains;
-                    const website = values.website;
+                    let domains = values.domains;
+                    let website = values.website;
                     const source = values.source;
 
+                    if (source) {
+                        resourceModel.findOne(
+                            { source: source },
+                            (err, resource) => {
+                                if (err) {
+                                    responder.status(repsonse, 500);
+                                } else {
+                                    responder.content(response, resource);
+                                }
+                            }
+                        );
+
+                        return;
+                    }
+
+                    if (!domains) {
+                        domains = preferences.all_domains;
+                    }
+                    if (!websites) {
+                        website = preferences.all_websites;
+                    }
+
+                    resourceModel.find(
+                        {
+                            domains: { $in: domains },
+                            website: { $in: website }
+                        },
+                        (err, resources) => {
+                            if (err) {
+                                responder.status(response, 500);
+                            } else {
+                                responder.content(response, resources);
+                            }
+                        }
+                    );
                 } catch {
                     responder.status(responder, 400);
                 }

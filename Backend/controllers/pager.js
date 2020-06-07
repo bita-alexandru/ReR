@@ -5,7 +5,6 @@ const httpErrorView = require('../views/http_error');
 const adminUtil = require('../util/admin');
 
 function index(data, response) {
-    console.log('index:'+adminUtil.usables.usableFeed);
     if (adminUtil.usables.usableFeed === false) {
         httpErrorView.serviceUnavailable(data, response);
         return;
