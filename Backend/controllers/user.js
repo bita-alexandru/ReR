@@ -21,6 +21,11 @@ function register(data, response) {
             const username = values.username;
             const password = values.password;
 
+            if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+                responder.status(response, 400);
+                return;
+            }
+
             userModel.findOne( // check if username is already used
                 { username: username }, 'username',
                 (err, user) => {
@@ -76,6 +81,11 @@ function login(data, response) {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
+
+            if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+                responder.status(response, 400);
+                return;
+            }
 
             userModel.findOne({ username: username }, '_id username password', (err, user) => {
                 if (err) {
