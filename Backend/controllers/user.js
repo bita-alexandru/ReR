@@ -20,8 +20,15 @@ function register(data, response) {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
+            const confirm_password = values.confirm_password;
 
-            if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+            if (inputValidator.username(username) === false ||
+                inputValidator.password(password) === false || inputValidator.password(confirm_password)) {
+                responder.status(response, 400);
+                return;
+            }
+
+            if (password !== confirm_password) {
                 responder.status(response, 400);
                 return;
             }
@@ -82,10 +89,10 @@ function login(data, response) {
             const username = values.username;
             const password = values.password;
 
-            if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
-                responder.status(response, 400);
-                return;
-            }
+            // if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+            //     responder.status(response, 400);
+            //     return;
+            // }
 
             userModel.findOne({ username: username }, '_id username password', (err, user) => {
                 if (err) {
@@ -197,7 +204,7 @@ function getFeed(data, response) {
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
                 resourceModel.find( // get resources based on the default domains and websites
-                    { domains: { $in: preferences.default_domains }, source: { $in: preferences.default_websites } },
+                    { domains: { $in: preferences.default_domains }, website: { $in: preferences.default_websites } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);

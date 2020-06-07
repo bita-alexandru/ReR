@@ -1,6 +1,8 @@
+const fs = require('fs');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const preferences = require('./available_preferences');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
@@ -191,7 +193,30 @@ function exportUsers(data, response) {
 }
 
 function exportResources(data, response) {
+    if (data.method === 'GET') {
+        resourceModel.find( // get all resources
+            (err, resources) => {
+                if (err) { // something went wrong, perhaps an internal error
+                    responder.status(response, 500);
+                } else {
+                    const date = new Date();
+                    const file = 'Resources_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
 
+                    fs.writeFile(
+                        file,
+                        JSON.stringify(resources, null, " "), err => {
+                            if (err) {
+                                responder.status(response, 500);
+                            } else {
+                                responder.status(response, 200);
+                            }
+                        });
+                }
+            }
+        );
+    } else {
+        responder.status(response, 400);
+    }
 }
 
 function manageUser(data, response) {
@@ -212,6 +237,7 @@ function manageResource(data, response) {
                             description: values.description,
                             domains: values.domains,
                             source: values.source,
+                            website: values.website,
                             date: values.date,
                             image: values.image
                         },
@@ -227,8 +253,21 @@ function manageResource(data, response) {
                     console.log('invalid json')
                     responder.status(response, 400);
                 }
+            } else if (data.method === 'GET') {
+                try {
+                    const values = JSON.parse(data.payload);
+                    const domains = values.domains;
+                    const website = values.website;
+                    const source = values.source;
+
+                } catch {
+                    responder.status(responder, 400);
+                }
+            } else if (data.method == 'PUT') {
+
+            } else if (data.method == 'DELETE') {
+
             } else {
-                console.log('not post')
                 responder.status(response, 400);
             }
         } else {
