@@ -13,7 +13,6 @@ function register(data, response) {
             const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
-
             userModel.findOne( // check if username is already used
                 { username: username }, 'username',
                 (err, user) => {
@@ -165,7 +164,7 @@ function getFeed(data, response) {
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
                 resourceModel.find( // get resources based on the default domains and websites
-                    { domains: { $in: preferences.default_domains }, source: { $in: preferences.default_websites } },
+                    { domains: { $in: preferences.default_domains }, website: { $in: preferences.default_websites } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
@@ -181,12 +180,12 @@ function getFeed(data, response) {
                             responder.status(response, 500);
                         } else { // found the requested domains and websites
                             resourceModel.find( // get resources 
-                                { domains: { $in: user.preferredDomains }, source: { $in: user.preferredSites } },
+                                { domains: { $in: user.preferredDomains }, website: { $in: user.preferredSites } },
                                 (err, resources) => { // get resources based on their selection of domains and websites
                                     if (err) { // something went wrong, perhaps an internal error
                                         responder.status(response, 500);
                                     } else { // found the requested resources
-                                        responder.content(response, resources);
+                                        responder.content(response, resources); 
                                     }
                                 }
                             );
