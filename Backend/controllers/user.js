@@ -33,7 +33,7 @@ function register(data, response) {
                 responder.status(response, 400);
                 return;
             }
-            
+
             userModel.findOne( // check if username is already used
                 { username: username }, 'username',
                 (err, user) => {
@@ -254,30 +254,19 @@ function getPreferences(data, response) {
             if (err) { // user is anonymous
                 let websites = [];
                 let domains = [];
-                let allWebsites = [];
-                let allDomains = [];
 
                 for (let i = 0; i < everyWebsite.length; i++) {
                     websites.push(i);
-                    allWebsites.push(i);
                 }
                 for (let i = 0; i < everyDomain.length; i++) {
                     domains.push(i);
-                    allDomains.push(i);
                 }
-                for (let i = everyWebsite.length; i < everyWebsite.length; i++) {
-                    allWebsites.push(i);
-                }
-                for (let i = everyDomain.length; i < everyDomain.length; i++) {
-                    allDomains.push(i);
-                }
-
 
                 const content = {
                     'websites': websites,
                     'domains': domains,
-                    'allWebsites': allWebsites,
-                    'allDomains': allDomains
+                    'allWebsites': everyWebsite,
+                    'allDomains': everyDomain
                 };
 
                 responder.content(response, content);
@@ -292,15 +281,7 @@ function getPreferences(data, response) {
                             if (user) {
                                 let websites = [];
                                 let domains = [];
-                                let allWebsites = [];
-                                let allDomains = [];
 
-                                for (let i = 0; i < everyWebsite.length; i++) {
-                                    allWebsites.push(i);
-                                }
-                                for (let i = 0; i < everyDomain.length; i++) {
-                                    allDomains.push(i);
-                                }
                                 for (let i = 0; i < user.preferredSites.length; i++) {
                                     websites.push(everyWebsite.findIndex(website => website === user.preferredSites[i]));
                                 }
@@ -311,8 +292,8 @@ function getPreferences(data, response) {
                                 const content = {
                                     'websites': websites,
                                     'domains': domains,
-                                    'allWebsites': allWebsites,
-                                    'allDomains': allDomains
+                                    'allWebsites': everyWebsite,
+                                    'allDomains': everyDomain
                                 };
 
                                 responder.content(response, content);
