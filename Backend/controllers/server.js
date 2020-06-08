@@ -25,6 +25,10 @@ let server = http.createServer((request, response) => {
         queryString = JSON.stringify(queryString);
         buffer = parser.parseQuery(buffer);
 
+        if(buffer) {
+            buffer = queryString;
+        }
+
         let handler =
             typeof (router.routes[trimmedPath]) !== 'undefined' ?
                 router.routes[trimmedPath] :

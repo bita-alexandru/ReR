@@ -10,6 +10,26 @@ const adminUtil = require('../util/admin');
 const parser = require('../util/parser');
 const httpErrorView = require('../views/http_error');
 
+function isAuthenticated(data, response) {
+    if (data.method === 'GET') {
+        const token = parser.parseCookie(data).token;
+
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
+            if (err) {
+                responder.status(response, 401);
+            } else {
+                if (decoded) {
+                    responder.status(response, 200);
+                } else {
+                    responder.status(response, 401);
+                }
+            }
+        });
+    } else {
+        responder.status(response, 400);
+    }
+}
+
 function register(data, response) {
     if (adminUtil.usables.usableRegister === false) {
         httpErrorView.serviceUnavailable(data, response);
@@ -368,4 +388,4 @@ function setPreferences(data, response) {
     }
 }
 
-module.exports = { register, login, deleteAccount, getFeed, getPreferences, setPreferences };
+module.exports = { isAuthenticated, register, login, deleteAccount, getFeed, getPreferences, setPreferences };

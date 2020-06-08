@@ -453,13 +453,13 @@ function manageResource(data, response) {
                     resourceModel.create( // create and store a new resource
                         {
                             _id: mongoose.Types.ObjectId(),
-                            title: values.title,
-                            description: values.description,
-                            domains: values.domains,
-                            source: values.source,
-                            website: values.website,
-                            date: values.date,
-                            image: values.image
+                            title: typeof (values.title) ? values.title : title,
+                            description: typeof (values.description) ? values.description : description,
+                            domains: typeof (values.domains) ? values.domains.split(',') : domains,
+                            url: typeof (values.url) ? values.url : source,
+                            website: typeof (values.website) ? values.website : website,
+                            image: typeof (values.image) ? values.image : image,
+                            date: typeof (values.date) ? values.date : date
                         },
                         (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
@@ -478,11 +478,11 @@ function manageResource(data, response) {
                     let domains;
                     let website;
 
-                    if (typeof (values.source)) {
-                        const source = values.source;
+                    if (typeof (values.url)) {
+                        const source = values.url;
 
                         resourceModel.findOne(
-                            { source: source },
+                            { url: source },
                             (err, resource) => {
                                 if (err) {
                                     responder.status(repsonse, 500);
@@ -497,9 +497,13 @@ function manageResource(data, response) {
 
                     if (typeof (values.domains)) {
                         domains = preferences.all_domains;
+                    } else {
+                        domains.split(',');
                     }
                     if (typeof (values.website)) {
                         website = preferences.all_websites;
+                    } else {
+                        domains.split(',');
                     }
 
                     resourceModel.find(
@@ -521,16 +525,16 @@ function manageResource(data, response) {
             } else if (data.method == 'PATCH') {
                 try {
                     const values = JSON.parse(data.queryString)
-                    const source = values.source;
-                    const newSource = values.newSource;
+                    const source = values.url;
+                    const newUrl = values.newUrl;
 
                     resourceModel.updateOne(
-                        { source: source },
+                        { url: source },
                         {
-                            source: newSource ? newSource : source,
+                            url: typeof (newUrl) ? newUrl : source,
                             title: typeof (values.title) ? values.title : title,
                             description: typeof (values.description) ? values.description : description,
-                            domains: typeof (values.domains) ? values.domains : domains,
+                            domains: typeof (values.domains) ? values.domains.split(',') : domains,
                             website: typeof (values.website) ? values.website : website,
                             image: typeof (values.image) ? values.image : image,
                             date: typeof (values.date) ? values.date : date
@@ -550,10 +554,10 @@ function manageResource(data, response) {
             } else if (data.method == 'DELETE') {
                 try {
                     const values = JSON.parse(data.queryString)
-                    const source = values.source;
+                    const source = values.url;
 
                     resourceModel.deleteOne(
-                        { source: source },
+                        { url: source },
                         err => {
                             if (err) {
                                 responder.status(repsonse, 500);

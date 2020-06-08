@@ -35,7 +35,7 @@ function createCard(cardData) {
     newTitle.classList.add('ml-1');
     newTitle.classList.add("col-1");
     newTitle.innerText = title;
-    newTitle.href = cardData.source;
+    newTitle.href = cardData.url;
     newTitle.target = "_blank";
 
     let newDescription = document.createElement("div");

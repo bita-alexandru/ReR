@@ -220,7 +220,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1234/admin/manage/resource?title=Inedit! SOC SOC SOC!&description=iti vei bate nevasta cand vei afla cum a aparut Inna in cea mai noua revista pt barbati !&domains=Economy,Politics,Animals&source=www.revisteonline.ro/cauta?editie=13&website=www.spotify.com&date=2000-02-22&image=https://image.shutterstock.com/image-photo/blur-background-naked-sexual-young-260nw-578298256.jpg",
+							"raw": "http://localhost:1234/admin/manage/resource?title=Inedit! SOC SOC SOC!&description=iti vei bate nevasta cand vei afla cum a aparut Inna in cea mai noua revista pt barbati !&domains=Economy,Politics,Animals&url=www.revisteonline.ro/cauta?editie=13&website=www.spotify.com&date=2000-02-22&image=https://image.shutterstock.com/image-photo/blur-background-naked-sexual-young-260nw-578298256.jpg",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -245,7 +245,7 @@
 									"value": "Economy,Politics,Animals"
 								},
 								{
-									"key": "source",
+									"key": "url",
 									"value": "www.revisteonline.ro/cauta?editie=13"
 								},
 								{
@@ -874,6 +874,25 @@
 			"name": "user_ops",
 			"item": [
 				{
+					"name": "/is_authenticated",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:1234/is_authenticated",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "1234",
+							"path": [
+								"is_authenticated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/get_feed",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -988,7 +1007,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1234/register?username=username&password=password&confirmPassword=password",
+							"raw": "http://localhost:1234/register?username=ioana1&password=Parola1_&confirmPassword=Parola1_",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1000,15 +1019,15 @@
 							"query": [
 								{
 									"key": "username",
-									"value": "username"
+									"value": "ioana1"
 								},
 								{
 									"key": "password",
-									"value": "password"
+									"value": "Parola1_"
 								},
 								{
 									"key": "confirmPassword",
-									"value": "password"
+									"value": "Parola1_"
 								}
 							]
 						}

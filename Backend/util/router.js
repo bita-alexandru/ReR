@@ -13,6 +13,7 @@ const routes = {
     },
 
     // serve user operations
+    'is_authenticated': userController.isAuthenticated,
     'get_feed': userController.getFeed,
     'get_preferences': userController.getPreferences,
     'set_preferences': userController.setPreferences,
