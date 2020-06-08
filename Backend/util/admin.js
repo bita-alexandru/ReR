@@ -6,7 +6,7 @@ const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
 const preferences = require('../util/available_preferences')
-const cookieParser = require('../util/cookie_parser');
+const parser = require('./parser');
 
 let usables = {
     usableFeed: true,
@@ -21,12 +21,19 @@ let usables = {
 
     toggleFeed: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableFeed = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableFeed = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableFeed = false;
+                    }
                     responder.status(response, result);
-                    console.log('admin' + usables.usableFeed);
                 } catch {
                     responder.status(response, 400);
                 }
@@ -38,10 +45,18 @@ let usables = {
 
     togglePreferences: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usablePreference = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usablePreferences = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usablePreferences = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -54,10 +69,18 @@ let usables = {
 
     toggleAccount: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableAccount = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableAccount = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableAccount = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -70,10 +93,18 @@ let usables = {
 
     toggleLogin: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableLogin = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableLogin = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableLogin = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -86,10 +117,18 @@ let usables = {
 
     toggleRegister: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableRegister = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableRegister = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableRegister = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -102,10 +141,18 @@ let usables = {
 
     toggleDeleteAccount: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableDeleteAccount = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableDeleteAccount = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableDeleteAccount = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -118,10 +165,18 @@ let usables = {
 
     toggleGetFeed: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableGetFeed = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableGetFeed = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableGetFeed = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -134,10 +189,18 @@ let usables = {
 
     toggleGetPreferences: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableGetPreferences = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableGetPreferences = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableGetPreferences = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -150,10 +213,18 @@ let usables = {
 
     toggleSetPreferences: function (data, response) {
         isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option;
-                    usables.usableSetPreferences = typeof (option) === 'boolean' ? option : (result = 400);
+                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableSetPreferences = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableSetPreferences = false;
+                    }
                     responder.status(response, result);
                 } catch {
                     responder.status(response, 400);
@@ -167,8 +238,8 @@ let usables = {
 
 function isAdmin(data, callback) {
     try {
-        const token = cookieParser.parse(data)['token'];
-        
+        const token = parser.parseCookie(data)['token'];
+
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
                 callback(401);
@@ -185,40 +256,39 @@ function isAdmin(data, callback) {
             }
         });
     } catch {
-        console.log(3);
         callback(400);
     }
 }
 
 function exportUsers(data, response) {
     isAdmin(data, result => {
+        if (data.method !== 'GET') {
+            responder.status(response, 400);
+            return;
+        }
         if (result === 200) {
-            if (data.method === 'GET') {
-                userModel.find( // get all user
-                    null,
-                    { password: 0 },
-                    (err, resources) => {
-                        if (err) { // something went wrong, perhaps an internal error
-                            responder.status(response, 500);
-                        } else {
-                            const date = new Date();
-                            const file = 'User_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
+            userModel.find( // get all users
+                null,
+                { password: 0 },
+                (err, resources) => {
+                    if (err) { // something went wrong, perhaps an internal error
+                        responder.status(response, 500);
+                    } else {
+                        const date = new Date();
+                        const file = 'User_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
 
-                            fs.writeFile(
-                                file,
-                                JSON.stringify(resources, null, " "), err => {
-                                    if (err) {
-                                        responder.status(response, 500);
-                                    } else {
-                                        responder.status(response, 200);
-                                    }
-                                });
-                        }
+                        fs.writeFile(
+                            file,
+                            JSON.stringify(resources, null, " "), err => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    responder.status(response, 200);
+                                }
+                            });
                     }
-                );
-            } else {
-                responder.status(response, 400);
-            }
+                }
+            );
         } else {
             responder.status(response, result);
         }
@@ -227,31 +297,31 @@ function exportUsers(data, response) {
 
 function exportResources(data, response) {
     isAdmin(data, result => {
+        if (data.method !== 'GET') {
+            responder.status(response, 400);
+            return;
+        }
         if (result === 200) {
-            if (data.method === 'GET') {
-                resourceModel.find( // get all resources
-                    (err, resources) => {
-                        if (err) { // something went wrong, perhaps an internal error
-                            responder.status(response, 500);
-                        } else {
-                            const date = new Date();
-                            const file = 'Resources_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
+            resourceModel.find( // get all resources
+                (err, resources) => {
+                    if (err) { // something went wrong, perhaps an internal error
+                        responder.status(response, 500);
+                    } else {
+                        const date = new Date();
+                        const file = 'Resources_' + date.getFullYear() + '_' + (date.getMonth() + 1) + '_' + date.getDate() + '.json';
 
-                            fs.writeFile(
-                                file,
-                                JSON.stringify(resources, null, " "), err => {
-                                    if (err) {
-                                        responder.status(response, 500);
-                                    } else {
-                                        responder.status(response, 200);
-                                    }
-                                });
-                        }
+                        fs.writeFile(
+                            file,
+                            JSON.stringify(resources, null, " "), err => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    responder.status(response, 200);
+                                }
+                            });
                     }
-                );
-            } else {
-                responder.status(response, 400);
-            }
+                }
+            );
         } else {
             responder.status(response, result);
         }
@@ -263,7 +333,7 @@ function manageUser(data, response) {
         if (result === 200) {
             if (data.method === 'POST') {
                 try {
-                    const values = JSON.parse(data.payload);
+                    const values = JSON.parse(data.queryString);
                     const password = values.password;
                     const saltRounds = 13;
 
@@ -271,13 +341,17 @@ function manageUser(data, response) {
                         if (err) {
                             responder.status(response, 500); // something went wrong, perhaps an internal error
                         } else {
+                            const date = new Date();
+                            const today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
                             userModel.create( // create and store a new user
                                 {
                                     _id: mongoose.Types.ObjectId(),
                                     username: values.username,
                                     password: hash,
                                     preferredDomains: preferences.default_domains,
-                                    preferredSites: preferences.default_websites
+                                    preferredSites: preferences.default_websites,
+                                    date: today
                                 },
                                 (err, user) => {
                                     if (err) {
@@ -294,7 +368,7 @@ function manageUser(data, response) {
                 }
             } else if (data.method === 'GET') {
                 try {
-                    const values = JSON.parse(data.payload);
+                    const values = JSON.parse(data.queryString);
                     const username = values.username;
 
                     userModel.find({ username: username }, (err, user) => {
@@ -325,53 +399,38 @@ function manageUser(data, response) {
                 }
             } else if (data.method === 'DELETE') {
                 try {
-                    const values = JSON.parse(data.payload);
+                    const values = JSON.parse(data.queryString);
                     const username = values.username;
 
-                    userModel.find({ username: username }, (err, user) => {
+                    userModel.deleteOne({ username: username }, err => {
                         if (err) {
                             responder.status(response, 500);
                         } else {
-                            if (user) {
-                                userModel.deleteOne({ username: username }, (err) => {
-                                    if (err) {
-                                        responder.status(response, 500);
-                                    } else {
-                                        responder.status(response, 200);
-                                    }
-                                });
-                            } else {
-                                responder.status(response, 500);
-                            }
+                            responder.status(response, 200);
                         }
-                    });
+                    }
+                    );
                 } catch{
                     responder.status(response, 400);
                 }
-            } else if (data.method === 'PUT') {
+            } else if (data.method === 'PATCH') {
                 try {
-                    const values = JSON.parse(data.payload);
+                    const values = JSON.parse(data.queryString);
                     const username = values.username;
 
-                    userModel.findOne({ username: username }, 'username preferredDomains preferredSites', (err, user) => {
-                        if (err) {
-                            responder.status(response, 500);
-                        } else {
-                            if (user) {
-                                if (values.preferredDomains !== 'undefined') {
-                                    user.preferredDomains = values.preferredDomains;
-                                }
-                                if (values.preferredSites !== 'undefined') {
-                                    user.preferredSites = values.preferredSites;
-                                }
-                                user.save();
-                                responder.content(response, user);
-                            }
-                            else {
+                    userModel.updateOne(
+                        { username: username },
+                        {
+                            preferredDomains: typeof (values.preferredDomains) ? values.preferredDomains : preferredDomains,
+                            preferredSites: typeof (values.preferredSites) ? values.preferredSites : preferredSites
+                        },
+                        err => {
+                            if (err) {
                                 responder.status(response, 500);
+                            } else {
+                                responder.status(response, 200);
                             }
-                        }
-                    });
+                        });
                 } catch{
                     responder.status(response, 400);
                 }
@@ -389,7 +448,7 @@ function manageResource(data, response) {
         if (result === 200) {
             if (data.method === 'POST') {
                 try {
-                    const values = JSON.parse(data.payload);
+                    const values = JSON.parse(data.queryString);
 
                     resourceModel.create( // create and store a new resource
                         {
@@ -402,11 +461,11 @@ function manageResource(data, response) {
                             date: values.date,
                             image: values.image
                         },
-                        err => {
+                        (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
                                 responder.status(response, 400);
                             } else { // resource created & stored successfully
-                                responder.status(response, result);
+                                responder.content(response, resource);
                             }
                         }
                     );
@@ -415,12 +474,13 @@ function manageResource(data, response) {
                 }
             } else if (data.method === 'GET') {
                 try {
-                    const values = JSON.parse(data.payload);
-                    let domains = values.domains;
-                    let website = values.website;
-                    const source = values.source;
+                    const values = JSON.parse(data.queryString);
+                    let domains;
+                    let website;
 
-                    if (source) {
+                    if (typeof (values.source)) {
+                        const source = values.source;
+
                         resourceModel.findOne(
                             { source: source },
                             (err, resource) => {
@@ -435,17 +495,17 @@ function manageResource(data, response) {
                         return;
                     }
 
-                    if (!domains) {
+                    if (typeof (values.domains)) {
                         domains = preferences.all_domains;
                     }
-                    if (!websites) {
+                    if (typeof (values.website)) {
                         website = preferences.all_websites;
                     }
 
                     resourceModel.find(
                         {
-                            domains: { $in: domains },
-                            website: { $in: website }
+                            domains: { $in: preferences.all_domains },
+                            website: { $in: preferences.all_websites }
                         },
                         (err, resources) => {
                             if (err) {
@@ -458,10 +518,53 @@ function manageResource(data, response) {
                 } catch {
                     responder.status(responder, 400);
                 }
-            } else if (data.method == 'PUT') {
+            } else if (data.method == 'PATCH') {
+                try {
+                    const values = JSON.parse(data.queryString)
+                    const source = values.source;
+                    const newSource = values.newSource;
 
+                    resourceModel.updateOne(
+                        { source: source },
+                        {
+                            source: newSource ? newSource : source,
+                            title: typeof (values.title) ? values.title : title,
+                            description: typeof (values.description) ? values.description : description,
+                            domains: typeof (values.domains) ? values.domains : domains,
+                            website: typeof (values.website) ? values.website : website,
+                            image: typeof (values.image) ? values.image : image,
+                            date: typeof (values.date) ? values.date : date
+                        },
+                        err => {
+                            console.log(1);
+                            if (err) {
+                                responder.status(repsonse, 500);
+                            } else {
+                                responder.status(response, 200);
+                            }
+                        }
+                    );
+                } catch {
+                    responder.status(response, status);
+                }
             } else if (data.method == 'DELETE') {
+                try {
+                    const values = JSON.parse(data.queryString)
+                    const source = values.source;
 
+                    resourceModel.deleteOne(
+                        { source: source },
+                        err => {
+                            if (err) {
+                                responder.status(repsonse, 500);
+                            } else {
+                                responder.status(response, 200);
+                            }
+                        }
+                    );
+                } catch {
+                    responder.status(response, status);
+                }
             } else {
                 responder.status(response, 400);
             }

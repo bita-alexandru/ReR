@@ -7,7 +7,7 @@ const responder = require('../util/responder');
 const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
 const adminUtil = require('../util/admin');
-const cookieParser = require('../util/cookie_parser');
+const parser = require('../util/parser');
 const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
@@ -18,18 +18,18 @@ function register(data, response) {
 
     if (data.method === 'POST') {
         try {
-            const values = JSON.parse(data.payload);
+            const values = JSON.parse(data.queryString);
             const username = values.username;
             const password = values.password;
-            const confirm_password = values.confirm_password;
+            const confirmPassword = values.confirmPassword;
 
             if (inputValidator.username(username) === false ||
-                inputValidator.password(password) === false || inputValidator.password(confirm_password)) {
+                inputValidator.password(password) === false || inputValidator.password(confirmPassword)) {
                 responder.status(response, 400);
                 return;
             }
 
-            if (password !== confirm_password) {
+            if (password !== confirmPassword) {
                 responder.status(response, 400);
                 return;
             }
@@ -49,13 +49,17 @@ function register(data, response) {
                                 if (err) {
                                     responder.status(response, 500); // something went wrong, perhaps an internal error
                                 } else {
+                                    const date = new Date();
+                                    const today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
                                     userModel.create( // create and store a new user
                                         {
                                             _id: mongoose.Types.ObjectId(),
                                             username: username,
                                             password: hash,
                                             preferredDomains: preferences.default_domains,
-                                            preferredSites: preferences.default_websites
+                                            preferredSites: preferences.default_websites,
+                                            date: today
                                         },
                                         err => {
                                             if (err) {
@@ -86,7 +90,7 @@ function login(data, response) {
 
     if (data.method === 'POST') {
         try {
-            const values = JSON.parse(data.payload);
+            const values = JSON.parse(data.queryString);
             const username = values.username;
             const password = values.password;
 
@@ -138,8 +142,8 @@ function deleteAccount(data, response) {
 
     if (data.method === 'DELETE') {
         try {
-            const values = JSON.parse(data.payload);
-            const token = cookieParser.parse(data).token;
+            const values = JSON.parse(data.queryString);
+            const token = parser.parseCookie(data).token;
             const password = values.password;
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
@@ -195,7 +199,7 @@ function getFeed(data, response) {
     }
 
     if (data.method === 'GET') {
-        const token = cookieParser.parse(data).token;
+        const token = parser.parseCookie(data).token;
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
@@ -221,7 +225,7 @@ function getFeed(data, response) {
                                     if (err) { // something went wrong, perhaps an internal error
                                         responder.status(response, 500);
                                     } else { // found the requested resources
-                                        responder.content(response, resources); 
+                                        responder.content(response, resources);
                                     }
                                 }
                             );
@@ -242,15 +246,38 @@ function getPreferences(data, response) {
     }
 
     if (data.method === 'GET') {
-        const token = cookieParser.parse(data).token
+        const token = parser.parseCookie(data).token
+        const everyWebsite = preferences.all_websites;
+        const everyDomain = preferences.all_domains;
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) { // user is anonymous
-                const default_domains = preferences.default_domains;
-                const default_websites = preferences.default_websites;
+                let websites = [];
+                let domains = [];
+                let allWebsites = [];
+                let allDomains = [];
+
+                for (let i = 0; i < everyWebsite.length; i++) {
+                    websites.push(i);
+                    allWebsites.push(i);
+                }
+                for (let i = 0; i < everyDomain.length; i++) {
+                    domains.push(i);
+                    allDomains.push(i);
+                }
+                for (let i = everyWebsite.length; i < everyWebsite.length; i++) {
+                    allWebsites.push(i);
+                }
+                for (let i = everyDomain.length; i < everyDomain.length; i++) {
+                    allDomains.push(i);
+                }
+
+
                 const content = {
-                    'websites': default_websites,
-                    'domains': default_domains
+                    'websites': websites,
+                    'domains': domains,
+                    'allWebsites': allWebsites,
+                    'allDomains': allDomains
                 };
 
                 responder.content(response, content);
@@ -263,11 +290,29 @@ function getPreferences(data, response) {
                             responder.status(response, 500);
                         } else {
                             if (user) {
-                                const websites = user.preferredSites;
-                                const domains = user.preferredDomains;
+                                let websites = [];
+                                let domains = [];
+                                let allWebsites = [];
+                                let allDomains = [];
+
+                                for (let i = 0; i < everyWebsite.length; i++) {
+                                    allWebsites.push(i);
+                                }
+                                for (let i = 0; i < everyDomain.length; i++) {
+                                    allDomains.push(i);
+                                }
+                                for (let i = 0; i < user.preferredSites.length; i++) {
+                                    websites.push(everyWebsite.findIndex(website => website === user.preferredSites[i]));
+                                }
+                                for (let i = 0; i < user.preferredDomains.length; i++) {
+                                    domains.push(everyDomain.findIndex(domain => domain === user.preferredDomains[i]));
+                                }
+
                                 const content = {
                                     'websites': websites,
-                                    'domains': domains
+                                    'domains': domains,
+                                    'allWebsites': allWebsites,
+                                    'allDomains': allDomains
                                 };
 
                                 responder.content(response, content);
@@ -294,10 +339,17 @@ function setPreferences(data, response) {
 
     if (data.method === 'PUT') {
         try {
-            const token = cookieParser.parse(data).token
-            const values = JSON.parse(data.payload);
-            const websites = values.websites;
-            const domains = values.domains;
+            const token = parser.parseCookie(data).token
+            const values = JSON.parse(data.queryString);
+            let websites = [];
+            let domains = [];
+
+            if (typeof (values.websites)) {
+                websites = values.websites.split(',');
+            }
+            if (typeof (values.domains)) {
+                domains = values.domains.split(',');
+            }
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
@@ -306,28 +358,19 @@ function setPreferences(data, response) {
                 else {
                     if (decoded) {
                         const username = decoded.userName;
-
-                        userModel.findOne(
+                    
+                        userModel.updateOne(
                             { username: username },
-                            (err, user) => {
+                            {
+                                preferredDomains: inputValidator.domains(domains),
+                                preferredSites: inputValidator.websites(websites)
+                            },
+                            err => {
                                 if (err) {
                                     responder.status(response, 500);
                                 } else {
-                                    if (user) {
-                                        user.preferredDomains = inputValidator.domains(domains);
-                                        user.preferredSites = inputValidator.websites(websites);
-
-                                        user.save(err => {
-                                            if (err) {
-                                                responder.status(response, 500);
-                                            } else {
-                                                responder.status(response, 200);
-                                            }
-                                        });
-                                    } else {
-                                        responder.status(response, 401);
-                                    }
-                                }
+                                    responder.status(response, 200);
+                                };
                             }
                         );
                     } else {
