@@ -18,22 +18,22 @@ function register(data, response) {
 
     if (data.method === 'POST') {
         try {
-            const values = JSON.parse(data.queryString);
+            const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
             const confirmPassword = values.confirmPassword;
 
             if (inputValidator.username(username) === false ||
-                inputValidator.password(password) === false || inputValidator.password(confirmPassword)) {
+                inputValidator.password(password) === false ||
+                confirmPassword !== password) {
                 responder.status(response, 400);
                 return;
             }
-
             if (password !== confirmPassword) {
                 responder.status(response, 400);
                 return;
             }
-
+            
             userModel.findOne( // check if username is already used
                 { username: username }, 'username',
                 (err, user) => {
@@ -90,7 +90,7 @@ function login(data, response) {
 
     if (data.method === 'POST') {
         try {
-            const values = JSON.parse(data.queryString);
+            const values = JSON.parse(data.payload);
             const username = values.username;
             const password = values.password;
 
@@ -358,7 +358,7 @@ function setPreferences(data, response) {
                 else {
                     if (decoded) {
                         const username = decoded.userName;
-                    
+
                         userModel.updateOne(
                             { username: username },
                             {
