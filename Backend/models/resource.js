@@ -5,9 +5,9 @@ const resourceSchema = mongoose.Schema({
     title: String,
     description: String,
     domains: [String],
-    source: String,
+    url: String,
     website: String,
-    date: Date,
+    published: Date,
     image: String
 })
 
