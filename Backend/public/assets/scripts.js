@@ -7,10 +7,10 @@ function toggleDependentCheckbox(caller, target) {
     }
 }
 
-function createCard(src, title, link) {
-    src = src === undefined ? "https://i.pinimg.com/236x/54/a4/00/54a4008daad4565a9b5db1b94e59c74c.jpg" : src;
-    title = title === undefined ? "Of" : title;
-    link = link === undefined ? "https://www.youtube.com/watch?v=QLlUEMtfbSk" : link;
+function createCard(cardData) {
+    src = cardData.image;
+    title = cardData.title;
+    link = '';
 
     let content = document.getElementById("content");
 
@@ -35,15 +35,13 @@ function createCard(src, title, link) {
     newTitle.classList.add('ml-1');
     newTitle.classList.add("col-1");
     newTitle.innerText = title;
-    newTitle.href = link;
+    newTitle.href = cardData.source;
     newTitle.target = "_blank";
-
-
 
     let newDescription = document.createElement("div");
     newDescription.classList.add('ml-1');
     newDescription.classList.add("col-3");
-    newDescription.innerText = "pfpfPF";
+    newDescription.innerText = cardData.description;   
 
     cardContentDiv.append(newTitle);
     cardContentDiv.append(newDescription);
@@ -53,4 +51,64 @@ function createCard(src, title, link) {
 
     newCard.append(newRow);
     content.append(newCard);
+}
+
+function getCookie(name) {
+    let cookieName = name + "=";
+    let allCookies = document.cookie.split(';');
+    for(let i = 0; i < allCookies.length; i++) {
+        let cookie = allCookies[i];
+        cookie = ' ' + cookie;
+        while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1);
+            if (cookie.indexOf(cookieName) != -1) {
+                return cookie.substring(cookieName.length,cookie.length);
+            }
+        }
+    }
+    return null;
+} 
+
+function initializeAccountPage(){
+    if(getCookie('token') === null){
+        let registerForm = document.getElementById('register-account');
+        registerForm.classList.remove('display-none');
+        let loginForm = document.getElementById('login-account');
+        loginForm.classList.remove('display-none');
+    }
+    else{
+        let deleteForm = document.getElementById('delete-account');
+        deleteForm.classList.remove('display-none');
+    }
+}
+
+function loggedIn(){
+    if(getCookie('token') === null){
+        return true;
+    }
+    return true;
+}
+
+function getFeed(){
+    if(loggedIn()){
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.method = 'GET';
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
+                    let jsonData = JSON.parse(xmlhttp.response);
+                    let content = document.getElementById('content');
+                    for(let i = 0; i < jsonData.length; i++){
+                        createCard(jsonData[i]);
+                    }
+                } else if(xmlhttp.status === 400){
+                   alert('Bad Request');
+                } else if(xmlhttp.status === 500){
+                    window.location = '/internal_error';
+                }
+            }
+          }
+          xmlhttp.open('GET', '/get_feed');
+          xmlhttp.send();
+    }
 }

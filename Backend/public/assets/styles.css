@@ -116,3 +116,7 @@ font-size: 1.5rem;
 .form-control{
 width:100%;
 }
+
+.display-none{
+  display: none;
+}
