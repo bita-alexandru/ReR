@@ -302,10 +302,10 @@ function getPreferences(data, response) {
                                     allDomains.push(i);
                                 }
                                 for (let i = 0; i < user.preferredSites.length; i++) {
-                                    websites.push(everyWebsite.findIndex(website => website === user.preferredSites[i]) - 1);
+                                    websites.push(everyWebsite.findIndex(website => website === user.preferredSites[i]));
                                 }
                                 for (let i = 0; i < user.preferredDomains.length; i++) {
-                                    domains.push(everyDomain.findIndex(domain => domain === user.preferredDomains[i]) - 1);
+                                    domains.push(everyDomain.findIndex(domain => domain === user.preferredDomains[i]));
                                 }
 
                                 const content = {
@@ -345,10 +345,10 @@ function setPreferences(data, response) {
             let domains = [];
 
             if (typeof (values.websites)) {
-                websites = Array.from(values.websites);
+                websites = values.websites.split(',');
             }
             if (typeof (values.domains)) {
-                domains = Array.from(values.domains);
+                domains = values.domains.split(',');
             }
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
@@ -358,7 +358,7 @@ function setPreferences(data, response) {
                 else {
                     if (decoded) {
                         const username = decoded.userName;
-
+                    
                         userModel.updateOne(
                             { username: username },
                             {
