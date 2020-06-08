@@ -52,7 +52,6 @@ let server = http.createServer((request, response) => {
             handler(data, response);
         }
 
-        console.log(`${method}: ${trimmedPath}`);
         console.log(data);
     });
 
