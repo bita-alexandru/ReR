@@ -1,6 +1,6 @@
 const http = require('http');
 
-function parse(data) {
+function parseCookie(data) {
     let list = {};
     let cookies = data.headers.cookie;
 
@@ -12,4 +12,4 @@ function parse(data) {
     return list;
 }
 
-module.exports = { parse };
+module.exports = { parseCookie };

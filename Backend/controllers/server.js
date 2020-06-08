@@ -3,10 +3,11 @@ const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const assetView = require('../views/asset');
 const router = require('../util/router');
+const parser = require('../util/parser');
 
 let server = http.createServer((request, response) => {
     let parsedUrl = url.parse(request.url, true);
-    let path = parsedUrl.path;
+    let path = parsedUrl.path.split('?')[0];
     let trimmedPath = path.replace(/^\/+|\/+$/g, '');
 
     let queryString = parsedUrl.query;
@@ -17,14 +18,13 @@ let server = http.createServer((request, response) => {
     let buffer = '';
     request.on('data', (data) => {
         buffer += decoder.write(data);
-        if (request.method === 'POST') {
-            buffer = convertBodyToJSON(buffer);
-        }
     });
 
     request.on('end', () => {
         buffer += decoder.end();
-
+        queryString = JSON.stringify(queryString);
+        console.log(queryString)
+        
         let handler =
             typeof (router.routes[trimmedPath]) !== 'undefined' ?
                 router.routes[trimmedPath] :
@@ -37,7 +37,7 @@ let server = http.createServer((request, response) => {
             'headers': headers,
             'payload': buffer
         };
-        
+
         if (trimmedPath.startsWith('assets/')) {
             if (trimmedPath.endsWith('.css')) {
                 assetView.getCSS(data, response);
@@ -52,23 +52,12 @@ let server = http.createServer((request, response) => {
             handler(data, response);
         }
 
-        // console.log(`${method}: ${trimmedPath}`);
+        console.log(`${method}: ${trimmedPath}`);
         // console.log('query: ' + JSON.stringify(queryString, null, " "));
         // console.log('headers: ' + JSON.stringify(headers, null, " "));
         // console.log('payload: ' + buffer);
     });
 
 });
-
-function convertBodyToJSON(data) {
-    let property;
-    let myJson = {};
-    let properties = data.slice(data.indexOf('?') + 1).split('&');
-    for (let i = 0; i < properties.length; i++) {
-        property = properties[i].split('=');
-        myJson[property[0]] = property[1];
-    }
-    return JSON.stringify(myJson);
-}
 
 module.exports = { server };

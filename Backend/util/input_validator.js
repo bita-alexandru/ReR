@@ -20,7 +20,6 @@ function domains(domains) {
             result.push(domain);
         }
     });
-
     return result;
 }
 
