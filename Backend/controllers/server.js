@@ -23,8 +23,8 @@ let server = http.createServer((request, response) => {
     request.on('end', () => {
         buffer += decoder.end();
         queryString = JSON.stringify(queryString);
-        console.log(queryString)
-        
+        buffer = parser.parseQuery(buffer);
+
         let handler =
             typeof (router.routes[trimmedPath]) !== 'undefined' ?
                 router.routes[trimmedPath] :
@@ -53,9 +53,7 @@ let server = http.createServer((request, response) => {
         }
 
         console.log(`${method}: ${trimmedPath}`);
-        // console.log('query: ' + JSON.stringify(queryString, null, " "));
-        // console.log('headers: ' + JSON.stringify(headers, null, " "));
-        // console.log('payload: ' + buffer);
+        console.log(data);
     });
 
 });
