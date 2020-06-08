@@ -12,6 +12,7 @@ let server = http.createServer((request, response) => {
     let queryString = parsedUrl.query;
     let method = request.method.toUpperCase();
     let headers = request.headers;
+    let authCookie = getCookie('token', request.headers.cookie);
 
     let decoder = new StringDecoder('utf-8');
     let buffer = '';
@@ -35,7 +36,8 @@ let server = http.createServer((request, response) => {
             'queryString': queryString,
             'method': method,
             'headers': headers,
-            'payload': buffer
+            'payload': buffer,
+            'authCookie': authCookie
         };
         
         if (trimmedPath.startsWith('assets/')) {
@@ -70,5 +72,22 @@ function convertBodyToJSON(data) {
     }
     return JSON.stringify(myJson);
 }
+
+function getCookie(name, allCookies) {
+    if(allCookies === undefined) return null;
+    let cookieName = name + "=";
+    allCookies = allCookies.split(';');
+    for(let i = 0; i < allCookies.length; i++) {
+        let cookie = allCookies[i];
+        cookie = ' ' + cookie;
+        while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1);
+            if (cookie.indexOf(cookieName) != -1) {
+                return cookie.substring(cookieName.length,cookie.length);
+            }
+        }
+    }
+    return null;
+} 
 
 module.exports = { server };

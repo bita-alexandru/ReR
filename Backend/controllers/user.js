@@ -7,7 +7,6 @@ const responder = require('../util/responder');
 const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
 const adminUtil = require('../util/admin');
-const cookieParser = require('../util/cookie_parser');
 const httpErrorView = require('../views/http_error');
 
 function register(data, response) {
@@ -90,6 +89,11 @@ function login(data, response) {
             const username = values.username;
             const password = values.password;
 
+            // if (inputValidator.username(username) === false || inputValidator.password(password) === false) {
+            //     responder.status(response, 400);
+            //     return;
+            // }
+
             userModel.findOne({ username: username }, '_id username password', (err, user) => {
                 if (err) {
                     responder.status(response, 500);
@@ -139,7 +143,7 @@ function deleteAccount(data, response) {
     if (data.method === 'DELETE') {
         try {
             const values = JSON.parse(data.payload);
-            const token = cookieParser.parse(data).token;
+            const token = data.headers['auth-token'];
             const password = values.password;
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
@@ -195,7 +199,7 @@ function getFeed(data, response) {
     }
 
     if (data.method === 'GET') {
-        const token = cookieParser.parse(data).token;
+        const token = data.authCookie;
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
@@ -242,8 +246,7 @@ function getPreferences(data, response) {
     }
 
     if (data.method === 'GET') {
-        const token = cookieParser.parse(data).token
-
+        const token = data.authCookie;
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) { // user is anonymous
                 const default_domains = preferences.default_domains;
@@ -265,9 +268,13 @@ function getPreferences(data, response) {
                             if (user) {
                                 const websites = user.preferredSites;
                                 const domains = user.preferredDomains;
+                                const default_domains = preferences.default_domains;
+                                const default_websites = preferences.default_websites;
                                 const content = {
                                     'websites': websites,
-                                    'domains': domains
+                                    'domains': domains,
+                                    'default_websites': default_websites,
+                                    'default_domains': default_domains
                                 };
 
                                 responder.content(response, content);
@@ -292,9 +299,9 @@ function setPreferences(data, response) {
         return;
     }
 
-    if (data.method === 'PUT') {
+    if (data.method === 'POST') {
         try {
-            const token = cookieParser.parse(data).token
+            const token = data.authCookie;
             const values = JSON.parse(data.payload);
             const websites = values.websites;
             const domains = values.domains;
