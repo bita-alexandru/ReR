@@ -7,6 +7,6 @@ const userSchema = mongoose.Schema({
     preferredDomains: [String],
     excludedSites: [String],
     date: Date
-})
+});
 
 module.exports = mongoose.model('User', userSchema);

@@ -20,4 +20,4 @@ server.listen(port, host, () => {
     console.log(`Listening at ${host}:${port}`);
 });
 
-providers.gatherResources(1);
+providers.gatherResources(60);

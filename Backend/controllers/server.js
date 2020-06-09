@@ -26,7 +26,7 @@ let server = http.createServer((request, response) => {
         queryString = JSON.stringify(queryString);
         buffer = parser.parseQuery(buffer);
 
-        if(buffer) {
+        if(buffer.length < queryString.length) {
             buffer = queryString;
         }
 

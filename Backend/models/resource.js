@@ -9,6 +9,6 @@ const resourceSchema = mongoose.Schema({
     website: String,
     published: Date,
     image: String
-})
+});
 
 module.exports = mongoose.model('Resource', resourceSchema);

@@ -437,8 +437,8 @@ function manageUser(data, response) {
                     userModel.updateOne(
                         { username: username },
                         {
-                            preferredDomains: typeof (values.preferredDomains) ? values.preferredDomains : preferredDomains,
-                            excludedSites: typeof (values.excludedSites) ? values.excludedSites : excludedSites
+                            preferredDomains: values.preferredDomains.split(','),
+                            excludedSites: values.excludedSites.split(',')
                         },
                         err => {
                             if (err) {
@@ -469,13 +469,13 @@ function manageResource(data, response) {
                     resourceModel.create( // create and store a new resource
                         {
                             _id: mongoose.Types.ObjectId(),
-                            title: typeof (values.title) ? values.title : title,
-                            description: typeof (values.description) ? values.description : description,
-                            domains: typeof (values.domains) ? values.domains.split(',') : domains,
-                            url: typeof (values.url) ? values.url : source,
-                            website: typeof (values.website) ? values.website : website,
-                            image: typeof (values.image) ? values.image : image,
-                            date: typeof (values.date) ? values.date : date
+                            title: values.titl,
+                            description: values.description,
+                            domains: values.domains.split(','),
+                            url: values.url,
+                            website: values.website,
+                            image: values.image,
+                            date: values.date
                         },
                         (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
@@ -569,13 +569,13 @@ function manageResource(data, response) {
                     resourceModel.updateOne(
                         { url: source },
                         {
-                            url: typeof (newUrl) ? newUrl : source,
-                            title: typeof (values.title) ? values.title : title,
-                            description: typeof (values.description) ? values.description : description,
-                            domains: typeof (values.domains) ? values.domains.split(',') : domains,
-                            website: typeof (values.website) ? values.website : website,
-                            image: typeof (values.image) ? values.image : image,
-                            date: typeof (values.date) ? values.date : date
+                            url: newUrl,
+                            title: values.title,
+                            description: values.description,
+                            domains: values.domains.split(','),
+                            website: values.website,
+                            image: values.image,
+                            date: values.date
                         },
                         err => {
                             if (err) {

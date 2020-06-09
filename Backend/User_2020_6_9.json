@@ -1,0 +1,84 @@
+[
+ {
+  "preferredDomains": [
+   "technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,art,food,game"
+  ],
+  "excludedSites": null,
+  "_id": "5edcba997f3e5f0cc49bb9dc",
+  "preferredSites": [
+   "",
+   "",
+   "",
+   ""
+  ],
+  "username": "admin",
+  "__v": 0
+ },
+ {
+  "preferredDomains": [
+   "Technology",
+   "Politics",
+   "Sports",
+   "Economy",
+   "Animals",
+   "Music",
+   "Video"
+  ],
+  "excludedSites": [],
+  "_id": "5edd6001f7a77c248488511b",
+  "preferredSites": [
+   "www.bbc.com",
+   "www.digi24.ro",
+   "www.youtube.com",
+   "www.spotify.com",
+   "www.reddit.com"
+  ],
+  "username": "ioana",
+  "__v": 0
+ },
+ {
+  "preferredDomains": [
+   "Technology",
+   "Politics",
+   "Sports",
+   "Economy",
+   "Animals",
+   "Music",
+   "Video"
+  ],
+  "excludedSites": [],
+  "_id": "5edd649520c0ff4dc4be8221",
+  "preferredSites": [
+   "www.bbc.com",
+   "www.digi24.ro",
+   "www.youtube.com",
+   "www.spotify.com",
+   "www.reddit.com"
+  ],
+  "username": "ioanabastana",
+  "__v": 0
+ },
+ {
+  "preferredDomains": [
+   "Technology",
+   "Politics",
+   "Sports",
+   "Economy",
+   "Animals",
+   "Music",
+   "Video"
+  ],
+  "excludedSites": [],
+  "_id": "5ede77201fc3b70a080db7a7",
+  "preferredSites": [
+   "www.bbc.com",
+   "www.digi24.ro",
+   "www.youtube.com",
+   "www.spotify.com",
+   "www.reddit.com"
+  ],
+  "username": "ioana1",
+  "date": "2020-06-07T21:00:00.000Z",
+  "__v": 0
+ }
+]

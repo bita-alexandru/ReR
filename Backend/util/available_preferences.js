@@ -1,19 +1,23 @@
 const default_domains = [
-    'Technology',
-    'Politics',
-    'Sports',
-    'Economy',
-    'Animals',
-    'Music',
-    'Video'
+    'world',
+    'politics',
+    'sports',
+    'technology',
+    'entertainment'
 ];
 
 const all_domains = default_domains.concat([
-    'Blogging',
-    'Lifestyle',
-    'Money',
-    'World',
-    'Gaming'
+    'lifestyle',
+    'business',
+    'science',
+    'health',
+    'environment',
+    'travel',
+    'music',
+    'art',
+    'food',
+    'game',
+    'research'
 ]);
 
 module.exports = { default_domains, all_domains };
