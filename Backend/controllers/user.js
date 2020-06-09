@@ -78,7 +78,6 @@ function register(data, response) {
                                             username: username,
                                             password: hash,
                                             preferredDomains: preferences.default_domains,
-                                            preferredSites: preferences.default_websites,
                                             date: today
                                         },
                                         err => {
@@ -224,7 +223,7 @@ function getFeed(data, response) {
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
                 resourceModel.find( // get resources based on the default domains and websites
-                    { domains: { $in: preferences.default_domains }, website: { $in: preferences.default_websites } },
+                    { domains: { $in: preferences.default_domains } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
@@ -235,12 +234,12 @@ function getFeed(data, response) {
                 );
             } else { // user is authenticated
                 userModel.findOne( // get user's preferred domains and websites
-                    { username: decoded.userName }, 'preferredDomains preferredSites', (err, user) => {
+                    { username: decoded.userName }, 'preferredDomains excludedSites', (err, user) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
                         } else { // found the requested domains and websites
                             resourceModel.find( // get resources 
-                                { domains: { $in: user.preferredDomains }, website: { $in: user.preferredSites } },
+                                { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
                                 (err, resources) => { // get resources based on their selection of domains and websites
                                     if (err) { // something went wrong, perhaps an internal error
                                         responder.status(response, 500);
@@ -267,26 +266,12 @@ function getPreferences(data, response) {
 
     if (data.method === 'GET') {
         const token = parser.parseCookie(data).token
-        const everyWebsite = preferences.all_websites;
-        const everyDomain = preferences.all_domains;
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) { // user is anonymous
-                let websites = [];
-                let domains = [];
-
-                for (let i = 0; i < everyWebsite.length; i++) {
-                    websites.push(i);
-                }
-                for (let i = 0; i < everyDomain.length; i++) {
-                    domains.push(i);
-                }
 
                 const content = {
-                    'websites': websites,
-                    'domains': domains,
-                    'allWebsites': everyWebsite,
-                    'allDomains': everyDomain
+                    'domains': preferences.default_domains,
                 };
 
                 responder.content(response, content);
@@ -294,26 +279,14 @@ function getPreferences(data, response) {
                 if (decoded) {
                     const username = decoded.userName;
 
-                    userModel.findOne({ username: username }, 'preferredSites preferredDomains', (err, user) => {
+                    userModel.findOne({ username: username }, 'preferredDomains excludedSites', (err, user) => {
                         if (err) {
                             responder.status(response, 500);
                         } else {
                             if (user) {
-                                let websites = [];
-                                let domains = [];
-
-                                for (let i = 0; i < user.preferredSites.length; i++) {
-                                    websites.push(everyWebsite.findIndex(website => website === user.preferredSites[i]));
-                                }
-                                for (let i = 0; i < user.preferredDomains.length; i++) {
-                                    domains.push(everyDomain.findIndex(domain => domain === user.preferredDomains[i]));
-                                }
-
                                 const content = {
-                                    'websites': websites,
-                                    'domains': domains,
-                                    'allWebsites': everyWebsite,
-                                    'allDomains': everyDomain
+                                    'domains': preferredDomains,
+                                    'websites': excludedSites,
                                 };
 
                                 responder.content(response, content);
@@ -364,7 +337,7 @@ function setPreferences(data, response) {
                             { username: username },
                             {
                                 preferredDomains: inputValidator.domains(domains),
-                                preferredSites: inputValidator.websites(websites)
+                                excludedSites: websites
                             },
                             err => {
                                 if (err) {

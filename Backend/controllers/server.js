@@ -16,6 +16,7 @@ let server = http.createServer((request, response) => {
 
     let decoder = new StringDecoder('utf-8');
     let buffer = '';
+    
     request.on('data', (data) => {
         buffer += decoder.write(data);
     });

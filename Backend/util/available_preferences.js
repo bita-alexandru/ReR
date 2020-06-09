@@ -8,14 +8,6 @@ const default_domains = [
     'Video'
 ];
 
-const default_websites = [
-    'www.bbc.com',
-    'www.digi24.ro',
-    'www.youtube.com',
-    'www.spotify.com',
-    'www.reddit.com'
-];
-
 const all_domains = default_domains.concat([
     'Blogging',
     'Lifestyle',
@@ -24,10 +16,4 @@ const all_domains = default_domains.concat([
     'Gaming'
 ]);
 
-const all_websites = default_websites.concat([
-    'www.tvr.ro',
-    'www.natgeo.com',
-    'www.metin2.ro'
-]);
-
-module.exports = { default_domains, default_websites, all_domains, all_websites };
+module.exports = { default_domains, all_domains };

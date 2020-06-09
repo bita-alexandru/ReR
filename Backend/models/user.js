@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
     username: String,
     password: String,
     preferredDomains: [String],
-    preferredSites: [String],
+    excludedSites: [String],
     date: Date
 })
 

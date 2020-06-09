@@ -334,8 +334,24 @@ function manageUser(data, response) {
             if (data.method === 'POST') {
                 try {
                     const values = JSON.parse(data.queryString);
-                    const password = values.password;
                     const saltRounds = 13;
+                    let username = "";
+                    let password = "";
+                    let preferredDomains = [];
+                    let excludedSites = [];
+
+                    if (typeof (values.username)) {
+                        username = values.username;
+                    }
+                    if (typeof (values.password)) {
+                        password = values.password;
+                    }
+                    if (typeof (values.preferredDomains)) {
+                        preferredDomains = values.preferredDomains.split(',');
+                    }
+                    if (typeof (values.excludedSites)) {
+                        excludedSites = values.excludedSites.split(',');
+                    }
 
                     bcrypt.hash(password, saltRounds, (err, hash) => { // encrypt the password
                         if (err) {
@@ -347,10 +363,10 @@ function manageUser(data, response) {
                             userModel.create( // create and store a new user
                                 {
                                     _id: mongoose.Types.ObjectId(),
-                                    username: values.username,
+                                    username: username,
                                     password: hash,
-                                    preferredDomains: preferences.default_domains,
-                                    preferredSites: preferences.default_websites,
+                                    preferredDomains: preferredDomains,
+                                    excludedSites: excludedSites,
                                     date: today
                                 },
                                 (err, user) => {
@@ -422,7 +438,7 @@ function manageUser(data, response) {
                         { username: username },
                         {
                             preferredDomains: typeof (values.preferredDomains) ? values.preferredDomains : preferredDomains,
-                            preferredSites: typeof (values.preferredSites) ? values.preferredSites : preferredSites
+                            excludedSites: typeof (values.excludedSites) ? values.excludedSites : excludedSites
                         },
                         err => {
                             if (err) {
@@ -476,9 +492,9 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.queryString);
                     let domains;
-                    let website;
+                    let websites;
 
-                    if (typeof (values.url)) {
+                    if (typeof (values.url) !== 'undefined') {
                         const source = values.url;
 
                         resourceModel.findOne(
@@ -491,34 +507,56 @@ function manageResource(data, response) {
                                 }
                             }
                         );
-
-                        return;
-                    }
-
-                    if (typeof (values.domains)) {
-                        domains = preferences.all_domains;
-                    } else {
+                    } else if (typeof (values.domains) !== 'undefined' && typeof (values.website) !== 'undefined') {
                         domains.split(',');
-                    }
-                    if (typeof (values.website)) {
-                        website = preferences.all_websites;
-                    } else {
-                        domains.split(',');
-                    }
+                        websites.split(',');
 
-                    resourceModel.find(
-                        {
-                            domains: { $in: preferences.all_domains },
-                            website: { $in: preferences.all_websites }
-                        },
-                        (err, resources) => {
-                            if (err) {
-                                responder.status(response, 500);
-                            } else {
-                                responder.content(response, resources);
+                        resourceModel.find(
+                            {
+                                domains: { $in: domains },
+                                website: { $in: websites }
+                            },
+                            (err, resources) => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    responder.content(response, resources);
+                                }
                             }
-                        }
-                    );
+                        );
+                    } else if (typeof (values.domains) !== 'undefined') {
+                        domains.split(',');
+
+                        resourceModel.find(
+                            {
+                                domains: { $in: domains }
+                            },
+                            (err, resources) => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    responder.content(response, resources);
+                                }
+                            }
+                        );
+                    } else if (typeof (values.website) != 'undefined') {
+                        websites.split(',');
+
+                        resourceModel.find(
+                            {
+                                website: { $in: websites }
+                            },
+                            (err, resources) => {
+                                if (err) {
+                                    responder.status(response, 500);
+                                } else {
+                                    responder.content(response, resources);
+                                }
+                            }
+                        );
+                    } else {
+                        responder.status(responder, 400);
+                    }
                 } catch {
                     responder.status(responder, 400);
                 }
@@ -540,7 +578,6 @@ function manageResource(data, response) {
                             date: typeof (values.date) ? values.date : date
                         },
                         err => {
-                            console.log(1);
                             if (err) {
                                 responder.status(repsonse, 500);
                             } else {
