@@ -13,16 +13,16 @@ const httpErrorView = require('../views/http_error');
 function isAuthenticated(data, response) {
     if (data.method === 'GET') {
         const token = parser.parseCookie(data).token;
+        let content = {
+            'success': false
+        };
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
-                responder.status(response, 401);
+                responder.content(response, content);
             } else {
-                if (decoded) {
-                    responder.status(response, 200);
-                } else {
-                    responder.status(response, 401);
-                }
+                content.success = true;
+                responder.content(response, content);
             }
         });
     } else {
