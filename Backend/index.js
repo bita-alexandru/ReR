@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const { server } = require('./controllers/server');
-const providers = require('./controllers/providers');
+const providers = require('./util/providers');
 
 dotenv.config();
 
@@ -20,4 +20,4 @@ server.listen(port, host, () => {
     console.log(`Listening at ${host}:${port}`);
 });
 
-//providers.gatherResources(60);
+providers.gatherResources(5);

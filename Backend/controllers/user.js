@@ -69,8 +69,6 @@ function register(data, response) {
                                 if (err) {
                                     responder.status(response, 500); // something went wrong, perhaps an internal error
                                 } else {
-                                    const date = new Date();
-                                    const today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
                                     userModel.create( // create and store a new user
                                         {
@@ -78,7 +76,7 @@ function register(data, response) {
                                             username: username,
                                             password: hash,
                                             preferredDomains: preferences.default_domains,
-                                            date: today
+                                            date: new Date()
                                         },
                                         err => {
                                             if (err) {

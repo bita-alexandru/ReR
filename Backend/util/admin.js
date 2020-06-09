@@ -357,9 +357,6 @@ function manageUser(data, response) {
                         if (err) {
                             responder.status(response, 500); // something went wrong, perhaps an internal error
                         } else {
-                            const date = new Date();
-                            const today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
                             userModel.create( // create and store a new user
                                 {
                                     _id: mongoose.Types.ObjectId(),
@@ -367,7 +364,7 @@ function manageUser(data, response) {
                                     password: hash,
                                     preferredDomains: preferredDomains,
                                     excludedSites: excludedSites,
-                                    date: today
+                                    date: new Date()
                                 },
                                 (err, user) => {
                                     if (err) {
