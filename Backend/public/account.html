@@ -30,19 +30,19 @@
                     <ul style="list-style: none;">
                         <li>
                             <a href="/" style="text-decoration: none;">
-                              <div>Feed</div>
+                                <div>Feed</div>
                             </a>
-                          </li>
-                          <li>
+                        </li>
+                        <li>
                             <a href="/preferences" style="text-decoration: none;">
-                              <div>Preferences</div>
+                                <div>Preferences</div>
                             </a>
-                          </li>
-                          <li>
+                        </li>
+                        <li>
                             <a href="/account" style="text-decoration: none;">
-                              <div>Account</div>
+                                <div>Account</div>
                             </a>
-                          </li>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -77,7 +77,8 @@
                                 Confirm Password:
                             </div>
                             <div class="col-8">
-                                <input class="form-control" type="password" id="confirmed-password" name="confirmPassword" />
+                                <input class="form-control" type="password" id="confirmed-password"
+                                    name="confirmPassword" />
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -138,12 +139,27 @@
                         </div>
 
                     </form>
+
+                    <div id="logout-account" class="display-none">
+                        <div class="row">
+                            <h3>Logout</h3>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="offset-9 col-2">
+
+                                <button class="form-control" onclick="logout()" type="button">Logout</button>
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>initializeAccountPage();</script>
+    <script>checkLoggedInFor(initializeAccountPage);</script>
 
 </body>
 
