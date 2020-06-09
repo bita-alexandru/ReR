@@ -13,8 +13,9 @@ const all_domains = default_domains.concat([
     'health',
     'environment',
     'travel',
-    'music',
     'art',
+    'music',
+    'video',
     'food',
     'game',
     'research'

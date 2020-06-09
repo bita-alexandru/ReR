@@ -279,7 +279,7 @@ function exportUsers(data, response) {
 
                         fs.writeFile(
                             file,
-                            JSON.stringify(resources, null, " "), err => {
+                            JSON.stringify(resources, null, ' '), err => {
                                 if (err) {
                                     responder.status(response, 500);
                                 } else {
@@ -312,7 +312,7 @@ function exportResources(data, response) {
 
                         fs.writeFile(
                             file,
-                            JSON.stringify(resources, null, " "), err => {
+                            JSON.stringify(resources, null, ' '), err => {
                                 if (err) {
                                     responder.status(response, 500);
                                 } else {
@@ -335,8 +335,8 @@ function manageUser(data, response) {
                 try {
                     const values = JSON.parse(data.queryString);
                     const saltRounds = 13;
-                    let username = "";
-                    let password = "";
+                    let username = '';
+                    let password = '';
                     let preferredDomains = [];
                     let excludedSites = [];
 
@@ -498,7 +498,7 @@ function manageResource(data, response) {
                             { url: source },
                             (err, resource) => {
                                 if (err) {
-                                    responder.status(repsonse, 500);
+                                    responder.status(response, 500);
                                 } else {
                                     responder.content(response, resource);
                                 }
@@ -576,7 +576,7 @@ function manageResource(data, response) {
                         },
                         err => {
                             if (err) {
-                                responder.status(repsonse, 500);
+                                responder.status(response, 500);
                             } else {
                                 responder.status(response, 200);
                             }
@@ -594,7 +594,7 @@ function manageResource(data, response) {
                         { url: source },
                         err => {
                             if (err) {
-                                responder.status(repsonse, 500);
+                                responder.status(response, 500);
                             } else {
                                 responder.status(response, 200);
                             }

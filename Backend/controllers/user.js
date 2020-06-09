@@ -127,7 +127,7 @@ function login(data, response) {
                                     },
                                         process.env.AUTH_TOKEN,
                                         {
-                                            expiresIn: "1h"
+                                            expiresIn: '1h'
                                         }
                                     );
 
@@ -270,6 +270,7 @@ function getPreferences(data, response) {
 
                 const content = {
                     'domains': preferences.default_domains,
+                    'allDomains': preferences.all_domains
                 };
 
                 responder.content(response, content);
@@ -283,7 +284,8 @@ function getPreferences(data, response) {
                         } else {
                             if (user) {
                                 const content = {
-                                    'domains': preferredDomains,
+                                    'domains': user.preferredDomains,
+                                    'allDomains': preferences.all_domains,
                                     'websites': excludedSites,
                                 };
 
