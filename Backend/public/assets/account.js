@@ -1,5 +1,5 @@
-function initializeAccountPage(){
-    if(getCookie('token') === null){
+function initializeAccountPage(logged){
+    if(!logged){
         let registerForm = document.getElementById('register-account');
         registerForm.classList.remove('display-none');
         let loginForm = document.getElementById('login-account');
@@ -8,21 +8,12 @@ function initializeAccountPage(){
     else{
         let deleteForm = document.getElementById('delete-account');
         deleteForm.classList.remove('display-none');
+        let logoutForm = document.getElementById('logout-account');
+        logoutForm.classList.remove('display-none');
     }
 }
 
-function login(e){
-    e.preventDefault();
-
-    let username = document.getElementById('loginUsername').value;
-    let password = document.getElementById('loginPassword').value;
-
-    let formData = {
-        username: username,
-        password: password
-    }
-
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('post', 'login', true);
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+function logout(){
+    document.cookie = 'token=';
+    location.reload();
 }
