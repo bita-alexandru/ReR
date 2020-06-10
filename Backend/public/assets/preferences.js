@@ -9,21 +9,14 @@ function updateSelect(options, id, defaultOption){
     }
 }
 
-`
-<div class="row">
-    <div class="col-8">
-        text
-    </div>
-    <div class="col-4">
-        <button type="button">Remove</button>
-    </div>
-</div>
-`
 function addNewPreference(prefix, data = null){
     let domainSelect = document.getElementById(prefix + 'select');
     let list = document.getElementById(prefix + 'added');
 
-    let selectedOption = domainSelect.options[domainSelect.selectedIndex];
+    if(data === null){
+        var selectedOption = domainSelect.options[domainSelect.selectedIndex];
+    }
+
     let value = data !== null ? data.value : selectedOption.value;
     let text = data !== null ? data.text : selectedOption.innerText;
 
@@ -36,7 +29,7 @@ function addNewPreference(prefix, data = null){
     if(value === null || value === '') return;
 
     let newDomain = document.createElement('li');
-    newDomain.value = value;
+    newDomain.setAttribute('value', value);
     let liDiv = document.createElement('div');
     liDiv.classList.add('row');
     liDiv.style = 'margin-bottom: 0.1rem';
@@ -58,13 +51,26 @@ function addNewPreference(prefix, data = null){
     updateHiddenDomains(prefix);
 }
 
+function addNewWebsite(){
+    let textEl = document.getElementById('excluded-website');
+    let text = textEl.value;
+    if(!validateElement(textEl.id)) return;
+    textEl.value = '';
+    textEl.focus();
+    let website = {
+        value: text,
+        text: text
+    }   
+    addNewPreference('websites-', website);
+}
+
 function updateHiddenDomains(prefix){
     let list = document.getElementById(prefix + 'added');
     let hiddenValue = '';
     let hiddenElement = document.getElementById(prefix + 'hidden');
     hiddenElement.value = '';
     for(let i = 0; i < list.children.length; i++){
-        hiddenValue += list.children[i].getAttribute('value') + ';';
+        hiddenValue += list.children[i].getAttribute('value') + '_';
     }
     hiddenElement.value = hiddenValue;
 }
@@ -81,8 +87,8 @@ function removePreference(prefix, value){
     updateHiddenDomains(prefix);
 }
 
-function getPreferences(){
-    if(loggedIn){
+function getPreferences(logged){
+    if(logged){
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.method = 'GET';
     
@@ -91,10 +97,7 @@ function getPreferences(){
               var response = JSON.parse(xmlhttp.responseText);
                 if (xmlhttp.status === 200) {
                     let jsonData = JSON.parse(xmlhttp.response);
-                    updateSelect(jsonData.default_domains, 'domains-select', 'Select Domain');
-                    updateSelect(jsonData.default_websites, 'websites-select', 'Select Website');
-                    
-
+                    updateSelect(jsonData.allDomains, 'domains-select', 'Select Domain');
                 } else if(xmlhttp.status === 400){
                     alert('Bad Request');
                  } else if(xmlhttp.status === 500){
@@ -102,7 +105,6 @@ function getPreferences(){
                  }
             }
           }
-    
           xmlhttp.open('GET', '/get_preferences');
           xmlhttp.send();
     }

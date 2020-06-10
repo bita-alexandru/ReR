@@ -1,4 +1,4 @@
-function createCard(cardData) {
+function createCard(cardData, index) {
     src = cardData.image;
     title = cardData.title;
     link = '';
@@ -29,9 +29,19 @@ function createCard(cardData) {
     newTitle.href = cardData.url;
     newTitle.target = "_blank";
 
+
+    if(cardData.description != null && cardData.description.length > 150){
+        var a = document.createElement('a');
+        a.innerText = 'Show More';
+        a.href = 'javascript:;';
+        a.onclick = function() { showMore(event, 'id' + index) };
+    }
+
     let newDescription = document.createElement("div");
     newDescription.classList.add('ml-1');
     newDescription.classList.add("col-3");
+    newDescription.classList.add("truncate-text");
+    newDescription.id = 'id' + index;
     newDescription.innerText = cardData.description;
 
     cardContentDiv.append(newTitle);
@@ -39,6 +49,8 @@ function createCard(cardData) {
 
     newRow.append(newImageDiv);
     newRow.append(cardContentDiv);
+    if(cardData.description != null && cardData.description.length > 150)
+    newRow.append(a);
 
     newCard.append(newRow);
     content.append(newCard);
@@ -54,7 +66,7 @@ function getFeed(logged) {
                     let jsonData = JSON.parse(xmlhttp.response);
                     let content = document.getElementById('content');
                     for (let i = 0; i < jsonData.length; i++) {
-                        createCard(jsonData[i]);
+                        createCard(jsonData[i], i);
                     }
                 } else if (xmlhttp.status === 400) {
                     alert('Bad Request');

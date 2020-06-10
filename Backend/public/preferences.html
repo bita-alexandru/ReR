@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"/>
 
   <title>Preferences</title>
 
@@ -49,62 +49,59 @@
 
     <div class="col-7 ml-1">
       <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto;">
-        <div>
-          <div class="card">
-            <form action="set_preferences" method="post">
-              <div style="height: 250px">
-                <div class="row mb-1">
-                  <h3>Domains</h3>
-                </div>
-                <div class="row">
-                  <div class="col-6">
-                    <select class="form-control" id="domains-select">
-                      <option>Select Domain</option>
-                    </select>
-                  </div>
-                  <div class="mb-1 ml-1 col-3">
-                    <button onclick="addNewPreference('domains-')" type="button">Add Domain</button>
-                  </div>
-                </div>
-                <div style="max-height: 125px; overflow-y: auto; overflow-x: hidden;" class="row">
-                  <div class="col-12">
-                    <ul style="list-style-type: none;" id="domains-added">
-                    </ul>
-                  </div>
-                </div>
-                <input name="added_domains" type="hidden" id="domains-hidden" />
-              </div>
-              <div style="height: 250px">
-                <div class="row mb-1">
-                  <h3>Websites</h3>
-                </div>
-                <div class="row">
-                  <div class="col-6">
-                    <select class="form-control" id="websites-select">
-                      <option>Select Website</option>
-                    </select>
-                  </div>
-                  <div class="ml-1 col-3">
-                    <button onclick="addNewPreference('websites-')" type="button">Add Website</button>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <ul style="list-style-type: none;" id="websites-added">
-                    </ul>
-                  </div>
-                </div>
-                <input name="added_websites" type="hidden" id="websites-hidden" />
-              </div>
+        <div class="card">
+          <form class="ml-1" action="set_preferences" method="POST">
+            <div style="height: 250px">
               <div class="row mb-1">
-                <div class="offset-9 col-2">
-                  <input class="form-control" type="submit" id="preferences" value="Submit" />
+                <h3>Domains</h3>
+              </div>
+              <div class="row">
+                <div class="col-9">
+                  <select class="form-control" id="domains-select">
+                    <option>Select Domain</option>
+                  </select>
+                </div>
+                <div class="mb-1 ml-1 col-2">
+                  <button onclick="addNewPreference('domains-')" class="simple-btn" type="button">Add Domain</button>
                 </div>
               </div>
-            </form>
-
-            <script>getPreferences();</script>
-          </div>
+              <div style="max-height: 125px; overflow-y: auto; overflow-x: hidden;" class="row">
+                <div class="col-12">
+                  <ul style="list-style-type: none;" id="domains-added">
+                  </ul>
+                </div>
+              </div>
+              <input name="added_domains" type="hidden" id="domains-hidden" />
+            </div>
+            <div style="height: 250px">
+              <div class="row mb-1">
+                <h3>Excluded Websites</h3>
+              </div>
+              <div class="row">
+                <div class="col-9">
+                  <input type="textbox" class="form-control" id="excluded-website" error-text='The website is invalid.'
+                    validation-regex='^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$' />
+                  <span id="excluded-website-error" class="valid"></span>
+                </div>
+                <div class="ml-1 col-2">
+                  <button onclick="addNewWebsite()" class="simple-btn" type="button">Add Website</button>
+                </div>
+              </div>
+              <div style="max-height: 125px; overflow-y: auto; overflow-x: hidden;" class="row">
+                <div class="col-12">
+                  <ul style="list-style-type: none;" id="websites-added">
+                  </ul>
+                </div>
+              </div>
+              <input name="added_websites" type="hidden" id="websites-hidden" />
+            </div>
+            <div class="row">
+              <div class="offset-9 col-2" style="margin-left: 80.5%;">
+                <input class="form-control" type="submit" id="preferences" class="simple-btn" value="Submit" />
+              </div>
+            </div>
+          </form>
+          <script>checkLoggedInFor(getPreferences);</script>
         </div>
       </div>
     </div>
