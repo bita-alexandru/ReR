@@ -27,7 +27,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -51,7 +51,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usablePreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -75,7 +75,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -99,7 +99,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableLogin = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -123,7 +123,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableRegister = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -147,7 +147,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableDeleteAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -171,7 +171,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -195,7 +195,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -219,7 +219,7 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.queryString).option.toLowerCase();
+                    const option = JSON.parse(data.payload).option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableSetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -333,7 +333,7 @@ function manageUser(data, response) {
         if (result === 200) {
             if (data.method === 'POST') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
                     const saltRounds = 13;
                     let username = '';
                     let password = '';
@@ -381,7 +381,7 @@ function manageUser(data, response) {
                 }
             } else if (data.method === 'GET') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
                     const username = values.username;
 
                     userModel.find({ username: username }, (err, user) => {
@@ -412,7 +412,7 @@ function manageUser(data, response) {
                 }
             } else if (data.method === 'DELETE') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
                     const username = values.username;
 
                     userModel.deleteOne({ username: username }, err => {
@@ -428,7 +428,7 @@ function manageUser(data, response) {
                 }
             } else if (data.method === 'PATCH') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
                     const username = values.username;
 
                     userModel.updateOne(
@@ -461,7 +461,7 @@ function manageResource(data, response) {
         if (result === 200) {
             if (data.method === 'POST') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
 
                     resourceModel.create( // create and store a new resource
                         {
@@ -487,7 +487,7 @@ function manageResource(data, response) {
                 }
             } else if (data.method === 'GET') {
                 try {
-                    const values = JSON.parse(data.queryString);
+                    const values = JSON.parse(data.payload);
                     let domains;
                     let websites;
 
@@ -559,7 +559,7 @@ function manageResource(data, response) {
                 }
             } else if (data.method == 'PATCH') {
                 try {
-                    const values = JSON.parse(data.queryString)
+                    const values = JSON.parse(data.payload)
                     const source = values.url;
                     const newUrl = values.newUrl;
 
@@ -587,7 +587,7 @@ function manageResource(data, response) {
                 }
             } else if (data.method == 'DELETE') {
                 try {
-                    const values = JSON.parse(data.queryString)
+                    const values = JSON.parse(data.payload)
                     const source = values.url;
 
                     resourceModel.deleteOne(

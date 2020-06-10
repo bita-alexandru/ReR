@@ -12,7 +12,7 @@ const apiOpenwhyd = 'https://openwhyd.org/hot?format=json&limit=100';
 // vimeo
 const apiVimeo = 'https://api.vimeo.com/videos?filter=trending';
 // youtube
-const apiYoutube = '';
+const apiYoutube = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&key=';
 let prevYoutube;
 // gettyimages 
 let prevGettyimages = '';
@@ -89,7 +89,7 @@ function getCurrents() { // news
                 prevCurrents = news[0].id;
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE');
+                console.log('EROARE_JSONPARSE_CURRENTS');
             }
         });
 }
@@ -158,7 +158,7 @@ function getOpenwhyd() { // music
                 resources.push(Resource);
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE');
+                console.log('EROARE_JSONPARSE_OPENWHYD');
             }
         });
 }
@@ -202,19 +202,56 @@ function getVimeo() { // videos
                     url: videos[r].link,
                     website: 'https://www.vimeo.com/',
                     published: new Date(),
-                    image: videos[r].pictures.sizes[3].link
+                    image: videos[r].pictures.sizes[2].link
                 });
 
                 resources.push(Resource);
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE');
+                console.log('EROARE_JSONPARSE_VIMEO');
             }
         });
 }
 
 function getYoutube() { // videos
+    fetch(apiYoutube + process.env.AUTH_YOUTUBE, {
+        method: 'get',
+    })
+        .catch(err => console.log('EROARE_API_YOUTUBE:' + err))
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('RASPUNS_API_YOUTUBE:' + response.ok);
+            }
+        })
+        .then(json => {
+            let resources = [];
 
+            try {
+                json = JSON.stringify(json);
+
+                const videos = JSON.parse(json).items;
+
+                let r = Math.floor(Math.random() * videos.length);
+
+                const Resource = new resourceModel({
+                    _id: mongoose.Types.ObjectId(),
+                    title: videos[r].snippet.title,
+                    description: videos[r].snippet.description,
+                    domains: 'video',
+                    url: 'https://www.youtube.com/watch?v=' + videos[r].id,
+                    website: 'https://www.youtube.com/',
+                    published: new Date(),
+                    image: videos[r].snippet.thumbnails.standard.url
+                });
+
+                resources.push(Resource);
+                save(resources);
+            } catch {
+                console.log('EROARE_JSONPARSE_YOUTUBE');
+            }
+        });
 }
 
 function getCore() { // videos
@@ -227,9 +264,10 @@ function getIeee() { // videos
 
 function gatherResources(rate) {
     setInterval(function () {
-        getCurrents();
-        getOpenwhyd();
-        getVimeo();
+        // getCurrents();
+        // getOpenwhyd();
+        // getVimeo();
+        // getYoutube();
     }, rate * 1000);
 }
 

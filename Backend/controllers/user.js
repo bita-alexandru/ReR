@@ -157,9 +157,9 @@ function deleteAccount(data, response) {
         return;
     }
 
-    if (data.method === 'DELETE') {
+    if (data.method === 'POST') {
         try {
-            const values = JSON.parse(data.queryString);
+            const values = JSON.parse(data.payload);
             const token = parser.parseCookie(data).token;
             const password = values.password;
 
@@ -286,7 +286,7 @@ function getPreferences(data, response) {
                                 const content = {
                                     'domains': user.preferredDomains,
                                     'allDomains': preferences.all_domains,
-                                    'websites': excludedSites,
+                                    'websites': user.excludedSites
                                 };
 
                                 responder.content(response, content);
@@ -311,10 +311,10 @@ function setPreferences(data, response) {
         return;
     }
 
-    if (data.method === 'PUT') {
+    if (data.method === 'POST') {
         try {
             const token = parser.parseCookie(data).token
-            const values = JSON.parse(data.queryString);
+            const values = JSON.parse(data.payload);
             let websites = [];
             let domains = [];
 
