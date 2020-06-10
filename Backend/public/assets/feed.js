@@ -30,7 +30,7 @@ function createCard(cardData, index) {
     newTitle.target = "_blank";
 
 
-    if(cardData.description != null && cardData.description.length > 150){
+    if(cardData.description != null && cardData.description.length > 175){
         var a = document.createElement('a');
         a.innerText = 'Show More';
         a.href = 'javascript:;';
@@ -49,7 +49,7 @@ function createCard(cardData, index) {
 
     newRow.append(newImageDiv);
     newRow.append(cardContentDiv);
-    if(cardData.description != null && cardData.description.length > 150)
+    if(cardData.description != null && cardData.description.length > 175)
     newRow.append(a);
 
     newCard.append(newRow);
