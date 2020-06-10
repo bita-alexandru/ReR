@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
     password: String,
     preferredDomains: [String],
     excludedSites: [String],
-    date: Date
+    created: Date
 });
 
 module.exports = mongoose.model('User', userSchema);

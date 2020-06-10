@@ -13,16 +13,12 @@ const httpErrorView = require('../views/http_error');
 function isAuthenticated(data, response) {
     if (data.method === 'GET') {
         const token = parser.parseCookie(data).token;
-        let content = {
-            'success': false
-        };
 
         jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
             if (err) {
-                responder.content(response, content);
+                responder.failure(response);
             } else {
-                content.success = true;
-                responder.content(response, content);
+                responder.success(response);
             }
         });
     } else {
@@ -76,7 +72,7 @@ function register(data, response) {
                                             username: username,
                                             password: hash,
                                             preferredDomains: preferences.default_domains,
-                                            date: new Date()
+                                            created: new Date()
                                         },
                                         err => {
                                             if (err) {
@@ -222,6 +218,8 @@ function getFeed(data, response) {
             if (err) { // user is anonymous
                 resourceModel.find( // get resources based on the default domains and websites
                     { domains: { $in: preferences.default_domains } },
+                    null,
+                    { sort: { published: -1 } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
@@ -238,6 +236,8 @@ function getFeed(data, response) {
                         } else { // found the requested domains and websites
                             resourceModel.find( // get resources 
                                 { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
+                                null,
+                                { sort: { published: -1 } },
                                 (err, resources) => { // get resources based on their selection of domains and websites
                                     if (err) { // something went wrong, perhaps an internal error
                                         responder.status(response, 500);

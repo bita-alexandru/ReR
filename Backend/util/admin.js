@@ -269,7 +269,9 @@ function exportUsers(data, response) {
         if (result === 200) {
             userModel.find( // get all users
                 null,
-                { password: 0 },
+                null,
+                null,
+                { sort: { created: -1 } },
                 (err, resources) => {
                     if (err) { // something went wrong, perhaps an internal error
                         responder.status(response, 500);
@@ -303,6 +305,10 @@ function exportResources(data, response) {
         }
         if (result === 200) {
             resourceModel.find( // get all resources
+                null,
+                null,
+                null,
+                { sort: { published: -1 } },
                 (err, resources) => {
                     if (err) { // something went wrong, perhaps an internal error
                         responder.status(response, 500);
@@ -364,7 +370,7 @@ function manageUser(data, response) {
                                     password: hash,
                                     preferredDomains: preferredDomains,
                                     excludedSites: excludedSites,
-                                    date: new Date()
+                                    created: new Date()
                                 },
                                 (err, user) => {
                                     if (err) {
@@ -472,7 +478,7 @@ function manageResource(data, response) {
                             url: values.url,
                             website: values.website,
                             image: values.image,
-                            date: values.date
+                            created: values.created
                         },
                         (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
@@ -572,7 +578,7 @@ function manageResource(data, response) {
                             domains: values.domains.split(','),
                             website: values.website,
                             image: values.image,
-                            date: values.date
+                            created: values.created
                         },
                         err => {
                             if (err) {
