@@ -9,6 +9,8 @@ const apiCurrents = 'https://api.currentsapi.services/v1/search';
 let prevCurrents = '';
 // openwhyd
 const apiOpenwhyd = 'https://openwhyd.org/hot?format=json&limit=10';
+// lastfm
+const apiLastfm = 'https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&format=json&limit=100&api_key=';
 // vimeo
 const apiVimeo = 'https://api.vimeo.com/videos?filter=trending';
 // youtube
@@ -155,6 +157,47 @@ function getOpenwhyd() { // music
                 save(resources);
             } catch {
                 console.log('ERROR_JSONPARSE_OPENWHYD');
+            }
+        });
+}
+
+function getLastfm() { // music
+    fetch(apiLastfm + process.env.AUTH_LASTFM, {
+        method: 'get'
+    })
+        .catch(err => console.log('ERROR_API_LASTFM:' + err))
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('RESPONSE_API_LASTFM:');
+            }
+        })
+        .then(json => {
+            let resources = [];
+
+            try {
+                json = JSON.stringify(json);
+
+                const tracks = JSON.parse(json).tracks.track;
+
+                let r = Math.floor(Math.random() * tracks.length);
+
+                const Resource = new resourceModel({
+                    _id: mongoose.Types.ObjectId(),
+                    title: tracks[r].artist.name + ' - ' + tracks[r].name,
+                    description: '',
+                    domains: 'music',
+                    url: tracks[r].url,
+                    website: 'www.last.fm',
+                    published: new Date(),
+                    image: tracks[r].image[2]['#text']
+                });
+
+                resources.push(Resource);
+                save(resources);
+            } catch {
+                console.log('ERROR_JSONPARSE_LASTFM');
             }
         });
 }
@@ -418,6 +461,7 @@ function gatherResources(rate) {
     setInterval(function () {
         getCurrents();
         getOpenwhyd();
+        getLastfm();
         getVimeo();
         getYoutube();
         getUnsplash();
