@@ -319,10 +319,10 @@ function setPreferences(data, response) {
             let domains = [];
 
             if (typeof (values.websites)) {
-                websites = values.websites.split(',');
+                websites = values.websites.split('_');
             }
             if (typeof (values.domains)) {
-                domains = values.domains.split(',');
+                domains = values.domains.split('_');
             }
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {

@@ -14,12 +14,10 @@ const apiVimeo = 'https://api.vimeo.com/videos?filter=trending';
 // youtube
 const apiYoutube = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&key=';
 let prevYoutube;
-// gettyimages 
-let prevGettyimages = '';
-const apiGettyimages = '';
-// flickr 
-let prevFlickr = '';
-const apiFlickr = '';
+// unsplash 
+const apiUnsplash = 'https://api.unsplash.com/photos?order_by=latest&per_page=100';
+// pexels 
+const apiPexels = 'https://api.pexels.com/v1/curated';
 // core 
 let prevCore = '';
 const apiCore = '';
@@ -30,7 +28,7 @@ const apiIeee = '';
 function save(resources) {
     resourceModel.insertMany(resources, err => {
         if (err) {
-            console.log('EROARE_INSERTMANY:' + err);
+            console.log('ERROR_INSERTMANY:' + err);
         }
     });
 }
@@ -41,12 +39,12 @@ function getCurrents() { // news
             'Authorization': process.env.AUTH_CURRENTS
         },
     })
-        .catch(err => console.log('EROARE_API_CURRENTS:' + err))
+        .catch(err => console.log('ERROR_API_CURRENTS:' + err))
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                console.log('RASPUNS_API_CURRENTS:' + response.ok);
+                console.log('RESPONSE_API_CURRENTS:' + response.ok);
             }
         })
         .then(json => {
@@ -89,7 +87,7 @@ function getCurrents() { // news
                 prevCurrents = news[0].id;
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE_CURRENTS');
+                console.log('ERROR_JSONPARSE_CURRENTS');
             }
         });
 }
@@ -98,12 +96,12 @@ function getOpenwhyd() { // music
     fetch(apiOpenwhyd, {
         method: 'get'
     })
-        .catch(err => console.log('EROARE_API_OPENWHYD:' + err))
+        .catch(err => console.log('ERROR_API_OPENWHYD:' + err))
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                console.log('RASPUNS_API_OPENWHYD:' + response.ok);
+                console.log('RESPONSE_API_OPENWHYD:' + response.ok);
             }
         })
         .then(json => {
@@ -158,17 +156,101 @@ function getOpenwhyd() { // music
                 resources.push(Resource);
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE_OPENWHYD');
+                console.log('ERROR_JSONPARSE_OPENWHYD');
             }
         });
 }
 
-function getGettyimages() { // images
+function getUnsplash() { // images
+    fetch(apiUnsplash, {
+        method: 'get',
+        headers: { 'Authorization': 'Client-ID ' + process.env.AUTH_UNSPLASH }
+    })
+        .catch(err => console.log('ERROR_API_UNSPLASH:' + err))
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('RESPONSE_API_UNSPLASH:' + response.ok);
+            }
+        })
+        .then(json => {
+            let resources = [];
 
+            try {
+                json = JSON.stringify(json);
+
+                const images = JSON.parse(json);
+
+                let r = Math.floor(Math.random() * images.length);
+
+                const Resource = new resourceModel({
+                    _id: mongoose.Types.ObjectId(),
+                    title: images[r].alt_description.replace(/(\b[a-z](?!\s))/g, function (x) { return x.toUpperCase(); }),
+                    description: images[r].description,
+                    domains: 'photography',
+                    url: images[r].links.html,
+                    website: 'www.unsplash.com',
+                    published: new Date(),
+                    image: images[r].urls.thumb
+                });
+
+                resources.push(Resource);
+                // save(resources);
+                console.log(resources)
+            } catch {
+                console.log('ERROR_JSONPARSE_UNSPLASH');
+            }
+        });
 }
 
-function getFlickr() { // images
 
+function getPexels() { // images
+    fetch(apiPexels, {
+        method: 'get',
+        headers: { 'Authorization': process.env.AUTH_PEXELS }
+        })
+        .catch(err => console.log('ERROR_API_PIXELS' + err))
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('RESPONSE_API_PEXELS' + response.ok)
+            }
+        })
+        .then(json => {
+            let resources = [];
+
+            try {
+                json = JSON.stringify(json);
+
+                const images = JSON.parse(json).photos;
+
+                let r = Math.floor(Math.random() * images.length);
+
+                let title = images[r].url.split('/')[4];
+                title = title.replace(/[0-9]/g, '');
+                title = title.replace(/-/g, ' ');
+                title = title.replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase();});
+
+                const Resource = new resourceModel({
+                    _id: mongoose.Types.ObjectId(),
+                    title: title,
+                    description: '',
+                    domains: 'photography',
+                    url: images[r].url,
+                    website: 'www.pexels.com',
+                    published: new Date(),
+                    image: images[r].url
+                })
+
+                resources.push(Resource);
+                // save(resource);
+                console.log(resources)
+            } catch{
+                console.log('ERROR_JSONPARSE_PEXELS');
+            }
+        });
 }
 
 function getVimeo() { // videos
@@ -176,12 +258,12 @@ function getVimeo() { // videos
         method: 'get',
         headers: { 'Authorization': 'bearer ' + process.env.AUTH_VIMEO }
     })
-        .catch(err => console.log('EROARE_API_VIMEO:' + err))
+        .catch(err => console.log('ERROR_API_VIMEO:' + err))
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                console.log('RASPUNS_API_VIMEO:' + response.ok);
+                console.log('RESPONSE_API_VIMEO:' + response.ok);
             }
         })
         .then(json => {
@@ -208,7 +290,7 @@ function getVimeo() { // videos
                 resources.push(Resource);
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE_VIMEO');
+                console.log('ERROR_JSONPARSE_VIMEO');
             }
         });
 }
@@ -217,12 +299,12 @@ function getYoutube() { // videos
     fetch(apiYoutube + process.env.AUTH_YOUTUBE, {
         method: 'get',
     })
-        .catch(err => console.log('EROARE_API_YOUTUBE:' + err))
+        .catch(err => console.log('ERROR_API_YOUTUBE:' + err))
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                console.log('RASPUNS_API_YOUTUBE:' + response.ok);
+                console.log('RESPONSE_API_YOUTUBE:' + response.ok);
             }
         })
         .then(json => {
@@ -249,16 +331,16 @@ function getYoutube() { // videos
                 resources.push(Resource);
                 save(resources);
             } catch {
-                console.log('EROARE_JSONPARSE_YOUTUBE');
+                console.log('ERROR_JSONPARSE_YOUTUBE');
             }
         });
 }
 
-function getCore() { // videos
+function getCore() { // documents
 
 }
 
-function getIeee() { // videos
+function getIeee() { // documents
 
 }
 
@@ -268,6 +350,8 @@ function gatherResources(rate) {
         // getOpenwhyd();
         // getVimeo();
         // getYoutube();
+        // getUnsplash();
+        getPexels();
     }, rate * 1000);
 }
 
