@@ -8,6 +8,9 @@
 
   <title>Feed</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/gridstyle.css">
   <script src="assets/scripts.js"></script>
@@ -17,15 +20,15 @@
 
 <body>
 
-  <div class="row">
-    <div class="col-2 offset-1 center">
-      <h1>LOGO</h1>
+  <div class="row" style="border-radius: 0.5rem; height: 4rem; background: #f7f9fb; margin-bottom: 1rem;">
+    <div class="col-2" style="margin-top:auto; margin-bottom: auto;text-align: center;">
+      <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">LOGO</span>  
     </div>
   </div>
 
   <div class="row">
-    <div class="offset-1 col-2">
-      <div class="sidebar">
+    <div class="col-2">
+      <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
         <div class="w-75">
           <ul style="list-style: none;">
             <li>
@@ -49,7 +52,7 @@
     </div>
 
     <div class="col-7 ml-1">
-      <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto;">
+      <div id="content" style="max-height: 580px; overflow: hidden; overflow-y:auto;">
         <div>
           <script>getFeed();</script>
         </div>

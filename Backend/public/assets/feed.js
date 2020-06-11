@@ -10,6 +10,7 @@ function createCard(cardData, index) {
 
     let newCard = document.createElement("div");
     newCard.classList.add("card");
+    newCard.style = "background: #f2f8fc";
 
     let newRow = document.createElement("div");
     newRow.classList.add("row");
@@ -19,7 +20,9 @@ function createCard(cardData, index) {
     let newImage = document.createElement("img");
     newImage.classList.add('w-100');
     newImage.src = src;
+    newImage.classList.add('image');
     newImageDiv.append(newImage);
+    newImageDiv.style = "margin-top:auto; margin-bottom: auto;"
 
     let cardContentDiv = document.createElement("div");
     cardContentDiv.classList.add("col-10");
@@ -31,7 +34,7 @@ function createCard(cardData, index) {
     newTitle.classList.add('ml-1');
     newTitle.innerText = title;
     newTitle.style = "text-decoration: none";
-    newTitle.style = "font-size: 1.5rem";
+    newTitle.style = "font-size: 1.4rem; font-weight: bolder; color: #0B0C10; ";
     newTitle.href = cardData.url;
     newTitle.target = "_blank";
 
@@ -52,6 +55,7 @@ function createCard(cardData, index) {
     newDescription.classList.add('ml-1');
     newDescription.classList.add("col-3");
     newDescription.classList.add("truncate-text");
+    newDescription.style = "color: #1F2833"
     newDescription.id = 'id' + index;
     newDescription.innerText = cardData.description;
     descriptionRow.append(newDescription);
@@ -66,17 +70,16 @@ function createCard(cardData, index) {
     }
 
     let newDomain = document.createElement("div"); 
-    newDomain.style= 'font-weight: bolder; margin-left: 2%';
+    newDomain.style= 'font-weight: bolder; margin-left: 4%; color: #78244c';
     newDomain.classList.add('center');
     newDomain.innerText = '[' + domains + ']';
 
     let newDate = document.createElement('div');
-    newDate.style = 'margin-left: 1%';
+    newDate.style = 'margin-left: 1%; font-size: 0.8rem; margin-top: auto; color: #895061';
     newDate.innerText = ' posted on ' + date;
 
     let newWebsite = document.createElement('div');
-    newWebsite.classList.add('col-3');
-    newWebsite.style = 'font-style: oblique; margin-left: 1%';
+    newWebsite.style = 'font-style: oblique; margin-left: 1%; font-size: 0.8rem; margin-top: auto; color: #895061';
     newWebsite.innerText = 'via ' + cardData.website; 
 
     domainRow.append(showMoreDiv);
