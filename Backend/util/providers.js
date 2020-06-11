@@ -400,7 +400,7 @@ function getCore() { // documents
                 const Resource = new resourceModel({
                     _id: mongoose.Types.ObjectId(),
                     title: docs[r].title,
-                    description: docs[r].description,
+                    description: typeof (docs[r].description) ? docs[r].description : '',
                     domains: 'research',
                     url: docs[r].downloadUrl,
                     website: 'www.core.ac.uk',

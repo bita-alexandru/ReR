@@ -340,24 +340,17 @@ function manageUser(data, response) {
             if (data.method === 'POST') {
                 try {
                     const values = JSON.parse(data.payload);
-                    const saltRounds = 13;
-                    let username = '';
-                    let password = '';
-                    let preferredDomains = [];
-                    let excludedSites = [];
 
-                    if (typeof (values.username)) {
-                        username = values.username;
+                    if (inputValidator.strings(values, ['username', 'password', 'preferredDomains', 'excludedSites'])) {
+                        responder.status(response, 400);
+                        return;
                     }
-                    if (typeof (values.password)) {
-                        password = values.password;
-                    }
-                    if (typeof (values.preferredDomains)) {
-                        preferredDomains = values.preferredDomains.split(',');
-                    }
-                    if (typeof (values.excludedSites)) {
-                        excludedSites = values.excludedSites.split(',');
-                    }
+
+                    const saltRounds = 13;
+                    let username = values.username;
+                    let password = values.password;
+                    let preferredDomains = values.preferredDomains.split(',');
+                    let excludedSites = values.excludedSites.split(',');
 
                     bcrypt.hash(password, saltRounds, (err, hash) => { // encrypt the password
                         if (err) {
@@ -388,6 +381,12 @@ function manageUser(data, response) {
             } else if (data.method === 'GET') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.strings(values, ['username'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
 
                     userModel.find({ username: username }, (err, user) => {
@@ -419,6 +418,12 @@ function manageUser(data, response) {
             } else if (data.method === 'DELETE') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.strings(values, ['username'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
 
                     userModel.deleteOne({ username: username }, err => {
@@ -435,7 +440,15 @@ function manageUser(data, response) {
             } else if (data.method === 'PATCH') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.strings(values, ['username', 'preferredDomains', 'excludedSites'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
+                    const preferredDomains = values.preferredDomains;
+                    const excludedSites = values.excludedSites;
 
                     userModel.updateOne(
                         { username: username },
@@ -469,16 +482,21 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
+                    if (inputValidator.strings(values, ['title', 'description', 'domains', 'url', 'website', 'image'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     resourceModel.create( // create and store a new resource
                         {
                             _id: mongoose.Types.ObjectId(),
-                            title: values.titl,
+                            title: values.title,
                             description: values.description,
                             domains: values.domains.split(','),
                             url: values.url,
                             website: values.website,
                             image: values.image,
-                            created: values.created
+                            created: new Date()
                         },
                         (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
@@ -497,7 +515,7 @@ function manageResource(data, response) {
                     let domains;
                     let websites;
 
-                    if (typeof (values.url) !== 'undefined') {
+                    if (typeof (values.url) === 'string') {
                         const source = values.url;
 
                         resourceModel.findOne(
@@ -510,7 +528,7 @@ function manageResource(data, response) {
                                 }
                             }
                         );
-                    } else if (typeof (values.domains) !== 'undefined' && typeof (values.website) !== 'undefined') {
+                    } else if (typeof (values.domains) === 'string' && typeof (values.website) === 'string') {
                         domains.split(',');
                         websites.split(',');
 
@@ -566,16 +584,22 @@ function manageResource(data, response) {
             } else if (data.method == 'PATCH') {
                 try {
                     const values = JSON.parse(data.payload)
+
+                    if (inputValidator.strings(values, ['newUrl', 'title', 'description', 'domains', 'url', 'website', 'image'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const source = values.url;
                     const newUrl = values.newUrl;
 
                     resourceModel.updateOne(
                         { url: source },
                         {
-                            url: newUrl,
                             title: values.title,
                             description: values.description,
                             domains: values.domains.split(','),
+                            url: newUrl,
                             website: values.website,
                             image: values.image,
                             created: values.created
@@ -594,6 +618,12 @@ function manageResource(data, response) {
             } else if (data.method == 'DELETE') {
                 try {
                     const values = JSON.parse(data.payload)
+
+                    if (inputValidator.strings(values, ['url'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const source = values.url;
 
                     resourceModel.deleteOne(

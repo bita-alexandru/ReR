@@ -18,7 +18,12 @@ function isAuthenticated(data, response) {
             if (err) {
                 responder.failure(response);
             } else {
-                responder.success(response);
+                const content = {
+                    'success': true,
+                    'username': decoded.userName
+                };
+
+                responder.content(response, content);
             }
         });
     } else {
@@ -35,6 +40,12 @@ function register(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.strings(values, ['username', 'password', 'confirmPassword'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const username = values.username;
             const password = values.password;
             const confirmPassword = values.confirmPassword;
@@ -104,6 +115,12 @@ function login(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.strings(values, ['username', 'password'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const username = values.username;
             const password = values.password;
 
@@ -156,6 +173,12 @@ function deleteAccount(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.strings(values, ['password'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const token = parser.parseCookie(data).token;
             const password = values.password;
 
@@ -315,15 +338,14 @@ function setPreferences(data, response) {
         try {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
-            let websites = [];
-            let domains = [];
 
-            if (typeof (values.websites)) {
-                websites = values.websites.split('_');
+            if (inputValidator.strings(values, ['domains', 'websites'])) {
+                responder.status(response, 400);
+                return;
             }
-            if (typeof (values.domains)) {
-                domains = values.domains.split('_');
-            }
+
+            let domains = domains = values.domains.split('_');
+            let websites = websites = values.websites.split('_');
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {

@@ -55,8 +55,6 @@ let server = http.createServer((request, response) => {
         } else {
             handler(data, response);
         }
-
-        // console.log(data);
     });
 
 });
