@@ -322,11 +322,13 @@ function getPreferences(data, response) {
                             responder.status(response, 500);
                         } else {
                             if (user) {
+                                console.log(user.preferredDomains);
                                 const content = {
                                     'domains': user.preferredDomains,
                                     'allDomains': preferences.all_domains,
                                     'websites': user.excludedSites
                                 };
+                                console.log(content);
 
                                 responder.content(response, content);
                             } else {
@@ -354,15 +356,13 @@ function setPreferences(data, response) {
         try {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
-
             if (inputValidator.badStrings(values, ['domains', 'websites'])) {
                 responder.status(response, 400);
                 return;
             }
-
-            let domains = domains = values.domains.split('_');
-            let websites = websites = values.websites.split('_');
-
+            let domains = values.domains.split('_');
+            let websites =  values.websites.split('_');
+            console.log(domains);
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
                     responder.status(response, 401);
@@ -370,7 +370,6 @@ function setPreferences(data, response) {
                 else {
                     if (decoded) {
                         const username = decoded.userName;
-
                         userModel.updateOne(
                             { username: username },
                             {
@@ -479,5 +478,7 @@ function getRSS(data, response) {
         responder.status(response, 400);
     }
 }
+
+
 
 module.exports = { isAuthenticated, register, login, logout, deleteAccount, getFeed, getPreferences, setPreferences, getRSS };

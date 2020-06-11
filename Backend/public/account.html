@@ -17,35 +17,35 @@
 
 <body>
 
-    <div class="row">
-        <div class="col-2 offset-1 center">
-            <h1>LOGO</h1>
+    <div class="row" style="border-radius: 0.5rem; height: 4rem; background: #f7f9fb; margin-bottom: 1rem;">
+        <div class="col-2" style="margin-top:auto; margin-bottom: auto;text-align: center;">
+          <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">LOGO</span>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="offset-1 col-2">
-            <div class="sidebar">
-                <div class="w-75">
-                    <ul style="list-style: none;">
-                        <li>
-                            <a href="/" style="text-decoration: none;">
-                                <div>Feed</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/preferences" style="text-decoration: none;">
-                                <div>Preferences</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/account" style="text-decoration: none;">
-                                <div>Account</div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+      </div>
+    
+      <div class="row">
+        <div class="col-2">
+          <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
+    
+            <ul style="list-style: none;">
+              <li>
+                <a href="/" style="text-decoration: none;">
+                  <div>Feed</div>
+                </a>
+              </li>
+              <li>
+                <a href="/preferences" style="text-decoration: none;">
+                  <div>Preferences</div>
+                </a>
+              </li>
+              <li>
+                <a href="/account" style="text-decoration: none;">
+                  <div>Account</div>
+                </a>
+              </li>
+            </ul>
+    
+          </div>
         </div>
 
         <div class="col-7 ml-1">
@@ -156,7 +156,7 @@
                         <div class="row mb-1">
                             <div class="offset-9 col-2">
 
-                                <button class="form-control" onclick="logout()" type="button">Logout</button>
+                                <button class="form-control" onclick="checkLoggedInFor(logout)" type="button">Logout</button>
 
                             </div>
                         </div>
