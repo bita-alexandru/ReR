@@ -42,6 +42,7 @@ function createCard(cardData, index) {
         var a = document.createElement('a');
         a.innerText = 'Show More';
         a.href = 'javascript:;';
+        a.style = 'margin-left: 25%';
         a.onclick = function () { showMore(event, 'id' + index) };
     }
 
@@ -68,16 +69,22 @@ function createCard(cardData, index) {
     }
     let newDomain = document.createElement("div"); 
     newDomain.style= 'font-weight: bolder; margin-left: 2%';
+    newDomain.classList.add('center');
     newDomain.innerText = '[' + domains + ']';
 
     let newDate = document.createElement('div');
     newDate.style = 'margin-left: 1%';
-    newDate.classList.add('col-3');
     newDate.innerText = ' posted on ' + date;
+
+    let newWebsite = document.createElement('div');
+    newWebsite.classList.add('col-3');
+    newWebsite.style = 'font-style: oblique; margin-left: 1%';
+    newWebsite.innerText = 'via ' + cardData.website; 
 
     domainRow.append(showMoreDiv);
     domainRow.append(newDomain);
     domainRow.append(newDate);
+    domainRow.append(newWebsite);
     cardContentDiv.append(titleRow);
     cardContentDiv.append(descriptionRow);
 
