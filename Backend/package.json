@@ -1,7 +1,10 @@
 {
   "name": "rer",
   "version": "1.0.0",
-  "description": "```\r HOST=localhost\r PORT=1234\r DB_USER=root\r DB_PASS=toor\r ```",
+  "engines": {
+    "node": "14.3.0"
+  },
+  "description": "web resource recommender",
   "main": "index.js",
   "nodemonConfig": {
     "ignore": [
@@ -22,6 +25,8 @@
     "mongoose": "^5.9.18",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.4",
+    "rss": "^1.2.2",
+    "xml-formatter": "^2.1.0",
     "xss": "^1.0.7"
   },
   "devDependencies": {}

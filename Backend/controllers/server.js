@@ -1,12 +1,18 @@
-const http = require('http');
+const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const xss = require('xss');
+const fs = require('fs');
 const assetView = require('../views/asset');
 const router = require('../util/router');
 const parser = require('../util/parser');
-const xss = require('xss');
 
-let server = http.createServer((request, response) => {
+const options = {
+    key: fs.readFileSync(__dirname + '/../security/key.key'),
+    cert: fs.readFileSync(__dirname + '/../security/cert.crt')
+};
+
+let server = https.createServer(options, (request, response) => {
     let parsedUrl = url.parse(request.url, true);
     let path = parsedUrl.path.split('?')[0];
     let trimmedPath = path.replace(/^\/+|\/+$/g, '');
@@ -56,8 +62,6 @@ let server = http.createServer((request, response) => {
         } else {
             handler(data, response);
         }
-
-        console.log(data.payload)
     });
 
 });

@@ -1,4 +1,4 @@
-const indexView = require('../views');
+const indexView = require('../views/index');
 const preferencesView = require('../views/preferences');
 const accountView = require('../views/account');
 const httpErrorView = require('../views/http_error');

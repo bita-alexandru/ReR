@@ -1,5 +1,3 @@
-const http = require('http');
-
 function parseCookie(data) {
     let list = {};
     let cookies = data.headers.cookie;

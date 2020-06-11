@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
-const preferences = require('../util/available_preferences')
 const parser = require('./parser');
+const inputValidator = require('./input_validator');
 
 let usables = {
     usableFeed: true,
@@ -18,6 +18,8 @@ let usables = {
     usableRegister: true,
     usableLogin: true,
     usableDeleteAccount: true,
+    usableLogout: true,
+    usableGetRSS: true,
 
     toggleFeed: function (data, response) {
         isAdmin(data, result => {
@@ -27,7 +29,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -51,7 +60,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usablePreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -75,7 +91,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -99,7 +122,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableLogin = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -123,7 +153,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableRegister = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -147,7 +184,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableDeleteAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -171,7 +215,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -195,7 +246,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -219,11 +277,80 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableSetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
                         usables.usableSetPreferences = false;
+                    }
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleLogout: function (data, response) {
+        isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
+            if (result === 200) {
+                try {
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableLogout = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableLogout = false;
+                    }
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleGetRSS: function (data, response) {
+        isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
+            if (result === 200) {
+                try {
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableGetRSS = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableGetRSS = false;
                     }
                     responder.status(response, result);
                 } catch {
