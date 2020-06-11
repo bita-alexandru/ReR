@@ -4,6 +4,7 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const assetView = require('../views/asset');
 const router = require('../util/router');
 const parser = require('../util/parser');
+const xss = require('xss');
 
 let server = http.createServer((request, response) => {
     let parsedUrl = url.parse(request.url, true);
@@ -16,7 +17,7 @@ let server = http.createServer((request, response) => {
 
     let decoder = new StringDecoder('utf-8');
     let buffer = '';
-    
+
     request.on('data', (data) => {
         buffer += decoder.write(data);
     });
@@ -24,9 +25,9 @@ let server = http.createServer((request, response) => {
     request.on('end', () => {
         buffer += decoder.end();
         queryString = JSON.stringify(queryString);
-        buffer = parser.parseQuery(buffer);
+        buffer = xss(parser.parseQuery(buffer));
 
-        if(buffer.length < queryString.length) {
+        if (buffer.length < queryString.length) {
             buffer = queryString;
         }
 
@@ -55,6 +56,8 @@ let server = http.createServer((request, response) => {
         } else {
             handler(data, response);
         }
+
+        console.log(data.payload)
     });
 
 });

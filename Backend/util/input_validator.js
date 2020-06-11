@@ -23,22 +23,26 @@ function domains(domains) {
     return result;
 }
 
-function strings(values, params) {
-    let i = 0;
+function badStrings(values, params) {
+    let used = {};
 
-    for (let val in values) {
-        if (typeof (val) !== 'string') {
-            return false;
+    for (const [key, value] of Object.entries(values)) {
+        if (typeof (value) !== 'string') {
+            return true;
         }
 
-        if (val !== params[i]) {
-            return false;
+        if (!params.includes(key)) {
+            return true;
         }
 
-        i++;
+        if (typeof (used.key) !== 'undefined') {
+            return true;
+        }
+
+        used[key] = 'true';
     }
 
-    return true;
+    return false;
 }
 
-module.exports = { password, username, domains, strings };
+module.exports = { password, username, domains, badStrings };

@@ -40,12 +40,12 @@ function register(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
-
-            if (inputValidator.strings(values, ['username', 'password', 'confirmPassword'])) {
+            
+            if (inputValidator.badStrings(values, ['username', 'password', 'confirmPassword'])) {
                 responder.status(response, 400);
                 return;
             }
-
+            
             const username = values.username;
             const password = values.password;
             const confirmPassword = values.confirmPassword;
@@ -116,7 +116,7 @@ function login(data, response) {
         try {
             const values = JSON.parse(data.payload);
 
-            if (inputValidator.strings(values, ['username', 'password'])) {
+            if (inputValidator.badStrings(values, ['username', 'password'])) {
                 responder.status(response, 400);
                 return;
             }
@@ -174,7 +174,7 @@ function deleteAccount(data, response) {
         try {
             const values = JSON.parse(data.payload);
 
-            if (inputValidator.strings(values, ['password'])) {
+            if (inputValidator.badStrings(values, ['password'])) {
                 responder.status(response, 400);
                 return;
             }
@@ -339,7 +339,7 @@ function setPreferences(data, response) {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
 
-            if (inputValidator.strings(values, ['domains', 'websites'])) {
+            if (inputValidator.badStrings(values, ['domains', 'websites'])) {
                 responder.status(response, 400);
                 return;
             }

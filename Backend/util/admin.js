@@ -341,7 +341,7 @@ function manageUser(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
-                    if (inputValidator.strings(values, ['username', 'password', 'preferredDomains', 'excludedSites'])) {
+                    if (inputValidator.badStrings(values, ['username', 'password', 'preferredDomains', 'excludedSites'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -382,7 +382,7 @@ function manageUser(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
-                    if (inputValidator.strings(values, ['username'])) {
+                    if (inputValidator.badStrings(values, ['username'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -419,7 +419,7 @@ function manageUser(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
-                    if (inputValidator.strings(values, ['username'])) {
+                    if (inputValidator.badStrings(values, ['username'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -441,7 +441,7 @@ function manageUser(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
-                    if (inputValidator.strings(values, ['username', 'preferredDomains', 'excludedSites'])) {
+                    if (inputValidator.badStrings(values, ['username', 'preferredDomains', 'excludedSites'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -482,7 +482,7 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
-                    if (inputValidator.strings(values, ['title', 'description', 'domains', 'url', 'website', 'image'])) {
+                    if (inputValidator.badStrings(values, ['title', 'description', 'domains', 'url', 'website', 'image'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -585,7 +585,7 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.payload)
 
-                    if (inputValidator.strings(values, ['newUrl', 'title', 'description', 'domains', 'url', 'website', 'image'])) {
+                    if (inputValidator.badStrings(values, ['newUrl', 'title', 'description', 'domains', 'url', 'website', 'image'])) {
                         responder.status(response, 400);
                         return;
                     }
@@ -619,7 +619,7 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.payload)
 
-                    if (inputValidator.strings(values, ['url'])) {
+                    if (inputValidator.badStrings(values, ['url'])) {
                         responder.status(response, 400);
                         return;
                     }
