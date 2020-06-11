@@ -22,7 +22,7 @@ function createCard(cardData, index) {
     newImage.src = src;
     newImage.classList.add('image');
     newImageDiv.append(newImage);
-    newImageDiv.style = "margin-top:auto; margin-bottom: auto;"
+    newImageDiv.style = "object-fit: cover; margin-top:0%; margin-bottom: auto;"
 
     let cardContentDiv = document.createElement("div");
     cardContentDiv.classList.add("col-10");
@@ -44,7 +44,6 @@ function createCard(cardData, index) {
         var a = document.createElement('a');
         a.innerText = 'Show More';
         a.href = 'javascript:;';
-        a.style = 'margin-left: 25%';
         a.onclick = function () { showMore(event, 'id' + index) };
     }
 
@@ -65,6 +64,7 @@ function createCard(cardData, index) {
 
     let showMoreDiv = document.createElement('div');
     showMoreDiv.classList.add('col-2');
+    showMoreDiv.classList.add('center');
     if (cardData.description != null && (cardData.description.length > 300 || (cardData.description.match(/<br>/g) || []).length >= 3)) {
         showMoreDiv.append(a);
     }

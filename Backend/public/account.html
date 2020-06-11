@@ -94,7 +94,7 @@
                         <hr />
                     </form>
 
-                    <form id="login-account" action="login" method="post" class="display-none">
+                    <form id="login-account" onsubmit="return postLogin();" action="login" method="post" class="display-none">
                         <div class="row">
                             <h3>Login</h3>
                         </div>
@@ -114,6 +114,9 @@
                             <div class="col-8">
                                 <input class="form-control" type="password" id="loginPassword" name="password" />
                             </div>
+                        </div>
+                        <div>
+                            <span id="fail-login" class="invalid valid">Username or password is incorrect.</span>
                         </div>
                         <div class="row mb-1">
                             <div class="offset-9 col-2">
