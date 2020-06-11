@@ -3,7 +3,7 @@ function status(response, status) {
         'success': false
     };
 
-    if(status === 200){
+    if (status === 200) {
         message.success = true;
     }
 
@@ -16,4 +16,22 @@ function content(response, content) {
     response.end(JSON.stringify(content));
 }
 
-module.exports = { status, content };
+function success(response) {
+    let message = {
+        'success': true
+    };
+
+    response.writeHead(200, { 'Content-type': 'text/json' });
+    response.end(JSON.stringify(message));
+}
+
+function failure(response) {
+    let message = {
+        'success': false
+    };
+
+    response.writeHead(200, { 'Content-type': 'text/json' });
+    response.end(JSON.stringify(message));
+}
+
+module.exports = { status, content, success, failure };
