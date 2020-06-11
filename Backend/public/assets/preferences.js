@@ -1,7 +1,7 @@
-function updateSelect(options, id, defaultOption){
+function updateSelect(options, id, defaultOption) {
     let selectEl = document.getElementById(id);
     selectEl.innerHTML = "<option value=''>" + defaultOption + "</option>";
-    for(let i = 0; i < options.length; i++){
+    for (let i = 0; i < options.length; i++) {
         let newOption = document.createElement('option');
         newOption.value = i;
         newOption.innerHTML = options[i];
@@ -9,24 +9,24 @@ function updateSelect(options, id, defaultOption){
     }
 }
 
-function addNewPreference(prefix, data = null){
+function addNewPreference(prefix, data = null) {
     let domainSelect = document.getElementById(prefix + 'select');
     let list = document.getElementById(prefix + 'added');
 
-    if(data === null){
+    if (data === null) {
         var selectedOption = domainSelect.options[domainSelect.selectedIndex];
     }
 
     let value = data !== null ? data.value : selectedOption.value;
     let text = data !== null ? data.text : selectedOption.innerText;
 
-    for(let i = 0; i < list.children.length; i++){
-        if(list.children[i].getAttribute('value') == value){
+    for (let i = 0; i < list.children.length; i++) {
+        if (list.children[i].getAttribute('value') == value) {
             alert('Value already exists');
             return;
         }
     }
-    if(value === null || value === '') return;
+    if (value === null || value === '') return;
 
     let newDomain = document.createElement('li');
     newDomain.setAttribute('value', value);
@@ -45,67 +45,78 @@ function addNewPreference(prefix, data = null){
     removeDiv.append(removeButton);
     liDiv.append(valueDiv);
     liDiv.append(removeDiv);
-    
+
     newDomain.append(liDiv);
     list.append(newDomain);
     updateHiddenDomains(prefix);
 }
 
-function addNewWebsite(){
+function addNewWebsite() {
     let textEl = document.getElementById('excluded-website');
     let text = textEl.value;
-    if(!validateElement(textEl.id)) return;
+    if (!validateElement(textEl.id)) return;
     textEl.value = '';
     textEl.focus();
     let website = {
         value: text,
         text: text
-    }   
+    }
     addNewPreference('websites-', website);
 }
 
-function updateHiddenDomains(prefix){
+function updateHiddenDomains(prefix) {
     let list = document.getElementById(prefix + 'added');
     let hiddenValue = '';
     let hiddenElement = document.getElementById(prefix + 'hidden');
     hiddenElement.value = '';
-    for(let i = 0; i < list.children.length; i++){
+    for (let i = 0; i < list.children.length; i++) {
         hiddenValue += list.children[i].getAttribute('value') + '_';
     }
     hiddenElement.value = hiddenValue;
 }
 
-function removePreference(prefix, value){
+function removePreference(prefix, value) {
     let domainList = document.getElementById(prefix + 'added');
     let domains = domainList.children;
 
-    for(let i = 0; i < domains.length; i++){
-        if(domains[i].getAttribute('value') == value){
+    for (let i = 0; i < domains.length; i++) {
+        if (domains[i].getAttribute('value') == value) {
             domainList.removeChild(domains[i]);
         }
     }
     updateHiddenDomains(prefix);
 }
 
-function getPreferences(logged){
-    if(logged){
+function getPreferences(logged) {
+    if (logged) {
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.method = 'GET';
-    
-        xmlhttp.onreadystatechange = function() {
+
+        xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4) {
-              var response = JSON.parse(xmlhttp.responseText);
+                var response = JSON.parse(xmlhttp.responseText);
                 if (xmlhttp.status === 200) {
                     let jsonData = JSON.parse(xmlhttp.response);
                     updateSelect(jsonData.allDomains, 'domains-select', 'Select Domain');
-                } else if(xmlhttp.status === 400){
+
+                    for (let i = 0; i < jsonData.domains.length - 1; i++) {
+                        addNewPreference('domains-',  { text: jsonData.domains[i], value: i } );
+                    }
+
+                    for (let i = 0; i < jsonData.websites.length - 1; i++) {
+                        addNewPreference('websites-',  { text: jsonData.websites[i], value: i } );
+                    }
+
+
+
+                } else if (xmlhttp.status === 400) {
                     alert('Bad Request');
-                 } else if(xmlhttp.status === 500){
-                     window.location = '/internal_error';
-                 }
+                } else if (xmlhttp.status === 500) {
+                    window.location = '/internal_error';
+                }
             }
-          }
-          xmlhttp.open('GET', '/get_preferences');
-          xmlhttp.send();
+        }
+        xmlhttp.open('GET', '/get_preferences');
+        xmlhttp.send();
     }
 }
