@@ -13,10 +13,27 @@ function initializeAccountPage(logged){
     }
 }
 
-function logout(){
-    document.cookie = 'token=';
-    location.reload();
+function logout(logged){
+    if (logged) {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.method = 'GET';
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
+                    location.reload();
+                } else if (xmlhttp.status === 400) {
+                    alert('Bad Request');
+                } else if (xmlhttp.status === 500) {
+                    window.location = '/internal_error';
+                }
+            }
+        }
+        xmlhttp.open('GET', '/logout');
+        xmlhttp.send();
+    }
 }
+    
 
 function postLogin(){
     let form = document.forms["login-account"];
@@ -34,7 +51,7 @@ function postLogin(){
     });
     fetch(request).then(response => {
         if(response.status === 200){
-            window.location = "/";
+            window.location.href = "/";
         }
         else{
             document.getElementById('fail-login').classList.remove('valid');

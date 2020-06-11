@@ -1,9 +1,13 @@
-function updateSelect(options, id, defaultOption) {
+function updateSelect(options, id, defaultOption, selectedDomains = null) {
     let selectEl = document.getElementById(id);
     selectEl.innerHTML = "<option value=''>" + defaultOption + "</option>";
     for (let i = 0; i < options.length; i++) {
+        if (selectedDomains !== null) {
+            if (selectedDomains.indexOf(options[i]) > -1) continue;
+        }
         let newOption = document.createElement('option');
         newOption.value = i;
+        newOption.setAttribute('pref-data', options[i]);
         newOption.innerHTML = options[i];
         selectEl.append(newOption);
     }
@@ -15,13 +19,15 @@ function addNewPreference(prefix, data = null) {
 
     if (data === null) {
         var selectedOption = domainSelect.options[domainSelect.selectedIndex];
+        if (selectedOption.value === null || selectedOption.value === '' || selectedOption.value === undefined) return;
+        domainSelect.removeChild(selectedOption);
     }
 
     let value = data !== null ? data.value : selectedOption.value;
     let text = data !== null ? data.text : selectedOption.innerText;
 
     for (let i = 0; i < list.children.length; i++) {
-        if (list.children[i].getAttribute('value') == value) {
+        if (list.children[i].getAttribute('pref-data') == text) {
             alert('Value already exists');
             return;
         }
@@ -30,6 +36,7 @@ function addNewPreference(prefix, data = null) {
 
     let newDomain = document.createElement('li');
     newDomain.setAttribute('value', value);
+    newDomain.setAttribute('pref-data', text);
     let liDiv = document.createElement('div');
     liDiv.classList.add('row');
     liDiv.style = 'margin-bottom: 0.1rem';
@@ -48,6 +55,9 @@ function addNewPreference(prefix, data = null) {
 
     newDomain.append(liDiv);
     list.append(newDomain);
+
+    document.getElementById('required').classList.add('valid');
+    
     updateHiddenDomains(prefix);
 }
 
@@ -70,17 +80,26 @@ function updateHiddenDomains(prefix) {
     let hiddenElement = document.getElementById(prefix + 'hidden');
     hiddenElement.value = '';
     for (let i = 0; i < list.children.length; i++) {
-        hiddenValue += list.children[i].getAttribute('value') + '_';
+        hiddenValue += list.children[i].getAttribute('pref-data') + '_';
     }
     hiddenElement.value = hiddenValue;
 }
 
 function removePreference(prefix, value) {
     let domainList = document.getElementById(prefix + 'added');
+    let domainSelect = document.getElementById(prefix + 'select');
     let domains = domainList.children;
 
     for (let i = 0; i < domains.length; i++) {
         if (domains[i].getAttribute('value') == value) {
+            if(prefix === 'domains-'){
+                let option = document.createElement('option');
+                let domainName = domains[i].getAttribute('pref-data');
+                option.setAttribute('value', i);
+                option.setAttribute('domain', domainName);
+                option.innerText = domainName;
+                domainSelect.append(option);
+            }
             domainList.removeChild(domains[i]);
         }
     }
@@ -97,17 +116,15 @@ function getPreferences(logged) {
                 var response = JSON.parse(xmlhttp.responseText);
                 if (xmlhttp.status === 200) {
                     let jsonData = JSON.parse(xmlhttp.response);
-                    updateSelect(jsonData.allDomains, 'domains-select', 'Select Domain');
+                    updateSelect(jsonData.allDomains, 'domains-select', 'Select Domain', jsonData.domains);
 
-                    for (let i = 0; i < jsonData.domains.length - 1; i++) {
-                        addNewPreference('domains-',  { text: jsonData.domains[i], value: i } );
+                    for (let i = 0; i < jsonData.domains.length; i++) {
+                        addNewPreference('domains-', { text: jsonData.domains[i], value: jsonData.domains[i] });
                     }
 
-                    for (let i = 0; i < jsonData.websites.length - 1; i++) {
-                        addNewPreference('websites-',  { text: jsonData.websites[i], value: i } );
+                    for (let i = 0; i < jsonData.websites.length; i++) {
+                        addNewPreference('websites-', { text: jsonData.websites[i], value: jsonData.websites[i] });
                     }
-
-
 
                 } else if (xmlhttp.status === 400) {
                     alert('Bad Request');
@@ -118,5 +135,36 @@ function getPreferences(logged) {
         }
         xmlhttp.open('GET', '/get_preferences');
         xmlhttp.send();
+    }
+}
+
+function postSetPreferences() {
+    let form = document.forms["set-preferences"];
+    if (!validateForm('set-preferences')) return;
+
+    let formData = new FormData(form);
+    if (!formData.get('domains')) {
+        document.getElementById('required').classList.remove('valid');
+        return false;
+    }
+    else {
+        let postQuery = "?domains=" + formData.get('domains') +
+            "&websites=" + formData.get('websites');
+        let request = new Request('/set_preferences', {
+            method: 'POST',
+            body: postQuery,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        fetch(request).then(response => {
+            if (response.status === 200) {
+                window.location = "/";
+            }
+            else {
+                alert('pf');
+            }
+        });
+        return false;
     }
 }
