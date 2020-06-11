@@ -37,7 +37,6 @@ function createCard(cardData, index) {
 
     titleRow.append(newTitle);
 
-
     if (cardData.description != null && (cardData.description.length > 300 || (cardData.description.match(/<br>/g) || []).length >= 3)) {
         var a = document.createElement('a');
         a.innerText = 'Show More';
@@ -57,8 +56,6 @@ function createCard(cardData, index) {
     newDescription.innerText = cardData.description;
     descriptionRow.append(newDescription);
 
-
-
     let domainRow = document.createElement('div');
     domainRow.classList.add('row');
 
@@ -67,6 +64,7 @@ function createCard(cardData, index) {
     if (cardData.description != null && (cardData.description.length > 300 || (cardData.description.match(/<br>/g) || []).length >= 3)) {
         showMoreDiv.append(a);
     }
+
     let newDomain = document.createElement("div"); 
     newDomain.style= 'font-weight: bolder; margin-left: 2%';
     newDomain.classList.add('center');
@@ -85,13 +83,13 @@ function createCard(cardData, index) {
     domainRow.append(newDomain);
     domainRow.append(newDate);
     domainRow.append(newWebsite);
+
     cardContentDiv.append(titleRow);
     cardContentDiv.append(descriptionRow);
 
     
     newRow.append(newImageDiv);
     newRow.append(cardContentDiv);
-
 
     newCard.append(newRow);
     newCard.append(domainRow);
@@ -101,7 +99,7 @@ function createCard(cardData, index) {
 let lastUpdateCount = 0;
 let newUpdateCount = 0;
 
-function getFeed() {
+function getFeed(load = true) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.method = 'GET';
     xmlhttp.onreadystatechange = function () {
@@ -109,6 +107,7 @@ function getFeed() {
             if (xmlhttp.status === 200) {
                 let jsonData = JSON.parse(xmlhttp.response);
                 let content = document.getElementById('content');
+                clearTimeout(getFeedTimer);
                 getFeedTimer = setTimeout(function () { getContinousFeed() }, 15000);
                 if (lastUpdateCount === 0) {
                     lastUpdateCount = jsonData.length;
@@ -116,9 +115,10 @@ function getFeed() {
                 else {
                     newUpdateCount = Math.max(0, jsonData.length - lastUpdateCount);
                 }
-                for (let i = 0; i < jsonData.length; i++) {
-                    createCard(jsonData[i], i);
-                    clearTimeout(getFeedTimer);
+                if(load){
+                    for (let i = 0; i < jsonData.length; i++) {
+                        createCard(jsonData[i], i);
+                    }
                 }
             } else if (xmlhttp.status === 400) {
                 alert('Bad Request');
@@ -135,7 +135,7 @@ var getFeedTimer = null;
 
 function getContinousFeed() {
     if (true) {
-        getFeed(true);
+        getFeed(false);
         if (newUpdateCount > 0) {
             alert('You have new ' + newUpdateCount + ' news');
         }
