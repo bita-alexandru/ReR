@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const rss = require('rss');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('../util/responder');
@@ -8,6 +9,7 @@ const preferences = require('../util/available_preferences');
 const inputValidator = require('../util/input_validator');
 const adminUtil = require('../util/admin');
 const parser = require('../util/parser');
+const indexView = require('../views/index');
 const httpErrorView = require('../views/http_error');
 
 function isAuthenticated(data, response) {
@@ -18,7 +20,12 @@ function isAuthenticated(data, response) {
             if (err) {
                 responder.failure(response);
             } else {
-                responder.success(response);
+                const content = {
+                    'success': true,
+                    'username': decoded.userName
+                };
+
+                responder.content(response, content);
             }
         });
     } else {
@@ -35,6 +42,12 @@ function register(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.badStrings(values, ['username', 'password', 'confirmPassword'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const username = values.username;
             const password = values.password;
             const confirmPassword = values.confirmPassword;
@@ -104,6 +117,12 @@ function login(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.badStrings(values, ['username', 'password'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const username = values.username;
             const password = values.password;
 
@@ -123,11 +142,11 @@ function login(data, response) {
                                     },
                                         process.env.AUTH_TOKEN,
                                         {
-                                            expiresIn: '1h'
+                                            expiresIn: '2d'
                                         }
                                     );
 
-                                    response.setHeader('set-cookie', `token=${token}`);
+                                    response.setHeader('set-cookie', `token=${token}; HttpOnly; Secure`);
                                     responder.status(response, 200);
                                 } else {
                                     responder.status(response, 401);
@@ -147,6 +166,20 @@ function login(data, response) {
     }
 }
 
+function logout(data, response) {
+    if (adminUtil.usables.usableLogout === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
+    if (data.method === 'GET') {
+        response.setHeader('set-cookie', `token=null; HttpOnly; Secure`);
+        indexView.feed(data, response);
+    } else {
+        responder.status(response, 400);
+    }
+}
+
 function deleteAccount(data, response) {
     if (adminUtil.usables.usableDeleteAccount === false) {
         httpErrorView.serviceUnavailable(data, response);
@@ -156,6 +189,12 @@ function deleteAccount(data, response) {
     if (data.method === 'POST') {
         try {
             const values = JSON.parse(data.payload);
+
+            if (inputValidator.badStrings(values, ['password'])) {
+                responder.status(response, 400);
+                return;
+            }
+
             const token = parser.parseCookie(data).token;
             const password = values.password;
 
@@ -315,15 +354,14 @@ function setPreferences(data, response) {
         try {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
-            let websites = [];
-            let domains = [];
 
-            if (typeof (values.websites)) {
-                websites = values.websites.split('_');
+            if (inputValidator.badStrings(values, ['domains', 'websites'])) {
+                responder.status(response, 400);
+                return;
             }
-            if (typeof (values.domains)) {
-                domains = values.domains.split('_');
-            }
+
+            let domains = domains = values.domains.split('_');
+            let websites = websites = values.websites.split('_');
 
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
@@ -361,4 +399,85 @@ function setPreferences(data, response) {
     }
 }
 
-module.exports = { isAuthenticated, register, login, deleteAccount, getFeed, getPreferences, setPreferences };
+function makeRSS(response, resources) {
+    let feed = new rss({
+        'title': 'TITLU',
+        'description': 'DESCRIERE',
+        'feed_url': 'https://site.com/rss',
+        'site_url': 'https://site.com',
+        'image_url': 'https://img.icons8.com/officel/80/000000/rss.png',
+        'pubDate': new Date(),
+        'ttl': 1
+    });
+
+    for (let i = 0; i < resources.length; i++) {
+        const resource = resources[i];
+
+        feed.item({
+            title: resource.title,
+            description: resource.description,
+            url: resource.url,
+            guid: resource._id.toHexString(),
+            categories: resource.categories,
+            author: resource.website,
+            date: resource.published
+        });
+    }
+
+    const xml = feed.xml({ indent: true });
+
+    responder.rss(response, xml);
+}
+
+function getRSS(data, response) {
+    if (adminUtil.usables.usableGetFeed === false) {
+        httpErrorView.serviceUnavailable(data, response);
+        return;
+    }
+
+    if (data.method === 'GET') {
+        const token = parser.parseCookie(data).token;
+
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
+            if (err) { // user is anonymous
+                resourceModel.find( // get resources based on the default domains and websites
+                    { domains: { $in: preferences.default_domains } },
+                    null,
+                    { sort: { published: -1 } },
+                    (err, resources) => {
+                        if (err) { // something went wrong, perhaps an internal error
+                            responder.status(response, 500);
+                        } else { // found the requested resources
+                            makeRSS(response, resources);
+                        }
+                    }
+                );
+            } else { // user is authenticated
+                userModel.findOne( // get user's preferred domains and websites
+                    { username: decoded.userName }, 'preferredDomains excludedSites', (err, user) => {
+                        if (err) { // something went wrong, perhaps an internal error
+                            responder.status(response, 500);
+                        } else { // found the requested domains and websites
+                            resourceModel.find( // get resources 
+                                { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
+                                null,
+                                { sort: { published: -1 } },
+                                (err, resources) => { // get resources based on their selection of domains and websites
+                                    if (err) { // something went wrong, perhaps an internal error
+                                        responder.status(response, 500);
+                                    } else { // found the requested resources
+                                        makeRSS(response, resources);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    } else { // not a valid method, bad request
+        responder.status(response, 400);
+    }
+}
+
+module.exports = { isAuthenticated, register, login, logout, deleteAccount, getFeed, getPreferences, setPreferences, getRSS };

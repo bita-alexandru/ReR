@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
 const resourceModel = require('../models/resource');
 const responder = require('./responder');
-const preferences = require('../util/available_preferences')
 const parser = require('./parser');
+const inputValidator = require('./input_validator');
 
 let usables = {
     usableFeed: true,
@@ -18,6 +18,8 @@ let usables = {
     usableRegister: true,
     usableLogin: true,
     usableDeleteAccount: true,
+    usableLogout: true,
+    usableGetRSS: true,
 
     toggleFeed: function (data, response) {
         isAdmin(data, result => {
@@ -27,7 +29,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -51,7 +60,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usablePreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -75,7 +91,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -99,7 +122,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableLogin = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -123,7 +153,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableRegister = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -147,7 +184,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableDeleteAccount = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -171,7 +215,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetFeed = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -195,7 +246,14 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableGetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
@@ -219,11 +277,80 @@ let usables = {
             }
             if (result === 200) {
                 try {
-                    const option = JSON.parse(data.payload).option.toLowerCase();
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
                     if (option === '1' || option === 'yes' || option === 'true') {
                         usables.usableSetPreferences = true;
                     } else if (option === '0' || option === 'no' || option === 'false') {
                         usables.usableSetPreferences = false;
+                    }
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleLogout: function (data, response) {
+        isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
+            if (result === 200) {
+                try {
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableLogout = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableLogout = false;
+                    }
+                    responder.status(response, result);
+                } catch {
+                    responder.status(response, 400);
+                }
+            } else {
+                responder.status(response, result);
+            }
+        });
+    },
+
+    toggleGetRSS: function (data, response) {
+        isAdmin(data, result => {
+            if (data.method !== 'POST') {
+                responder.status(response, 400);
+                return;
+            }
+            if (result === 200) {
+                try {
+                    const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['option'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
+                    const option = values.option.toLowerCase();
+                    if (option === '1' || option === 'yes' || option === 'true') {
+                        usables.usableGetRSS = true;
+                    } else if (option === '0' || option === 'no' || option === 'false') {
+                        usables.usableGetRSS = false;
                     }
                     responder.status(response, result);
                 } catch {
@@ -340,24 +467,17 @@ function manageUser(data, response) {
             if (data.method === 'POST') {
                 try {
                     const values = JSON.parse(data.payload);
-                    const saltRounds = 13;
-                    let username = '';
-                    let password = '';
-                    let preferredDomains = [];
-                    let excludedSites = [];
 
-                    if (typeof (values.username)) {
-                        username = values.username;
+                    if (inputValidator.badStrings(values, ['username', 'password', 'preferredDomains', 'excludedSites'])) {
+                        responder.status(response, 400);
+                        return;
                     }
-                    if (typeof (values.password)) {
-                        password = values.password;
-                    }
-                    if (typeof (values.preferredDomains)) {
-                        preferredDomains = values.preferredDomains.split(',');
-                    }
-                    if (typeof (values.excludedSites)) {
-                        excludedSites = values.excludedSites.split(',');
-                    }
+
+                    const saltRounds = 13;
+                    let username = values.username;
+                    let password = values.password;
+                    let preferredDomains = values.preferredDomains.split(',');
+                    let excludedSites = values.excludedSites.split(',');
 
                     bcrypt.hash(password, saltRounds, (err, hash) => { // encrypt the password
                         if (err) {
@@ -388,6 +508,12 @@ function manageUser(data, response) {
             } else if (data.method === 'GET') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['username'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
 
                     userModel.find({ username: username }, (err, user) => {
@@ -419,6 +545,12 @@ function manageUser(data, response) {
             } else if (data.method === 'DELETE') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['username'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
 
                     userModel.deleteOne({ username: username }, err => {
@@ -435,7 +567,15 @@ function manageUser(data, response) {
             } else if (data.method === 'PATCH') {
                 try {
                     const values = JSON.parse(data.payload);
+
+                    if (inputValidator.badStrings(values, ['username', 'preferredDomains', 'excludedSites'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const username = values.username;
+                    const preferredDomains = values.preferredDomains;
+                    const excludedSites = values.excludedSites;
 
                     userModel.updateOne(
                         { username: username },
@@ -469,16 +609,21 @@ function manageResource(data, response) {
                 try {
                     const values = JSON.parse(data.payload);
 
+                    if (inputValidator.badStrings(values, ['title', 'description', 'domains', 'url', 'website', 'image'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     resourceModel.create( // create and store a new resource
                         {
                             _id: mongoose.Types.ObjectId(),
-                            title: values.titl,
+                            title: values.title,
                             description: values.description,
                             domains: values.domains.split(','),
                             url: values.url,
                             website: values.website,
                             image: values.image,
-                            created: values.created
+                            created: new Date()
                         },
                         (err, resource) => {
                             if (err) { // something went wrong, perhaps an internal error
@@ -497,7 +642,7 @@ function manageResource(data, response) {
                     let domains;
                     let websites;
 
-                    if (typeof (values.url) !== 'undefined') {
+                    if (typeof (values.url) === 'string') {
                         const source = values.url;
 
                         resourceModel.findOne(
@@ -510,7 +655,7 @@ function manageResource(data, response) {
                                 }
                             }
                         );
-                    } else if (typeof (values.domains) !== 'undefined' && typeof (values.website) !== 'undefined') {
+                    } else if (typeof (values.domains) === 'string' && typeof (values.website) === 'string') {
                         domains.split(',');
                         websites.split(',');
 
@@ -566,16 +711,22 @@ function manageResource(data, response) {
             } else if (data.method == 'PATCH') {
                 try {
                     const values = JSON.parse(data.payload)
+
+                    if (inputValidator.badStrings(values, ['newUrl', 'title', 'description', 'domains', 'url', 'website', 'image'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const source = values.url;
                     const newUrl = values.newUrl;
 
                     resourceModel.updateOne(
                         { url: source },
                         {
-                            url: newUrl,
                             title: values.title,
                             description: values.description,
                             domains: values.domains.split(','),
+                            url: newUrl,
                             website: values.website,
                             image: values.image,
                             created: values.created
@@ -594,6 +745,12 @@ function manageResource(data, response) {
             } else if (data.method == 'DELETE') {
                 try {
                     const values = JSON.parse(data.payload)
+
+                    if (inputValidator.badStrings(values, ['url'])) {
+                        responder.status(response, 400);
+                        return;
+                    }
+
                     const source = values.url;
 
                     resourceModel.deleteOne(

@@ -21,6 +21,7 @@ const routes = {
     'login': userController.login,
     'logout': userController.logout,
     'delete_account': userController.deleteAccount,
+    'get_rss': userController.getRSS,
 
     // serve admin operations
     'admin/export/users': adminUtil.exportUsers,
@@ -35,7 +36,9 @@ const routes = {
     'admin/toggle/set_preferences': adminUtil.usables.toggleSetPreferences,
     'admin/toggle/register': adminUtil.usables.toggleRegister,
     'admin/toggle/login': adminUtil.usables.toggleLogin,
-    'admin/toggle/delete_account': adminUtil.usables.toggleDeleteAccount
+    'admin/toggle/delete_account': adminUtil.usables.toggleDeleteAccount,
+    'admin/toggle/logout': adminUtil.usables.toggleLogout,
+    'admin/toggle/get_rss': adminUtil.usables.toggleGetRSS
 };
 
 module.exports = { routes };

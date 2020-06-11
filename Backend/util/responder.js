@@ -1,3 +1,5 @@
+const resource = require("../models/resource");
+
 function status(response, status) {
     let message = {
         'success': false
@@ -8,12 +10,14 @@ function status(response, status) {
     }
 
     response.writeHead(status, { 'Content-type': 'text/json' });
-    response.end(JSON.stringify(message));
+    response.write(JSON.stringify(message));
+    response.end();
 }
 
 function content(response, content) {
     response.writeHead(200, { 'Content-type': 'text/json' });
-    response.end(JSON.stringify(content));
+    response.write(JSON.stringify(content));
+    response.end();
 }
 
 function success(response) {
@@ -22,7 +26,8 @@ function success(response) {
     };
 
     response.writeHead(200, { 'Content-type': 'text/json' });
-    response.end(JSON.stringify(message));
+    response.write(JSON.stringify(message));
+    response.end();
 }
 
 function failure(response) {
@@ -31,7 +36,14 @@ function failure(response) {
     };
 
     response.writeHead(200, { 'Content-type': 'text/json' });
-    response.end(JSON.stringify(message));
+    response.write(JSON.stringify(message));
+    response.end();
 }
 
-module.exports = { status, content, success, failure };
+function rss(response, content) {
+    response.writeHead(200, { 'Content-type': 'application/rss+xml' });
+    response.write(content);
+    response.end();
+}
+
+module.exports = { status, content, success, failure, rss };
