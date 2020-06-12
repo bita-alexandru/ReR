@@ -21,6 +21,7 @@ function createCard(cardData, index) {
     newImage.classList.add('w-100');
     newImage.src = src;
     newImage.classList.add('image');
+    newImage.alt = title;
     newImageDiv.append(newImage);
     newImageDiv.style = "object-fit: cover; margin-top:0%; margin-bottom: auto;"
 
@@ -37,6 +38,7 @@ function createCard(cardData, index) {
     newTitle.style = "font-size: 1.4rem; font-weight: bolder; color: #0B0C10; ";
     newTitle.href = cardData.url;
     newTitle.target = "_blank";
+    newTitle.rel = 'noopener';
 
     titleRow.append(newTitle);
 
@@ -69,8 +71,8 @@ function createCard(cardData, index) {
         showMoreDiv.append(a);
     }
 
-    let newDomain = document.createElement("div"); 
-    newDomain.style= 'font-weight: bolder; margin-left: 4%; color: #78244c';
+    let newDomain = document.createElement("div");
+    newDomain.style = 'font-weight: bolder; margin-left: 4%; color: #78244c';
     newDomain.classList.add('center');
     newDomain.innerText = '[' + domains + ']';
 
@@ -80,7 +82,7 @@ function createCard(cardData, index) {
 
     let newWebsite = document.createElement('div');
     newWebsite.style = 'font-style: oblique; margin-left: 1%; font-size: 0.8rem; margin-top: auto; color: #895061';
-    newWebsite.innerText = 'via ' + cardData.website; 
+    newWebsite.innerText = 'via ' + cardData.website;
 
     domainRow.append(showMoreDiv);
     domainRow.append(newDomain);
@@ -90,7 +92,7 @@ function createCard(cardData, index) {
     cardContentDiv.append(titleRow);
     cardContentDiv.append(descriptionRow);
 
-    
+
     newRow.append(newImageDiv);
     newRow.append(cardContentDiv);
 
@@ -118,7 +120,7 @@ function getFeed(load = true) {
                 else {
                     newUpdateCount = Math.max(0, jsonData.length - lastUpdateCount);
                 }
-                if(load){
+                if (load) {
                     for (let i = 0; i < jsonData.length; i++) {
                         createCard(jsonData[i], i);
                     }
@@ -143,6 +145,10 @@ function getContinousFeed() {
             let el = document.getElementById('newPosts');
             el.classList.remove('valid');
             el.innerText = 'You have ' + newUpdateCount + ' new posts!';
+
+            if (document.visibilityState !== 'visible') {
+                alert('Hei, you have new TOPIKS to check out!');
+            }
         }
     }
 }
