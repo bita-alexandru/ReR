@@ -166,7 +166,7 @@ function login(data, response) {
     }
 }
 
-function logout(data, response) { // unset users' cookie
+function logout(data, response) { // unset user's cookie
     if (adminUtil.usables.usableLogout === false) {
         httpErrorView.serviceUnavailable(data, response);
         return;
