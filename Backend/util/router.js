@@ -3,7 +3,7 @@ const userController = require('../controllers/user');
 const httpErrorView = require('../views/http_error');
 const adminUtil = require('./admin');
 
-const routes = {
+const routes = { // assign handlers to the specificate endpoints
     // serve static files
     '': pagerController.index,
     'preferences': pagerController.preferences,

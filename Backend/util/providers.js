@@ -457,7 +457,7 @@ function getSpringer() { // documents
         });
 }
 
-function gatherResources(rate) {
+function gatherResources(rate) { // make calls to the APIs above which 'rate' seconds
     setInterval(function () {
         getCurrents();
         getOpenwhyd();

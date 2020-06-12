@@ -18,8 +18,7 @@ const all_domains = default_domains.concat([
     'video',
     'food',
     'game',
-    'research',
-    'photography'
+    'research'
 ]);
 
 module.exports = { default_domains, all_domains };

@@ -24,25 +24,25 @@ let server = https.createServer(options, (request, response) => {
     let decoder = new StringDecoder('utf-8');
     let buffer = '';
 
-    request.on('data', (data) => {
+    request.on('data', (data) => { // get payload from chunks
         buffer += decoder.write(data);
     });
 
-    request.on('end', () => {
-        buffer += decoder.end();
+    request.on('end', () => { 
+        buffer += decoder.end(); 
         queryString = JSON.stringify(queryString);
-        buffer = xss(parser.parseQuery(buffer));
+        buffer = xss(parser.parseQuery(buffer)); // save stringified into buffer
 
         if (buffer.length < queryString.length) {
             buffer = queryString;
         }
 
-        let handler =
+        let handler = // choose the suiteted function for the requested route
             typeof (router.routes[trimmedPath]) !== 'undefined' ?
                 router.routes[trimmedPath] :
                 router.routes['not_found'];
 
-        let data = {
+        let data = { // build up all the receive info into one structure
             'trimmedPath': trimmedPath,
             'queryString': queryString,
             'method': method,
@@ -50,7 +50,7 @@ let server = https.createServer(options, (request, response) => {
             'payload': buffer
         };
 
-        if (trimmedPath.startsWith('assets/')) {
+        if (trimmedPath.startsWith('assets/')) { // return css/js/inco files 
             if (trimmedPath.endsWith('.css')) {
                 assetView.getCSS(data, response);
             }
