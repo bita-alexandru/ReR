@@ -9,8 +9,6 @@
     <title>Account</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <a href="https://icons8.com/icon/48708/github"></a>
-    <a href="https://icons8.com/icon/48564/rss"></a>
 
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="assets/gridstyle.css">
@@ -73,7 +71,7 @@
         </div>
 
         <div class="col-7 ml-1">
-            <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto; ">
+            <div id="content" style="max-height: 620px; overflow: hidden; overflow-y:auto; ">
                 <div class="card" style="background-color: #f2f8fc;">
                     <form onsubmit="return postRegister();" id="register-account" action="register" method="post"
                         class="display-none">
@@ -94,6 +92,7 @@
                                 <span id="fail-register" style="margin-left: 13%;" class="valid invalid">This
                                     username
                                     is already taken.</span>
+                                
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -117,6 +116,7 @@
                                     name="confirmPassword" error-text="The password does not coincide."
                                     val-required="true" validation-custom='checkPassword' />
                                 <span id="confirmed-password-error" class="valid"></span>
+                                <span id="success-register" style="margin-left: 13%;" class="valid success">Registered successfully!</span>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -216,10 +216,12 @@
 
     <script>checkLoggedInFor(initializeAccountPage);</script>
 
+    <p style="font-size: 10px; margin-left: 25%; margin-right: 25%; text-align: center; margin-top: 10%;"> &copy; TOPIKS is
+        a multimedia aggregator developed by Adam Ioana, Bita Alexandru and Danu Teodor</p>
+
 </body>
 
 
-<p style="font-size: 10px; margin-left: 25%; margin-right: 25%; text-align: center; margin-top: 10%;">&copy; TOPIKS is
-    a multimedia aggregator developed by Adam Ioana, Bita Alexandru and Danu Teodor</p>
+
 
 </html>
