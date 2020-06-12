@@ -187,3 +187,27 @@ min-width: 3rem;
   font-size: 2em;
   font-weight: bold;
 }
+
+.newPostBtn{
+  color: #2D4159;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.newPostBtn:hover{
+  color: #1e324b;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.newPostBtn a{
+  
+  text-decoration: none;
+  color: #DAE0E6;
+}
