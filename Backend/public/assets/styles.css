@@ -17,9 +17,17 @@ padding: 1rem;
 .w-100{
 width: 100%;
 }
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+
 
 body{
-  background-color: #f3f5f9;
+  background-color: #DAE0E6;
+  font-family: 'Roboto', sans-serif;
 }
 
 .blur{
@@ -34,9 +42,8 @@ filter: blur(0px);
 
 .sidebar{
 width: 100%;
-background-color: #99738E;
-font-family: 'Josefin Sans', sans-serif;
-color:lightgray;;
+background-color: #2D4159;
+color:lightgray;
 }
 
 .sidebar ul{
@@ -45,12 +52,12 @@ color:lightgray;;
 
 .sidebar ul li{
 height: 60px;
-border-bottom: 1px solid rgba(0,0,0,0.05);
-border-top: 1px solid rgba(255,255,255,0.05); 
+border-bottom: 1.5px solid rgba(0,0,0,0.05);
+border-top: 1.5px solid rgba(255,255,255,0.05); 
 }
 
 .sidebar ul li a{
-color: #bdb8d7;
+color: rgb(163, 185, 211);
 display: block;
 height: 100%;
 
@@ -66,13 +73,15 @@ height: 100%;
   text-overflow: ellipsis;
   }
 
+.sidebar ul li:hover{
+    background-color: rgb(52, 75, 102);
+    }
+
 .btn:focus{
 outline: none;
 }
 
-.sidebar ul li:hover{
-background-color: rgb(173, 126, 160);
-}
+
 
 .sidebar ul li:hover a{
 color: #fff;
@@ -110,6 +119,10 @@ text-decoration: none;
   padding: 1.25rem;
   border-radius: 0.25rem;
   margin-bottom: 10px;
+}
+
+.card:hover{
+  border: 1px solid rgba(0,0,0,.500);
 }
 
 .card a{
@@ -160,4 +173,41 @@ min-width: 3rem;
 .show-more{
  min-width: 90%;
  text-size-adjust: 10px;
+}
+
+.image{
+  opacity: 0.85;
+}
+
+.image:hover{
+  opacity: 1;
+}
+
+.logo{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.newPostBtn{
+  color: #2D4159;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.newPostBtn:hover{
+  color: #1e324b;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.newPostBtn a{
+  
+  text-decoration: none;
+  color: #DAE0E6;
 }

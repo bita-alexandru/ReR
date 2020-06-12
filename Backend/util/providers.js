@@ -32,13 +32,7 @@ const apiCore = 'https://core.ac.uk:443/api-v2/articles/search/*?page=_PAGE&page
 // ieee 
 const apiSpringer = 'http://api.springernature.com/meta/v2/json?q=type:Journal&p=100&api_key=';
 
-const pusher = new Pusher({
-    appId: '1017884',
-    key: process.env.KEY_PUSHER,
-    secret: process.env.SECRET_PUSHER,
-    cluster: 'eu',
-    useTLS: true
-});
+
 
 function save(resources) {
     unread += resources.length;
@@ -53,6 +47,11 @@ function save(resources) {
     if (calledApis === 9) {
         calledApis = 0;
         console.log(unread);
+
+        pusher.trigger('my-channel', 'my-event', {
+            'message': 'hello world'
+        });
+
         unread = 0;
     }
 }
@@ -488,16 +487,30 @@ function getSpringer() { // documents
 }
 
 function gatherResources(rate) { // make calls to the APIs above each 'rate' seconds
+    webPush.setVapidDetails('mailto:bita.alexandru24@gmail.com', process.env.PUBLIC_VAPID, process.env.PRIVATE_VAPID);
+    const key_pusher = process.env.KEY_PUSHER;
+    const secret_pusher = process.env.SECRET_PUSHER;
+    const pusher = new Pusher({
+        appId: '1017884',
+        key: key_pusher,
+        secret: secret_pusher,
+        cluster: 'eu',
+        useTLS: true
+    });
+    
     setInterval(function () {
-        getCurrents();
-        getOpenwhyd();
-        getLastfm();
-        getVimeo();
-        getYoutube();
-        getUnsplash();
-        getPexels();
-        getCore();
-        getSpringer();
+        // getCurrents();
+        // getOpenwhyd();
+        // getLastfm();
+        // getVimeo();
+        // getYoutube();
+        // getUnsplash();
+        // getPexels();
+        // getCore();
+        // getSpringer();
+        pusher.trigger('my-channel', 'my-event', {
+            'message': 'hello world'
+        });
     }, rate * 1000);
 }
 
