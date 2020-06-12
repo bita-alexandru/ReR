@@ -1,15 +1,10 @@
 const fetch = require('node-fetch');
-const util = require('util');
 const mongoose = require('mongoose');
-const webPush = require('web-push');
 const Pusher = require('pusher');
 const resourceModel = require('../models/resource');
 const preferences = require('./available_preferences');
-const { resolve } = require('path');
 
 const allDomains = preferences.all_domains;
-let unread = 0;
-let calledApis = 0;
 
 // currents
 const apiCurrents = 'https://api.currentsapi.services/v1/search';
@@ -32,28 +27,12 @@ const apiCore = 'https://core.ac.uk:443/api-v2/articles/search/*?page=_PAGE&page
 // ieee 
 const apiSpringer = 'http://api.springernature.com/meta/v2/json?q=type:Journal&p=100&api_key=';
 
-
-
 function save(resources) {
-    unread += resources.length;
-    calledApis++;
-
-    // resourceModel.insertMany(resources, err => {
-    //     if (err) {
-    //         console.log('ERROR_INSERTMANY:' + err);
-    //     }
-    // });
-
-    if (calledApis === 9) {
-        calledApis = 0;
-        console.log(unread);
-
-        pusher.trigger('my-channel', 'my-event', {
-            'message': 'hello world'
-        });
-
-        unread = 0;
-    }
+    resourceModel.insertMany(resources, err => {
+        if (err) {
+            console.log('ERROR_INSERTMANY:' + err);
+        }
+    });
 }
 
 function getCurrents() { // news
@@ -487,30 +466,16 @@ function getSpringer() { // documents
 }
 
 function gatherResources(rate) { // make calls to the APIs above each 'rate' seconds
-    webPush.setVapidDetails('mailto:bita.alexandru24@gmail.com', process.env.PUBLIC_VAPID, process.env.PRIVATE_VAPID);
-    const key_pusher = process.env.KEY_PUSHER;
-    const secret_pusher = process.env.SECRET_PUSHER;
-    const pusher = new Pusher({
-        appId: '1017884',
-        key: key_pusher,
-        secret: secret_pusher,
-        cluster: 'eu',
-        useTLS: true
-    });
-    
     setInterval(function () {
-        // getCurrents();
-        // getOpenwhyd();
-        // getLastfm();
-        // getVimeo();
-        // getYoutube();
-        // getUnsplash();
-        // getPexels();
-        // getCore();
-        // getSpringer();
-        pusher.trigger('my-channel', 'my-event', {
-            'message': 'hello world'
-        });
+        getCurrents();
+        getOpenwhyd();
+        getLastfm();
+        getVimeo();
+        getYoutube();
+        getUnsplash();
+        getPexels();
+        getCore();
+        getSpringer();
     }, rate * 1000);
 }
 

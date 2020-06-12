@@ -28,7 +28,7 @@ function isAuthenticated(data, response) { // check if user is authenticated
                 responder.content(response, content);
             }
         });
-    } else { 
+    } else {
         responder.status(response, 400);
     }
 }
@@ -134,7 +134,7 @@ function login(data, response) {
                         bcrypt.compare(password, user.password, (err, result) => {  /// check if the password matches the password from database
                             if (err) { // something went wrong, perhaps an internal error 
                                 responder.status(response, 500);
-                            } else { 
+                            } else {
                                 if (result) { // password and username matches
                                     const token = jwt.sign({ //create an auth-token
                                         userId: user._id,
@@ -207,7 +207,7 @@ function deleteAccount(data, response) {
                         userModel.findOne({ username: username }, 'password', (err, user) => { // check if the username is in the database
                             if (err) { // something went wrong, perhaps an internal error
                                 responder.status(response, 500);
-                            } else { 
+                            } else {
                                 if (user) { // username is in the database
                                     bcrypt.compare(password, user.password, (err, result) => { // check if the password matches the password from database 
                                         if (err) { // something went wrong, perhaps an internal error
@@ -373,7 +373,7 @@ function setPreferences(data, response) {
                     responder.status(response, 401);
                 }
                 else {
-                    if (decoded) { 
+                    if (decoded) {
                         const username = decoded.userName;
 
                         userModel.updateOne( // update the database with the new domains and website for the user 
