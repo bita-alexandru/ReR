@@ -137,7 +137,9 @@ function getContinousFeed() {
     if (true) {
         getFeed(false);
         if (newUpdateCount > 0) {
-            alert('You have new ' + newUpdateCount + ' news');
+            let el = document.getElementById('newPosts');
+            el.classList.remove('valid');
+            el.innerText = 'You have ' + newUpdateCount + ' new posts!';
         }
     }
 }
