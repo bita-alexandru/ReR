@@ -27,7 +27,6 @@
   <div class="row">
     <div class="col-2">
       <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
-
         <ul style="list-style: none;">
           <li>
             <a href="/" style="text-decoration: none;">
@@ -82,7 +81,7 @@
               </div>
               <div class="row">
                 <div class="col-9">
-                  <input type="textbox" class="form-control" id="excluded-website" error-text='The website is invalid.'
+                  <input type="text" class="form-control" id="excluded-website" error-text='The website is invalid.'
                      validation-regex='^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$' />
                   <span id="excluded-website-error" class="valid"></span>
                 </div>
@@ -100,7 +99,7 @@
             </div>
             <div class="row">
               <div class="offset-9 col-2" style="margin-left: 80.5%;">
-                <input class="form-control" type="submit" id="preferences" class="simple-btn" value="Submit" />
+                <input class="form-control simple-btn" type="submit" id="preferences" value="Submit" />
                 
               </div>
               <span id="fail-setPreferences" style="margin-left: 15%;" class="valid invalid">You must be logged in first in order to set preferences!</span>

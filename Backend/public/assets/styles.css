@@ -17,13 +17,6 @@ padding: 1rem;
 .w-100{
 width: 100%;
 }
- 
-body::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
-}
-
-
 
 body{
   background-color: #DAE0E6;
@@ -172,7 +165,7 @@ min-width: 3rem;
 
 .show-more{
  min-width: 90%;
- text-size-adjust: 10px;
+ font-size: 10px;
 }
 
 .image{
