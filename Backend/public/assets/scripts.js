@@ -1,19 +1,3 @@
-function getCookie(name) {
-    let cookieName = name + "=";
-    let allCookies = document.cookie.split(';');
-    for (let i = 0; i < allCookies.length; i++) {
-        let cookie = allCookies[i];
-        cookie = ' ' + cookie;
-        while (cookie.charAt(0) == ' ') {
-            cookie = cookie.substring(1);
-            if (cookie.indexOf(cookieName) != -1) {
-                return cookie.substring(cookieName.length, cookie.length);
-            }
-        }
-    }
-    return null;
-}
-
 function checkLoggedInFor(callbackFunc) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.method = 'GET';
@@ -36,7 +20,13 @@ function checkPassword(){
     return false;
 }
 
-var customValidations = [ checkPassword ];
+function checkNull(id){
+    let element = document.getElementById(id);
+    if(element.value === '' || element.value === null || element.value === undefined) return false;
+    return true;
+}
+
+var customValidations = [ checkPassword, checkNull ];
 
 
 function validateElement(id){
@@ -52,7 +42,7 @@ function validateElement(id){
         isValid = regExpression.test(element.value);
     }
     if(customValid !== null){
-        isValid = customValidations.filter(c => c.name === customValid)[0]();
+        isValid = customValidations.filter(c => c.name === customValid)[0](id);
     }
 
     if(!isValid){

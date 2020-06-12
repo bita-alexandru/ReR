@@ -37,7 +37,7 @@ function logout(logged){
 
 function postLogin(){
     let form = document.forms["login-account"];
-    if(!validateForm('login-account')) return;
+    if(!validateForm('login-account')) return false;
 
     let formData = new FormData(form);
     let postQuery = "?username=" + formData.get('username') + 
@@ -52,9 +52,66 @@ function postLogin(){
     fetch(request).then(response => {
         if(response.status === 200){
             window.location.href = "/";
+            return true;
         }
         else{
             document.getElementById('fail-login').classList.remove('valid');
+        }
+    });
+    return false;
+}
+
+function postDelete(){
+    let form = document.forms["delete-account"];
+    if(!validateForm('delete-account')) return false;
+
+    let formData = new FormData(form);
+    let postQuery = "?password=" + formData.get('password');
+    let request = new Request('/delete_account', {
+        method: 'POST',
+        body: postQuery,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    fetch(request).then(response => {
+        if(response.status === 200){
+            window.location.href = "/";
+            return true;
+        }
+        else if(response.status === 401){
+            document.getElementById('fail-delete').classList.remove('valid');
+        }
+        else if(response.status === 500){
+            window.location.href = "/internal_error";
+        }
+    });
+    return false;
+}
+
+function postRegister(){
+    let form = document.forms["register-account"];
+    document.getElementById('fail-register').classList.add('valid');
+    if(!validateForm('register-account')) return false;
+
+    let formData = new FormData(form);
+    let postQuery = "?username=" + formData.get('username') + "&password=" + formData.get('password') + "&confirmPassword=" + formData.get('confirmPassword');
+    let request = new Request('/register', {
+        method: 'POST',
+        body: postQuery,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    fetch(request).then(response => {
+        if(response.status === 200){
+            return true;
+        }
+        else if(response.status === 409){
+            document.getElementById('fail-register').classList.remove('valid');
+        }
+        else if(response.status === 500){
+            window.location.href = "/internal_error";
         }
     });
     return false;
