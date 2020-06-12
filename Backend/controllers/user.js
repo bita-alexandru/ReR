@@ -259,7 +259,7 @@ function getFeed(data, response) {
                 resourceModel.find( // get resources based on the default domains and websites
                     { domains: { $in: preferences.default_domains } },
                     null,
-                    { sort: { published: -1 } },
+                    { limit: 30, sort: { published: -1 } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
@@ -278,7 +278,7 @@ function getFeed(data, response) {
                                 resourceModel.find( // get resources 
                                     { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
                                     null,
-                                    { sort: { published: -1 } },
+                                    { limit: 30, sort: { published: -1 } },
                                     (err, resources) => { // get resources based on their selection of domains and websites
                                         if (err) { // something went wrong, perhaps an internal error
                                             responder.status(response, 500);
@@ -448,7 +448,7 @@ function getRSS(data, response) {
                 resourceModel.find( // get resources based on the default domains and websites
                     { domains: { $in: preferences.default_domains } },
                     null,
-                    { sort: { published: -1 } },
+                    { limit: 30, sort: { published: -1 } },
                     (err, resources) => {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
