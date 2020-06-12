@@ -32,20 +32,29 @@ const apiCore = 'https://core.ac.uk:443/api-v2/articles/search/*?page=_PAGE&page
 // ieee 
 const apiSpringer = 'http://api.springernature.com/meta/v2/json?q=type:Journal&p=100&api_key=';
 
+const pusher = new Pusher({
+    appId: '1017884',
+    key: process.env.KEY_PUSHER,
+    secret: process.env.SECRET_PUSHER,
+    cluster: 'eu',
+    useTLS: true
+});
+
 function save(resources) {
     unread += resources.length;
     calledApis++;
+
+    // resourceModel.insertMany(resources, err => {
+    //     if (err) {
+    //         console.log('ERROR_INSERTMANY:' + err);
+    //     }
+    // });
 
     if (calledApis === 9) {
         calledApis = 0;
         console.log(unread);
         unread = 0;
     }
-    // resourceModel.insertMany(resources, err => {
-    //     if (err) {
-    //         console.log('ERROR_INSERTMANY:' + err);
-    //     }
-    // });
 }
 
 function getCurrents() { // news
@@ -479,14 +488,6 @@ function getSpringer() { // documents
 }
 
 function gatherResources(rate) { // make calls to the APIs above each 'rate' seconds
-    var pusher = new Pusher({
-        appId: '1017884',
-        key: process.env.KEY_PUSHER,
-        secret: process.env.SECRET_PUSHER,
-        cluster: 'eu',
-        useTLS: true
-    });
-
     setInterval(function () {
         getCurrents();
         getOpenwhyd();
