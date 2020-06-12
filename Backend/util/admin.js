@@ -9,6 +9,7 @@ const parser = require('./parser');
 const inputValidator = require('./input_validator');
 
 let usables = {
+    // these variables indicate if the corresponding endpoints are avaiable to the client
     usableFeed: true,
     usablePreferences: true,
     usableAccount: true,
@@ -20,7 +21,8 @@ let usables = {
     usableDeleteAccount: true,
     usableLogout: true,
     usableGetRSS: true,
-
+    
+    // these functions set the variables above according to data.payload.option
     toggleFeed: function (data, response) {
         isAdmin(data, result => {
             if (data.method !== 'POST') {
@@ -367,33 +369,33 @@ function isAdmin(data, callback) {
     try {
         const token = parser.parseCookie(data)['token'];
 
-        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
-            if (err) {
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {  // check if user is authenticated or not
+            if (err) {  // user is not authenticated
                 callback(401);
             } else {
-                if (!decoded) {
+                if (!decoded) { // something went wrong, perhaps an internal error
                     callback(500);
-                } else {
-                    if (decoded.userName === 'admin') {
+                } else { // user is authenticatd
+                    if (decoded.userName === 'admin') { // user is admin
                         callback(200);
-                    } else {
+                    } else { // user is not admin
                         callback(401);
                     }
                 }
             }
         });
-    } catch {
+    } catch { // not a valid cookie
         callback(400);
     }
 }
 
 function exportUsers(data, response) {
     isAdmin(data, result => {
-        if (data.method !== 'GET') {
+        if (data.method !== 'GET') { 
             responder.status(response, 400);
             return;
         }
-        if (result === 200) {
+        if (result === 200) { // user is admin
             userModel.find( // get all users
                 null,
                 null,
@@ -409,16 +411,16 @@ function exportUsers(data, response) {
                         fs.writeFile(
                             file,
                             JSON.stringify(resources, null, ' '), err => {
-                                if (err) {
+                                if (err) { // something went wrong, perhaps an internal error
                                     responder.status(response, 500);
-                                } else {
+                                } else { 
                                     responder.status(response, 200);
                                 }
                             });
                     }
                 }
             );
-        } else {
+        } else { // the user isn't admin, unauthorized
             responder.status(response, result);
         }
     });
@@ -430,7 +432,7 @@ function exportResources(data, response) {
             responder.status(response, 400);
             return;
         }
-        if (result === 200) {
+        if (result === 200) { // user is admin
             resourceModel.find( // get all resources
                 null,
                 null,
@@ -446,7 +448,7 @@ function exportResources(data, response) {
                         fs.writeFile(
                             file,
                             JSON.stringify(resources, null, ' '), err => {
-                                if (err) {
+                                if (err) { // something went wrong, perhaps an internal error
                                     responder.status(response, 500);
                                 } else {
                                     responder.status(response, 200);
@@ -455,7 +457,7 @@ function exportResources(data, response) {
                     }
                 }
             );
-        } else {
+        } else { // user isn't admin, unauthorized
             responder.status(response, result);
         }
     });
@@ -464,7 +466,7 @@ function exportResources(data, response) {
 function manageUser(data, response) {
     isAdmin(data, result => {
         if (result === 200) {
-            if (data.method === 'POST') {
+            if (data.method === 'POST') { // create a new user
                 try {
                     const values = JSON.parse(data.payload);
 
@@ -479,11 +481,11 @@ function manageUser(data, response) {
                     let preferredDomains = values.preferredDomains.split(',');
                     let excludedSites = values.excludedSites.split(',');
 
-                    bcrypt.hash(password, saltRounds, (err, hash) => { // encrypt the password
+                    bcrypt.hash(password, saltRounds, (err, hash) => { 
                         if (err) {
-                            responder.status(response, 500); // something went wrong, perhaps an internal error
+                            responder.status(response, 500); 
                         } else {
-                            userModel.create( // create and store a new user
+                            userModel.create( 
                                 {
                                     _id: mongoose.Types.ObjectId(),
                                     username: username,
@@ -493,7 +495,7 @@ function manageUser(data, response) {
                                     created: new Date()
                                 },
                                 (err, user) => {
-                                    if (err) {
+                                    if (err) { 
                                         responder.status(response, 500);
                                     } else {
                                         responder.content(response, user);
@@ -502,10 +504,10 @@ function manageUser(data, response) {
                             );
                         }
                     });
-                } catch {
+                } catch { 
                     responder.status(response, 400);
                 }
-            } else if (data.method === 'GET') {
+            } else if (data.method === 'GET') { // get a info about a user
                 try {
                     const values = JSON.parse(data.payload);
 
@@ -517,32 +519,32 @@ function manageUser(data, response) {
                     const username = values.username;
 
                     userModel.find({ username: username }, (err, user) => {
-                        if (err) {
+                        if (err) { 
                             responder.status(response, 500);
                         }
                         else {
-                            if (user) {
-                                userModel.find(
+                            if (user) { 
+                                userModel.find( 
                                     { username: username },
                                     { password: 0 },
                                     (err, users) => {
-                                        if (err) { // something went wrong, perhaps an internal error
+                                        if (err) { 
                                             responder.status(response, 500);
-                                        } else {
+                                        } else { 
                                             responder.content(response, users);
                                         }
                                     }
                                 );
-                            } else {
+                            } else { 
                                 responder.status(response, 401);
                             }
                         }
                     });
 
-                } catch{
+                } catch{ // payload is not a valid json 
                     responder.status(response, 400)
                 }
-            } else if (data.method === 'DELETE') {
+            } else if (data.method === 'DELETE') { // delete a user
                 try {
                     const values = JSON.parse(data.payload);
 
@@ -553,18 +555,18 @@ function manageUser(data, response) {
 
                     const username = values.username;
 
-                    userModel.deleteOne({ username: username }, err => {
-                        if (err) {
+                    userModel.deleteOne({ username: username }, err => { 
+                        if (err) { 
                             responder.status(response, 500);
-                        } else {
+                        } else { 
                             responder.status(response, 200);
                         }
                     }
                     );
-                } catch{
+                } catch{ 
                     responder.status(response, 400);
                 }
-            } else if (data.method === 'PATCH') {
+            } else if (data.method === 'PATCH') { // updating user.preferredDomains and user.excludesSites for user.username 
                 try {
                     const values = JSON.parse(data.payload);
 
@@ -577,26 +579,26 @@ function manageUser(data, response) {
                     const preferredDomains = values.preferredDomains;
                     const excludedSites = values.excludedSites;
 
-                    userModel.updateOne(
+                    userModel.updateOne( // 
                         { username: username },
                         {
                             preferredDomains: values.preferredDomains.split(','),
                             excludedSites: values.excludedSites.split(',')
                         },
                         err => {
-                            if (err) {
+                            if (err) { // something went wrong, perhaps an internal error
                                 responder.status(response, 500);
                             } else {
                                 responder.status(response, 200);
                             }
                         });
-                } catch{
+                } catch{ // payload is not a valid json
                     responder.status(response, 400);
                 }
             } else {
                 responder.status(response, 400);
             }
-        } else {
+        } else { // user isn't admin, unauthorized
             responder.status(response, result);
         }
     });
@@ -605,7 +607,7 @@ function manageUser(data, response) {
 function manageResource(data, response) {
     isAdmin(data, result => {
         if (result === 200) {
-            if (data.method === 'POST') {
+            if (data.method === 'POST') { // create a new resource
                 try {
                     const values = JSON.parse(data.payload);
 
@@ -636,7 +638,7 @@ function manageResource(data, response) {
                 } catch {
                     responder.status(response, 400);
                 }
-            } else if (data.method === 'GET') {
+            } else if (data.method === 'GET') { // get all the resource which is associated with a domain/domains, a website/websites or an url
                 try {
                     const values = JSON.parse(data.payload);
                     let domains;
@@ -708,7 +710,7 @@ function manageResource(data, response) {
                 } catch {
                     responder.status(responder, 400);
                 }
-            } else if (data.method == 'PATCH') {
+            } else if (data.method == 'PATCH') { // updating a resource which is associated with an url
                 try {
                     const values = JSON.parse(data.payload)
 
@@ -742,7 +744,7 @@ function manageResource(data, response) {
                 } catch {
                     responder.status(response, status);
                 }
-            } else if (data.method == 'DELETE') {
+            } else if (data.method == 'DELETE') { // deleting a resource which is associated with an url
                 try {
                     const values = JSON.parse(data.payload)
 

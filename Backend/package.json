@@ -25,7 +25,6 @@
     "mongoose": "^5.9.18",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.4",
-    "pusher": "^3.0.1",
     "rss": "^1.2.2",
     "web-push": "^3.4.4",
     "xml-formatter": "^2.1.0",

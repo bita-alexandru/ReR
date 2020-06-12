@@ -1,4 +1,4 @@
-function parseCookie(data) {
+function parseCookie(data) { 
     let list = {};
     let cookies = data.headers.cookie;
 

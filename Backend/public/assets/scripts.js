@@ -84,7 +84,7 @@ function validateForm(id){
     let isValid = true;
     if(formInputs === null || formInputs === undefined) return true;
     for(let i = 0; i < formInputs.length; i++){
-        if(formInputs[i].getAttribute('val-required') !== null){ //alegem doar elementele care au proprietati de validare
+        if(formInputs[i].getAttribute('error-text') !== null){ //alegem doar elementele care au proprietati de validare
             if(!validateElement(formInputs[i].id)){
                 isValid = false;
             }

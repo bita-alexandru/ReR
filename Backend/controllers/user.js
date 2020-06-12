@@ -12,7 +12,7 @@ const parser = require('../util/parser');
 const indexView = require('../views/index');
 const httpErrorView = require('../views/http_error');
 
-function isAuthenticated(data, response) {
+function isAuthenticated(data, response) { // check if user is authenticated
     if (data.method === 'GET') {
         const token = parser.parseCookie(data).token;
 
@@ -28,7 +28,7 @@ function isAuthenticated(data, response) {
                 responder.content(response, content);
             }
         });
-    } else {
+    } else { 
         responder.status(response, 400);
     }
 }
@@ -88,9 +88,9 @@ function register(data, response) {
                                             created: new Date()
                                         },
                                         err => {
-                                            if (err) {
+                                            if (err) { // something went wrong, perhaps an internal error
                                                 responder.status(response, 500);
-                                            } else {
+                                            } else { // all good
                                                 responder.status(response, 200);
                                             }
                                         }
@@ -126,17 +126,17 @@ function login(data, response) {
             const username = values.username;
             const password = values.password;
 
-            userModel.findOne({ username: username }, '_id username password', (err, user) => {
-                if (err) {
+            userModel.findOne({ username: username }, '_id username password', (err, user) => { // check if the username is in the database
+                if (err) { // // something went wrong, perhaps an internal error 
                     responder.status(response, 500);
                 } else {
-                    if (user) {
-                        bcrypt.compare(password, user.password, (err, result) => {
-                            if (err) {
+                    if (user) { // found a user with the username
+                        bcrypt.compare(password, user.password, (err, result) => {  /// check if the password matches the password from database
+                            if (err) { // something went wrong, perhaps an internal error 
                                 responder.status(response, 500);
-                            } else {
-                                if (result) {
-                                    const token = jwt.sign({
+                            } else { 
+                                if (result) { // password and username matches
+                                    const token = jwt.sign({ //create an auth-token
                                         userId: user._id,
                                         userName: user.username
                                     },
@@ -145,28 +145,28 @@ function login(data, response) {
                                             expiresIn: '2d'
                                         }
                                     );
-
+                                    // all god, user is logged in
                                     response.setHeader('set-cookie', `token=${token}; HttpOnly; Secure`);
                                     responder.status(response, 200);
-                                } else {
+                                } else { // password  doesn't match, unauthorized 
                                     responder.status(response, 401);
                                 }
                             }
                         });
-                    } else {
+                    } else { // username doesn't match, unauthorized 
                         responder.status(response, 401);
                     }
                 }
             });
-        } catch{
+        } catch{ // payload is not a valid json
             responder.status(response, 400);
         }
-    } else {
+    } else { // not a valid method , bad request
         responder.status(response, 400);
     }
 }
 
-function logout(data, response) {
+function logout(data, response) { // unset users' cookie
     if (adminUtil.usables.usableLogout === false) {
         httpErrorView.serviceUnavailable(data, response);
         return;
@@ -198,49 +198,49 @@ function deleteAccount(data, response) {
             const token = parser.parseCookie(data).token;
             const password = values.password;
 
-            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
-                if (err) {
+            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
+                if (err) { // user is not authenticated 
                     responder.status(response, 401);
-                } else {
+                } else { // user is authenticated
                     if (decoded) {
                         const username = decoded.userName;
-                        userModel.findOne({ username: username }, 'password', (err, user) => {
-                            if (err) {
+                        userModel.findOne({ username: username }, 'password', (err, user) => { // check if the username is in the database
+                            if (err) { // something went wrong, perhaps an internal error
                                 responder.status(response, 500);
-                            } else {
-                                if (user) {
-                                    bcrypt.compare(password, user.password, (err, result) => {
-                                        if (err) {
+                            } else { 
+                                if (user) { // username is in the database
+                                    bcrypt.compare(password, user.password, (err, result) => { // check if the password matches the password from database 
+                                        if (err) { // something went wrong, perhaps an internal error
                                             responder.status(response, 500);
                                         } else {
-                                            if (result) {
+                                            if (result) { // passwords matches
                                                 user.deleteOne({ username: username }, (err) => {
-                                                    if (err) {
+                                                    if (err) { // something went wrong, perhaps an internal error
                                                         responder.status(response, 500);
                                                     } else {
                                                         response.setHeader('set-cookie', `token=null; HttpOnly; Secure`);
                                                         responder.status(response, 200);
                                                     }
                                                 })
-                                            } else {
+                                            } else { // password is wrong, unauthorized
                                                 responder.status(response, 401);
                                             }
                                         }
                                     });
-                                } else {
+                                } else { // username is wrong, unauthorized
                                     responder.status(response, 401);
                                 }
                             }
                         });
-                    } else {
+                    } else { // decodation failed(unprobable)
                         responder.status(response, 401);
                     }
                 }
             });
-        } catch{
+        } catch{ // payload is not a valid json
             responder.status(response, 400);
         }
-    } else {
+    } else { // not a valid method, bad request
         responder.status(response, 400);
     }
 }
@@ -309,7 +309,7 @@ function getPreferences(data, response) {
     if (data.method === 'GET') {
         const token = parser.parseCookie(data).token
 
-        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
+        jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
             if (err) { // user is anonymous
 
                 const content = {
@@ -322,8 +322,8 @@ function getPreferences(data, response) {
                 if (decoded) {
                     const username = decoded.userName;
 
-                    userModel.findOne({ username: username }, 'preferredDomains excludedSites', (err, user) => {
-                        if (err) {
+                    userModel.findOne({ username: username }, 'preferredDomains excludedSites', (err, user) => { // search in the database preferredDomains and excludedSites for username
+                        if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
                         } else {
                             if (user) {
@@ -334,17 +334,17 @@ function getPreferences(data, response) {
                                 };
 
                                 responder.content(response, content);
-                            } else {
+                            } else { // unauthorized 
                                 responder.status(response, 401);
                             }
                         }
                     })
-                } else {
+                } else { // something went wrong, perhaps an internal error
                     responder.status(response, 500);
                 }
             }
         });
-    } else {
+    } else { // not a valid method, bad request
         responder.status(response, 400);
     }
 }
@@ -359,44 +359,47 @@ function setPreferences(data, response) {
         try {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
+
             if (inputValidator.badStrings(values, ['domains', 'websites'])) {
                 responder.status(response, 400);
                 return;
             }
-            let domains = values.domains.split('_');
-            let websites = values.websites.split('_');
 
-            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
-                if (err) {
+            let domains = domains = values.domains.split('_');
+            let websites = websites = values.websites.split('_');
+
+            jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
+                if (err) { // user is not authenticated, unauthorized
                     responder.status(response, 401);
                 }
                 else {
-                    if (decoded) {
+                    if (decoded) { 
                         const username = decoded.userName;
-                        userModel.updateOne(
+
+                        userModel.updateOne( // update the database with the new domains and website for the user 
                             { username: username },
                             {
                                 preferredDomains: inputValidator.domains(domains),
                                 excludedSites: websites
                             },
                             err => {
-                                if (err) {
+                                if (err) { // something went wrong, perhaps an internal error 
                                     responder.status(response, 500);
-                                } else {
+                                } else { // all good
                                     responder.status(response, 200);
                                 };
                             }
                         );
-                    } else {
+                    } else { // unauthorized
                         responder.status(response, 401);
                     }
                 }
             });
-        } catch {
+        } catch { // payload is not a valid json
             responder.status(response, 400);
         }
 
-    } else {
+    } else { // not a valid method, bad request
         responder.status(response, 400);
     }
 }
@@ -481,7 +484,5 @@ function getRSS(data, response) {
         responder.status(response, 400);
     }
 }
-
-
 
 module.exports = { isAuthenticated, register, login, logout, deleteAccount, getFeed, getPreferences, setPreferences, getRSS };

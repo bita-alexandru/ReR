@@ -12,7 +12,7 @@ function password(password) {
     return regex.test(password);
 }
 
-function domains(domains) {
+function domains(domains) { // returns only the valid domains specified in the users' input
     let result = [];
 
     domains.forEach(domain => {
@@ -23,7 +23,7 @@ function domains(domains) {
     return result;
 }
 
-function badStrings(values, params) {
+function badStrings(values, params) { // check if the users input covers the requiremeds (only string and valid keys)
     let used = {};
 
     for (const [key, value] of Object.entries(values)) {

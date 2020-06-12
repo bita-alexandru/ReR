@@ -478,7 +478,7 @@ function getSpringer() { // documents
         });
 }
 
-function gatherResources(rate) {
+function gatherResources(rate) { // make calls to the APIs above each 'rate' seconds
     var pusher = new Pusher({
         appId: '1017884',
         key: process.env.KEY_PUSHER,
