@@ -140,6 +140,10 @@ min-width: 3rem;
   color: rgb(255,0,0);
 }
 
+.success{
+  color: #2D4159;
+}
+
 .display-none{
   display: none;
 }

@@ -105,6 +105,7 @@ function postRegister(){
     });
     fetch(request).then(response => {
         if(response.status === 200){
+            document.getElementById('success-register').classList.remove('valid');
             return true;
         }
         else if(response.status === 409){
