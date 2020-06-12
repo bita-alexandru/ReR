@@ -1,9 +1,16 @@
 const fetch = require('node-fetch');
+const util = require('util');
 const mongoose = require('mongoose');
+const webPush = require('web-push');
+const Pusher = require('pusher');
 const resourceModel = require('../models/resource');
 const preferences = require('./available_preferences');
+const { resolve } = require('path');
 
 const allDomains = preferences.all_domains;
+let unread = 0;
+let calledApis = 0;
+
 // currents
 const apiCurrents = 'https://api.currentsapi.services/v1/search';
 let prevCurrents = '';
@@ -19,18 +26,26 @@ let prevYoutube;
 // unsplash 
 const apiUnsplash = 'https://api.unsplash.com/photos?order_by=latest&per_page=100';
 // pexels 
-const apiPexels = 'https://api.pexels.com/v1/curated';
+const apiPexels = 'https://api.pexels.com/v1/curated?per_page=80';
 // core 
 const apiCore = 'https://core.ac.uk:443/api-v2/articles/search/*?page=_PAGE&pageSize=100&metadata=true&fulltext=false&citations=false&similar=false&duplicate=false&urls=true&faithfulMetadata=false&apiKey=';
 // ieee 
 const apiSpringer = 'http://api.springernature.com/meta/v2/json?q=type:Journal&p=100&api_key=';
 
 function save(resources) {
-    resourceModel.insertMany(resources, err => {
-        if (err) {
-            console.log('ERROR_INSERTMANY:' + err);
-        }
-    });
+    unread += resources.length;
+    calledApis++;
+
+    if (calledApis === 9) {
+        calledApis = 0;
+        console.log(unread);
+        unread = 0;
+    }
+    // resourceModel.insertMany(resources, err => {
+    //     if (err) {
+    //         console.log('ERROR_INSERTMANY:' + err);
+    //     }
+    // });
 }
 
 function getCurrents() { // news
@@ -86,6 +101,7 @@ function getCurrents() { // news
 
                 prevCurrents = news[0].id;
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_CURRENTS');
             }
@@ -238,6 +254,7 @@ function getUnsplash() { // images
 
                 resources.push(Resource);
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_UNSPLASH');
             }
@@ -283,7 +300,7 @@ function getPexels() { // images
                 })
 
                 resources.push(Resource);
-                save(resource);
+                save(resources);
             } catch{
                 console.log('ERROR_JSONPARSE_PEXELS');
             }
@@ -326,6 +343,7 @@ function getVimeo() { // videos
 
                 resources.push(Resource);
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_VIMEO');
             }
@@ -367,6 +385,7 @@ function getYoutube() { // videos
 
                 resources.push(Resource);
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_YOUTUBE');
             }
@@ -410,6 +429,7 @@ function getCore() { // documents
 
                 resources.push(Resource);
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_CORE');
             }
@@ -451,6 +471,7 @@ function getSpringer() { // documents
 
                 resources.push(Resource);
                 save(resources);
+
             } catch {
                 console.log('ERROR_JSONPARSE_SPRINGER');
             }
@@ -458,6 +479,14 @@ function getSpringer() { // documents
 }
 
 function gatherResources(rate) {
+    var pusher = new Pusher({
+        appId: '1017884',
+        key: process.env.KEY_PUSHER,
+        secret: process.env.SECRET_PUSHER,
+        cluster: 'eu',
+        useTLS: true
+    });
+
     setInterval(function () {
         getCurrents();
         getOpenwhyd();

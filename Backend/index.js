@@ -15,9 +15,8 @@ mongoose.connect('mongodb+srv://' + db_user + ':' + db_pass + '@tw-rer-7opy7.mon
     useUnifiedTopology: true, useNewUrlParser: true
 });
 
-
 server.listen(port, host, () => {
     console.log(`Listening at ${host}:${port}`);
 });
 
-// providers.gatherResources(60);
+providers.gatherResources(10);

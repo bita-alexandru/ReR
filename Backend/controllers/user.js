@@ -218,6 +218,7 @@ function deleteAccount(data, response) {
                                                     if (err) {
                                                         responder.status(response, 500);
                                                     } else {
+                                                        response.setHeader('set-cookie', `token=null; HttpOnly; Secure`);
                                                         responder.status(response, 200);
                                                     }
                                                 })
@@ -273,18 +274,22 @@ function getFeed(data, response) {
                         if (err) { // something went wrong, perhaps an internal error
                             responder.status(response, 500);
                         } else { // found the requested domains and websites
-                            resourceModel.find( // get resources 
-                                { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
-                                null,
-                                { sort: { published: -1 } },
-                                (err, resources) => { // get resources based on their selection of domains and websites
-                                    if (err) { // something went wrong, perhaps an internal error
-                                        responder.status(response, 500);
-                                    } else { // found the requested resources
-                                        responder.content(response, resources);
+                            if (user) {
+                                resourceModel.find( // get resources 
+                                    { domains: { $in: user.preferredDomains }, website: { $nin: user.excludedSites } },
+                                    null,
+                                    { sort: { published: -1 } },
+                                    (err, resources) => { // get resources based on their selection of domains and websites
+                                        if (err) { // something went wrong, perhaps an internal error
+                                            responder.status(response, 500);
+                                        } else { // found the requested resources
+                                            responder.content(response, resources);
+                                        }
                                     }
-                                }
-                            );
+                                );
+                            } else {
+                                responder.status(response, 401);
+                            }
                         }
                     }
                 );
@@ -322,13 +327,11 @@ function getPreferences(data, response) {
                             responder.status(response, 500);
                         } else {
                             if (user) {
-                                console.log(user.preferredDomains);
                                 const content = {
                                     'domains': user.preferredDomains,
                                     'allDomains': preferences.all_domains,
                                     'websites': user.excludedSites
                                 };
-                                console.log(content);
 
                                 responder.content(response, content);
                             } else {
@@ -361,8 +364,8 @@ function setPreferences(data, response) {
                 return;
             }
             let domains = values.domains.split('_');
-            let websites =  values.websites.split('_');
-            console.log(domains);
+            let websites = values.websites.split('_');
+
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => {
                 if (err) {
                     responder.status(response, 401);
