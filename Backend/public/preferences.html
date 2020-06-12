@@ -19,15 +19,34 @@
 <body>
 
   <div class="row" style="border-radius: 0.5rem; height: 4rem; background: #f7f9fb; margin-bottom: 1rem;">
-    <div class="col-2" style="margin-top:auto; margin-bottom: auto;text-align: center;">
-      <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">TOPIKS</span>
+
+    <div class="col-2" style="margin-top:auto;margin-bottom:auto;text-align: center;">
+        <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">TOPIKS</span>
     </div>
-  </div>
+
+    <div class="col-8 center" style="margin-top:auto;margin-bottom:auto;text-align: center;">
+        
+    </div>
+    <div class="col-2 center">
+        <span>
+            <a style="text-decoration: none" href="https://github.com/bita-alexandru/ReR" target="_blank"
+                rel='noopener'>
+                <img class="image-size" alt="Github" src="https://img.icons8.com/wired/50/000000/github.png" />
+            </a>
+        </span>
+        <span>
+            <a href="/get_rss">
+                <img style="text-decoration: none" class="image-size" alt="RSS"
+                    src="https://img.icons8.com/wired/64/000000/rss.png" />
+            </a>
+        </span>
+
+    </div>
+</div>
 
   <div class="row">
     <div class="col-2">
       <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
-
         <ul style="list-style: none;">
           <li>
             <a href="/" style="text-decoration: none;">
@@ -82,7 +101,7 @@
               </div>
               <div class="row">
                 <div class="col-9">
-                  <input type="textbox" class="form-control" id="excluded-website" error-text='The website is invalid.'
+                  <input type="text" class="form-control" id="excluded-website" error-text='The website is invalid.'
                      validation-regex='^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$' />
                   <span id="excluded-website-error" class="valid"></span>
                 </div>
@@ -100,10 +119,10 @@
             </div>
             <div class="row">
               <div class="offset-9 col-2" style="margin-left: 80.5%;">
-                <input class="form-control" type="submit" id="preferences" class="simple-btn" value="Submit" />
+                <input class="form-control simple-btn" type="submit" id="preferences" value="Submit" />
                 
               </div>
-              <span id="fail-setPreferences" style="margin-left: 15%;" class="valid invalid">You must be logged in first in order to set preferences!</span>
+              <span id="fail-setPreferences" style="margin-left: 22.5%;" class="valid invalid">You must be logged in first in order to set preferences!</span>
             </div>
           </form>
           <script>checkLoggedInFor(getPreferences);</script>
@@ -111,6 +130,9 @@
       </div>
     </div>
   </div>
+
+  <p style="font-size: 10px; margin-left: 25%; margin-right: 25%; text-align: center; margin-top: 3%;">&copy; TOPIKS is
+    a multimedia aggregator developed by Adam Ioana, Bita Alexandru and Danu Teodor</p>
 </body>
 
 </html>

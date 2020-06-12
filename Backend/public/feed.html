@@ -10,6 +10,8 @@
   <title>Feed</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+  <a href="https://icons8.com/icon/48708/github"></a>
+  <a href="https://icons8.com/icon/48564/rss"></a>
 
 
   <link rel="stylesheet" href="assets/styles.css">
@@ -29,6 +31,20 @@
 
     <div class="col-8 center" style="margin-top:auto;margin-bottom:auto;text-align: center;">
       <a id="newPosts" class="valid form-control newPostBtn" href="/">New Posts!</a>
+    </div>
+    <div class="col-2 center">
+      <span>
+        <a style="text-decoration: none" href="https://github.com/bita-alexandru/ReR" target="_blank" rel='noopener'>
+          <img class="image-size" alt="Github" src="https://img.icons8.com/wired/50/000000/github.png" />
+        </a>
+      </span>
+      <span>
+        <a href="/get_rss">
+          <img style="text-decoration: none" class="image-size" alt="RSS"
+            src="https://img.icons8.com/wired/64/000000/rss.png" />
+        </a>
+      </span>
+
     </div>
   </div>
 
@@ -55,16 +71,21 @@
         </ul>
 
       </div>
+
+
     </div>
 
     <div class="col-7 ml-1">
-      <div id="content" style="max-height: 650px; overflow: hidden; overflow-y:auto;">
+      <div id="content" style="max-height: 620px; overflow: hidden; overflow-y:auto;">
         <div>
           <script>getFeed();</script>
         </div>
       </div>
     </div>
   </div>
+
+  <p style="font-size: 10px; margin-left: 25%; margin-right: 25%; text-align: center; margin-top: 1.25%;">&copy; TOPIKS is
+    a multimedia aggregator developed by Adam Ioana, Bita Alexandru and Danu Teodor</p>
 
 </body>
 
