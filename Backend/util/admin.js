@@ -674,7 +674,7 @@ function manageResource(data, response) {
                                 }
                             }
                         );
-                    } else if (typeof (values.domains) !== 'undefined') {
+                    } else if (typeof (values.domains) === 'string') {
                         domains.split(',');
 
                         resourceModel.find(
@@ -689,7 +689,7 @@ function manageResource(data, response) {
                                 }
                             }
                         );
-                    } else if (typeof (values.website) != 'undefined') {
+                    } else if (typeof (values.website) === 'string') {
                         websites.split(',');
 
                         resourceModel.find(
