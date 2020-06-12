@@ -359,21 +359,22 @@ function setPreferences(data, response) {
         try {
             const token = parser.parseCookie(data).token
             const values = JSON.parse(data.payload);
-
+            
             if (inputValidator.badStrings(values, ['domains', 'websites'])) {
                 responder.status(response, 400);
                 return;
             }
 
-            let domains = domains = values.domains.split('_');
-            let websites = websites = values.websites.split('_');
-
+            let domains = values.domains.split('_');
+            let websites = values.websites.split('_');
+            
             jwt.verify(token, process.env.AUTH_TOKEN, (err, decoded) => { // check if user is authenticated or not
                 if (err) { // user is not authenticated, unauthorized
                     responder.status(response, 401);
                 }
                 else {
                     if (decoded) {
+                        console.log(4)
                         const username = decoded.userName;
 
                         userModel.updateOne( // update the database with the new domains and website for the user 
