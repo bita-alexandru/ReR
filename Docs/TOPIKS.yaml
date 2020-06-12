@@ -1,0 +1,1651 @@
+openapi: 3.0.0
+tags:
+  - name: page_content
+    description: Return HTML/CSS/JS content
+  - name: user_operation
+    description: Handle user operations
+  - name: admin_operation
+    description: Handle admin operations
+info:
+  title: ReR-API
+  version: '1.0'
+  description: 'Mashup Application with built-in notifications, also available as a chromium extension.'
+  contact:
+    name: Alexandru Bita
+    email: bita.alexandru24@gmail.com
+    url: https://salty-river-31938.herokuapp.com/
+  termsOfService: tos-url-tba
+  license:
+    name: license-tba
+    url: license-url-tbaa
+servers:
+  - url: 'https://salty-river-31938.herokuapp.com/'
+paths:
+  /get_feed:
+    get:
+      summary: ''
+      tags:
+        - user_operation
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  resources:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/resource'
+                required:
+                  - success
+                  - resources
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      operationId: get-get_feed
+      description: "Get the resources corresponding to the user's preferred websites and domains (the default ones if the user is not logged in)"
+      parameters: []
+  /set_preferences:
+    parameters: []
+    put:
+      summary: ''
+      operationId: put-set_preferences
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                required:
+                  - success
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '401':
+          description: Unauthorized
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      description: "Update user's preferred domains and websites"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          required: true
+          name: Auth-Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                websites:
+                  type: array
+                  items:
+                    type: string
+                domains:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - websites
+                - domains
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+      tags:
+        - user_operation
+  /get_preferences:
+    get:
+      summary: ''
+      tags:
+        - user_operation
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  websites:
+                    type: array
+                    items:
+                      type: string
+                  domains:
+                    type: array
+                    items:
+                      type: string
+                required:
+                  - success
+                  - websites
+                  - domains
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      operationId: get-get_preferences
+      description: "Get current's user preferred domains and websites (the default ones if the user is not loggedd in)"
+      parameters: []
+  /register:
+    post:
+      summary: ''
+      operationId: post-register
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                required:
+                  - success
+          headers:
+            set-cookie:
+              schema:
+                type: string
+                default: token
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    default: 'false'
+                    type: string
+                required:
+                  - success
+        '409':
+          description: Conflict
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      description: Create and store a new account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 16
+                  pattern: '^(?=.{3,16}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$'
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 24
+                  pattern: "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*._\\-]).{8,24}$"
+              required:
+                - username
+                - password
+      tags:
+        - user_operation
+  /login:
+    post:
+      summary: ''
+      operationId: post-login
+      responses:
+        '200':
+          description: OK
+          headers:
+            Auth-Token:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                required:
+                  - success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      description: Return an Auth-Token for accessing more domains and websites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 16
+                  pattern: '^(?=.{3,16}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$'
+                password:
+                  type: string
+                  minLength: 68
+                  maxLength: 24
+                  pattern: "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*._\\-]).{8,24}$"
+              required:
+                - username
+                - password
+      tags:
+        - user_operation
+  /delete_account:
+    delete:
+      summary: ''
+      operationId: delete-delete_account
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                required:
+                  - success
+              examples: {}
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+        '401':
+          description: Unauthorized
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+              examples: {}
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+                required:
+                  - success
+      description: Delete account associated with request.Auth-Token
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: password
+      tags:
+        - user_operation
+  /:
+    get:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                description: content
+      operationId: get-index
+      description: Return the static file corresponding to feed.html
+      tags:
+        - page_content
+    parameters: []
+  /account:
+    get:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                description: content
+      operationId: get-account
+      description: Return the static file corresponding to account.html
+      tags:
+        - page_content
+  /preferences:
+    get:
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                description: content
+      operationId: get-preferences
+      description: Return the static file corresponding to preferences.html
+      tags:
+        - page_content
+  /admin/manage/user:
+    get:
+      tags:
+        - admin_operation
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      username:
+                        type: string
+                      preferredDomains:
+                        type: string
+                      excludedSites:
+                        type: string
+                      created:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-admin-manage-user
+      description: Get all the info about a user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: username
+    post:
+      summary: ''
+      operationId: post-admin-manage-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      preferredDomains:
+                        type: string
+                      excludedSites:
+                        type: string
+                      created:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                preferredDomains:
+                  type: string
+                excludedSites:
+                  type: string
+              required:
+                - username
+                - password
+                - preferredDomains
+                - excludedSites
+      tags:
+        - admin_operation
+      description: Create a new user
+    delete:
+      summary: ''
+      operationId: delete-admin-manage-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  succes:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      description: Delete a user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: username
+    patch:
+      summary: ''
+      operationId: patch-admin-manage-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                preferredDomains:
+                  type: string
+                excludedSites:
+                  type: string
+      tags:
+        - admin_operation
+      description: Update a user preferred domains and websites
+  /admin/manage/resource:
+    get:
+      summary: ''
+      tags:
+        - admin_operation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  resource:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      domains:
+                        type: string
+                      url:
+                        type: string
+                      website:
+                        type: string
+                      image:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-admin-manage-resource
+      description: Get all the info about an resource
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: domains
+        - schema:
+            type: string
+          in: query
+          name: websites
+        - schema:
+            type: string
+          in: query
+          name: url
+    post:
+      summary: ''
+      operationId: post-admin-manage-resource
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+                  resource:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      domains:
+                        type: array
+                        items:
+                          type: string
+                      url:
+                        type: string
+                      website:
+                        type: string
+                      image:
+                        type: string
+                      created:
+                        type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                domains:
+                  type: array
+                  items:
+                    type: string
+                url:
+                  type: string
+                website:
+                  type: string
+                image:
+                  type: string
+              required:
+                - title
+                - description
+                - domains
+                - url
+                - website
+                - image
+      tags:
+        - admin_operation
+      description: Create an new resource
+    delete:
+      summary: ''
+      operationId: delete-admin-manage-resource
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  succes:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      description: Delete an resource
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: url
+    patch:
+      summary: ''
+      operationId: patch-admin-manage-resource
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                newUrl:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                domains:
+                  type: array
+                  items:
+                    type: string
+                website:
+                  type: string
+                image:
+                  type: string
+              required:
+                - url
+                - newUrl
+      tags:
+        - admin_operation
+      description: 'Update an resource url, domains, website, title or description'
+  /admin/export/resources:
+    get:
+      summary: ''
+      tags:
+        - admin_operation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-admin-export-resources
+      description: Export all the resource and info about them
+  /admin/export/users:
+    get:
+      summary: ''
+      tags:
+        - admin_operation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-admin-export-users
+      description: 'Export all the user and info about them '
+  /admin/toggle/feed:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-feed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+      tags:
+        - admin_operation
+  /admin/toggle/account:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+      tags:
+        - admin_operation
+      description: ''
+  /admin/toggle/preferences:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-preferences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+      tags:
+        - admin_operation
+  /admin/toggle/login:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+      tags:
+        - admin_operation
+  /admin/toggle/register:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-register
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/delete_account:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-delete_account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/get_feed:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-get_feed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/get_prefences:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-get_preferences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/set_preferences:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-set_prefences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/logout:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-logout
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /admin/toggle/get_rss:
+    post:
+      summary: ''
+      operationId: post-admin-toggle-get_rss
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      tags:
+        - admin_operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+  /logout:
+    get:
+      summary: ''
+      tags:
+        - user_operation
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-logout
+      description: "End the user's session"
+  /get_rss:
+    get:
+      summary: ''
+      tags:
+        - user_operation
+      responses:
+        '200':
+          description: OK
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    default: 'true'
+        '400':
+          description: Bad Request
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+        '500':
+          description: Internal Server Error
+          headers:
+            content-type:
+              schema:
+                type: string
+                default: text/json
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: 'false'
+      operationId: get-get_rss
+      parameters: []
+      description: 'Get an RSS feed '
+components:
+  schemas:
+    user:
+      title: user
+      type: object
+      description: provided via POST /register and stored into the database
+      x-tags:
+        - model
+      properties:
+        _id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        excludedSites:
+          type: array
+          items:
+            type: string
+        preferredDomains:
+          type: array
+          items:
+            type: string
+      required:
+        - _id
+        - username
+        - password
+        - excludedSites
+        - preferredDomains
+    resource:
+      title: resource
+      type: object
+      x-tags:
+        - model
+      description: provided via public APIs and stored into the database
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+        published:
+          type: string
+        image:
+          type: string
+      required:
+        - _id
+        - title
+        - description
+        - domains
+        - source
