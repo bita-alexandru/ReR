@@ -9,6 +9,8 @@
     <title>Account</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <a href="https://icons8.com/icon/48708/github"></a>
+    <a href="https://icons8.com/icon/48564/rss"></a>
 
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="assets/gridstyle.css">
@@ -20,40 +22,61 @@
 <body>
 
     <div class="row" style="border-radius: 0.5rem; height: 4rem; background: #f7f9fb; margin-bottom: 1rem;">
-        <div class="col-2" style="margin-top:auto; margin-bottom: auto;text-align: center;">
-          <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">TOPIKS</span>
+
+        <div class="col-2" style="margin-top:auto;margin-bottom:auto;text-align: center;">
+            <span class="logo" style="margin-left: 25%; margin-top:auto; margin-bottom: auto;">TOPIKS</span>
         </div>
-      </div>
-    
-      <div class="row">
+
+        <div class="col-8 center" style="margin-top:auto;margin-bottom:auto;text-align: center;">
+            
+        </div>
+        <div class="col-2 center">
+            <span>
+                <a style="text-decoration: none" href="https://github.com/bita-alexandru/ReR" target="_blank"
+                    rel='noopener'>
+                    <img class="image-size" alt="Github" src="https://img.icons8.com/wired/50/000000/github.png" />
+                </a>
+            </span>
+            <span>
+                <a href="/get_rss">
+                    <img style="text-decoration: none" class="image-size" alt="RSS"
+                        src="https://img.icons8.com/wired/64/000000/rss.png" />
+                </a>
+            </span>
+
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-2">
-          <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
-    
-            <ul style="list-style: none;">
-              <li>
-                <a href="/" style="text-decoration: none;">
-                  <div>Feed</div>
-                </a>
-              </li>
-              <li>
-                <a href="/preferences" style="text-decoration: none;">
-                  <div>Preferences</div>
-                </a>
-              </li>
-              <li>
-                <a href="/account" style="text-decoration: none;">
-                  <div>Account</div>
-                </a>
-              </li>
-            </ul>
-    
-          </div>
+            <div class="sidebar" style="width: 75%; margin-left: 25%; margin-right: 25%;">
+
+                <ul style="list-style: none;">
+                    <li>
+                        <a href="/" style="text-decoration: none;">
+                            <div>Feed</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/preferences" style="text-decoration: none;">
+                            <div>Preferences</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/account" style="text-decoration: none;">
+                            <div>Account</div>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
 
         <div class="col-7 ml-1">
             <div id="content" style="max-height: 600px; overflow: hidden; overflow-y:auto; ">
-                <div class="card" style="background-color: #f2f8fc;" >
-                    <form onsubmit="return postRegister();" id="register-account" action="register" method="post" class="display-none">
+                <div class="card" style="background-color: #f2f8fc;">
+                    <form onsubmit="return postRegister();" id="register-account" action="register" method="post"
+                        class="display-none">
                         <div class="row">
                             <h3>Create Account</h3>
                         </div>
@@ -63,10 +86,14 @@
                                 Username:
                             </div>
                             <div class="col-8">
-                                <input  class="form-control" type="text" id="register-username" name="username" error-text="The username must contain between 3-16 characters, no special characters, only english letters and numbers."
-                                val-required="true" validation-regex="^(?=.{3,16}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?![_.])$"  />
+                                <input class="form-control" type="text" id="register-username" name="username"
+                                    error-text="The username must contain between 3-16 characters, no special characters, only english letters and numbers."
+                                    val-required="true"
+                                    validation-regex="^(?=.{3,16}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?![_.])$" />
                                 <span id="register-username-error" class="valid"></span>
-                                <span id="fail-register" style="margin-left: 13%;" class="valid invalid">This username is already taken.</span>
+                                <span id="fail-register" style="margin-left: 13%;" class="valid invalid">This
+                                    username
+                                    is already taken.</span>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -74,9 +101,11 @@
                                 Password:
                             </div>
                             <div class="col-8">
-                                <input class="form-control" type="password" id="register-password" name="password" error-text="The password must contain between 8-24 characters, at least one special character, one number amd one uppercase letter."
-                                val-required="true" validation-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*._\-]).{8,24}$"/>
-                                 <span id="register-password-error" class="valid"></span>
+                                <input class="form-control" type="password" id="register-password" name="password"
+                                    error-text="The password must contain between 8-24 characters, at least one special character, one number amd one uppercase letter."
+                                    val-required="true"
+                                    validation-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*._\-]).{8,24}$" />
+                                <span id="register-password-error" class="valid"></span>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -84,8 +113,9 @@
                                 Confirm Password:
                             </div>
                             <div class="col-8">
-                                <input class="form-control" type="password" id="confirmed-password" name="confirmPassword" error-text="The password does not coincide."
-                                val-required="true" validation-custom='checkPassword'/>
+                                <input class="form-control" type="password" id="confirmed-password"
+                                    name="confirmPassword" error-text="The password does not coincide."
+                                    val-required="true" validation-custom='checkPassword' />
                                 <span id="confirmed-password-error" class="valid"></span>
                             </div>
                         </div>
@@ -97,7 +127,8 @@
                         <hr />
                     </form>
 
-                    <form id="login-account" onsubmit="return postLogin();" action="login" method="post" class="display-none">
+                    <form id="login-account" onsubmit="return postLogin();" action="login" method="post"
+                        class="display-none">
                         <div class="row">
                             <h3>Login</h3>
                         </div>
@@ -107,7 +138,9 @@
                                 Username:
                             </div>
                             <div class="col-8">
-                                <input error-text="The field Username is required." val-required="true" validation-custom="checkNull" class="form-control" type="text" id="loginUsername" name="username" />
+                                <input error-text="The field Username is required." val-required="true"
+                                    validation-custom="checkNull" class="form-control" type="text" id="loginUsername"
+                                    name="username" />
                                 <span id="loginUsername-error" class="valid"></span>
                             </div>
                         </div>
@@ -116,12 +149,16 @@
                                 Password:
                             </div>
                             <div class="col-8">
-                                <input error-text="The field Password is required." val-required="true" validation-custom="checkNull" class="form-control" type="password" id="loginPassword" name="password" />
+                                <input error-text="The field Password is required." val-required="true"
+                                    validation-custom="checkNull" class="form-control" type="password"
+                                    id="loginPassword" name="password" />
                                 <span id="loginPassword-error" class="valid"></span>
                             </div>
                         </div>
                         <div>
-                            <span style="margin-left: 25%;"id="fail-login" class="valid invalid">Username or password is incorrect.</span>
+                            <span style="margin-left: 25%;" id="fail-login" class="valid invalid">Username or
+                                password
+                                is incorrect.</span>
                         </div>
                         <div class="row mb-1">
                             <div class="offset-9 col-2">
@@ -131,7 +168,8 @@
                         <hr />
                     </form>
 
-                    <form onsubmit='return postDelete();' id="delete-account" action="delete_account" method="post" class="display-none">
+                    <form onsubmit='return postDelete();' id="delete-account" action="delete_account" method="post"
+                        class="display-none">
                         <div class="row">
                             <h3>Delete Account</h3>
                         </div>
@@ -145,7 +183,8 @@
                             </div>
                         </div>
 
-                        <span style="margin-left: 25%;" id="fail-delete" class="valid invalid">Password is incorrect.</span>
+                        <span style="margin-left: 25%;" id="fail-delete" class="valid invalid">Password is
+                            incorrect.</span>
 
                         <div class="row mb-1">
                             <div class="offset-9 col-2">
@@ -163,7 +202,8 @@
                         <div class="row mb-1">
                             <div class="offset-9 col-2">
 
-                                <button class="form-control" onclick="checkLoggedInFor(logout)" type="button">Logout</button>
+                                <button class="form-control" onclick="checkLoggedInFor(logout)"
+                                    type="button">Logout</button>
 
                             </div>
                         </div>
@@ -179,6 +219,7 @@
 </body>
 
 
-
+<p style="font-size: 10px; margin-left: 25%; margin-right: 25%; text-align: center; margin-top: 10%;">&copy; TOPIKS is
+    a multimedia aggregator developed by Adam Ioana, Bita Alexandru and Danu Teodor</p>
 
 </html>

@@ -204,3 +204,11 @@ min-width: 3rem;
   text-decoration: none;
   color: #DAE0E6;
 }
+
+.image-size{
+  max-width: 50px;
+  max-height: 50px;
+  margin-top: 3%;
+  padding: 2px;
+  margin-left: 5%;
+}
