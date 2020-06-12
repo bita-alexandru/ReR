@@ -21,6 +21,7 @@ function createCard(cardData, index) {
     newImage.classList.add('w-100');
     newImage.src = src;
     newImage.classList.add('image');
+    newImage.alt = title;
     newImageDiv.append(newImage);
     newImageDiv.style = "object-fit: cover; margin-top:0%; margin-bottom: auto;"
 
@@ -37,6 +38,7 @@ function createCard(cardData, index) {
     newTitle.style = "font-size: 1.4rem; font-weight: bolder; color: #0B0C10; ";
     newTitle.href = cardData.url;
     newTitle.target = "_blank";
+    newTitle.rel = 'noopener';
 
     titleRow.append(newTitle);
 
