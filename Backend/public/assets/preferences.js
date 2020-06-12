@@ -88,7 +88,11 @@ function removePreference(prefix, value) {
 }
 
 function getPreferences(logged) {
-    if (logged) {
+    if(!logged){
+        document.getElementById('fail-setPreferences').classList.remove('valid');
+    }
+
+    
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.method = 'GET';
 
@@ -99,13 +103,17 @@ function getPreferences(logged) {
                     let jsonData = JSON.parse(xmlhttp.response);
                     updateSelect(jsonData.allDomains, 'domains-select', 'Select Domain');
 
-                    for (let i = 0; i < jsonData.domains.length - 1; i++) {
-                        addNewPreference('domains-',  { text: jsonData.domains[i], value: i } );
+                    if(logged){
+                        for (let i = 0; i < jsonData.domains.length; i++) {
+                            addNewPreference('domains-', { text: jsonData.domains[i], value: jsonData.domains[i] });
+                        }
+    
+                        for (let i = 0; i < jsonData.websites.length; i++) {
+                            addNewPreference('websites-', { text: jsonData.websites[i], value: jsonData.websites[i] });
+                        }
                     }
 
-                    for (let i = 0; i < jsonData.websites.length - 1; i++) {
-                        addNewPreference('websites-',  { text: jsonData.websites[i], value: i } );
-                    }
+                    
 
 
 
@@ -118,5 +126,39 @@ function getPreferences(logged) {
         }
         xmlhttp.open('GET', '/get_preferences');
         xmlhttp.send();
+}
+
+function postSetPreferences() {
+    let form = document.forms["set-preferences"];
+    if (!validateForm('set-preferences')) return false;
+
+    let formData = new FormData(form);
+    if (!formData.get('domains')) {
+        document.getElementById('required').classList.remove('valid');
+        return false;
+    }
+    else {
+        let postQuery = "?domains=" + formData.get('domains') +
+            "&websites=" + formData.get('websites');
+        let request = new Request('/set_preferences', {
+            method: 'POST',
+            body: postQuery,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        fetch(request).then(response => {
+            if (response.status === 200) {
+                window.location = "/";
+                return true;
+            }
+            else if(response.status === 401){
+                document.getElementById('fail-setPreferences').classList.remove('valid');
+            }
+            else if(response.status === 500){
+                window.location.href = "/internal_error";
+            }
+        });
+        return false;
     }
 }

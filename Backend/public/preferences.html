@@ -7,6 +7,8 @@
 
   <title>Preferences</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/gridstyle.css">
   <script src="assets/scripts.js"></script>
@@ -98,7 +100,9 @@
             <div class="row">
               <div class="offset-9 col-2" style="margin-left: 80.5%;">
                 <input class="form-control" type="submit" id="preferences" class="simple-btn" value="Submit" />
+                
               </div>
+              <span id="fail-setPreferences" style="margin-left: 15%;" class="valid invalid">You must be logged in first in order to set preferences!</span>
             </div>
           </form>
           <script>checkLoggedInFor(getPreferences);</script>
