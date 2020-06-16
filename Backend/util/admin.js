@@ -399,7 +399,6 @@ function exportUsers(data, response) {
             userModel.find( // get all users
                 null,
                 null,
-                null,
                 { sort: { created: -1 } },
                 (err, resources) => {
                     if (err) { // something went wrong, perhaps an internal error
@@ -434,7 +433,6 @@ function exportResources(data, response) {
         }
         if (result === 200) { // user is admin
             resourceModel.find( // get all resources
-                null,
                 null,
                 null,
                 { sort: { published: -1 } },

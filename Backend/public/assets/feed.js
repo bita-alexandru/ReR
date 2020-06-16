@@ -113,12 +113,20 @@ function getFeed(load = true) {
                 let jsonData = JSON.parse(xmlhttp.response);
                 let content = document.getElementById('content');
                 clearTimeout(getFeedTimer);
-                getFeedTimer = setTimeout(function () { getContinousFeed() }, 15000);
+                getFeedTimer = setTimeout(function () { getContinousFeed(); }, 15000);
                 if (lastUpdateCount === 0) {
-                    lastUpdateCount = jsonData.length;
+                    lastUpdateCount = jsonData[0]._id;
                 }
                 else {
-                    newUpdateCount = Math.max(0, jsonData.length - lastUpdateCount);
+					
+					for(let i = 0; i < jsonData.length; i++) {
+						
+						if(jsonData[i]._id === lastUpdateCount) {
+							
+							newUpdateCount=i+1;
+							break;
+						}
+					}
                 }
                 if (load) {
                     for (let i = 0; i < jsonData.length; i++) {
@@ -139,15 +147,17 @@ function getFeed(load = true) {
 var getFeedTimer = null;
 
 function getContinousFeed() {
+
     if (true) {
         getFeed(false);
+
         if (newUpdateCount > 0) {
             let el = document.getElementById('newPosts');
             el.classList.remove('valid');
-            el.innerText = 'You have ' + newUpdateCount + ' new posts!';
+            el.innerText = newUpdateCount + ' topiks wait for you!';
 
             if (document.visibilityState !== 'visible') {
-                alert('Hei, you have new TOPIKS to check out!');
+                alert('Hey, you have new TOPIKS to check out!');
             }
         }
     }
