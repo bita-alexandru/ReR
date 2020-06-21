@@ -1,0 +1,1521 @@
+{
+	"info": {
+		"_postman_id": "9a3190f3-47dc-4dc5-b930-bcb3c9566946",
+		"name": "rer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin_ops",
+			"item": [
+				{
+					"name": "/admin/export/users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/export/users",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"export",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/export/resources",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/export/resources",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"export",
+								"resources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/user?username=admin",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/resource",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/resource?source=www.revisteonline.ro/cauta?editie=14",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "www.revisteonline.ro/cauta?editie=14"
+								},
+								{
+									"key": "domains",
+									"value": "Economy",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/user?username=Cavalerul&password=parolamea&preferredDomains=technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,video,photography,food,game,research&excludedSites=",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Cavalerul"
+								},
+								{
+									"key": "password",
+									"value": "parolamea"
+								},
+								{
+									"key": "preferredDomains",
+									"value": "technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,video,photography,food,game,research"
+								},
+								{
+									"key": "excludedSites",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/resource",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/resource?title=Inedit! SOC SOC SOC!&description=iti vei bate nevasta cand vei afla cum a aparut Inna in cea mai noua revista pt barbati !&domains=Economy,Politics,Animals&url=www.revisteonline.ro/cauta?editie=13&website=www.spotify.com&date=2000-02-22&image=https://image.shutterstock.com/image-photo/blur-background-naked-sexual-young-260nw-578298256.jpg",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Inedit! SOC SOC SOC!"
+								},
+								{
+									"key": "description",
+									"value": "iti vei bate nevasta cand vei afla cum a aparut Inna in cea mai noua revista pt barbati !"
+								},
+								{
+									"key": "domains",
+									"value": "Economy,Politics,Animals"
+								},
+								{
+									"key": "url",
+									"value": "www.revisteonline.ro/cauta?editie=13"
+								},
+								{
+									"key": "website",
+									"value": "www.spotify.com"
+								},
+								{
+									"key": "date",
+									"value": "2000-02-22"
+								},
+								{
+									"key": "image",
+									"value": "https://image.shutterstock.com/image-photo/blur-background-naked-sexual-young-260nw-578298256.jpg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"username\",\n    \"password\": \"password\",\n    \"preferredDomains\": [\n        \"domain\"\n    ],\n    \"preferredSites\": [\n        \"site\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/user?username=admin&preferredDomains=technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,video,photography,food,game,research&excludedSites=",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin"
+								},
+								{
+									"key": "preferredDomains",
+									"value": "technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,video,photography,food,game,research"
+								},
+								{
+									"key": "excludedSites",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/resource",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/resource?source=www.revisteonline.ro/cauta?editie=15&newSource=www.revisteonline.ro/cauta?editie=15",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "title",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"disabled": true
+								},
+								{
+									"key": "domains",
+									"value": "domain1,domain2",
+									"disabled": true
+								},
+								{
+									"key": "source",
+									"value": "www.revisteonline.ro/cauta?editie=15"
+								},
+								{
+									"key": "newSource",
+									"value": "www.revisteonline.ro/cauta?editie=15"
+								},
+								{
+									"key": "date",
+									"value": "2000-02-22",
+									"disabled": true
+								},
+								{
+									"key": "image",
+									"value": "image",
+									"disabled": true
+								},
+								{
+									"key": "website",
+									"value": "website",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/user?username=username",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "username"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/manage/resource",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/manage/resource?source=www.revisteonline.ro/cauta?editie=15",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"manage",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "source",
+									"value": "www.revisteonline.ro/cauta?editie=15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/feed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/feed?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/preferences?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"preferences"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/account?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"account"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/get_feed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/get_feed?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"get_feed"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/get_preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/get_preferences?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"get_preferences"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/set_preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/set_preferences?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"set_preferences"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/get_feed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Auth-Token",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZWRjYmE5OTdmM2U1ZjBjYzQ5YmI5ZGMiLCJ1c2VyTmFtZSI6ImFkbWluIiwiaWF0IjoxNTkxNTMxNjM0LCJleHAiOjE1OTE1MzUyMzR9.S2rupurCFAkq-WUZwmmLAW02kDcZGpRjNrXmFCirDOM"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/register?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"register"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/login?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"login"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/admin/toggle/delete_account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/admin/toggle/delete_account?option=false",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"admin",
+								"toggle",
+								"delete_account"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "pager_ops",
+			"item": [
+				{
+					"name": "/",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/preferences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/preferences",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/account",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/not_found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/not_found",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"not_found"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user_ops",
+			"item": [
+				{
+					"name": "/is_authenticated",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/is_authenticated",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"is_authenticated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/get_feed",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/get_feed",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"get_feed"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "alex",
+									"disabled": true
+								},
+								{
+									"key": "simp",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/get_rss",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/is_authenticated",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"is_authenticated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/get_preferences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.localhost.com:8443/get_preferences",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"get_preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/login?username=admin&password=admin",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin"
+								},
+								{
+									"key": "password",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/register?username=ioana1&password=Parola1_&confirmPassword=Parola1_",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"register"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "ioana1"
+								},
+								{
+									"key": "password",
+									"value": "Parola1_"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "Parola1_"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/set_preferences",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/set_preferences?domains=Blogging,Music,Gaming,Politics&websites=www.metin2.ro,www.youtube.com,www.reddit.com,www.tvr.ro",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"set_preferences"
+							],
+							"query": [
+								{
+									"key": "domains",
+									"value": "Blogging,Music,Gaming,Politics"
+								},
+								{
+									"key": "websites",
+									"value": "www.metin2.ro,www.youtube.com,www.reddit.com,www.tvr.ro"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/delete_account",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.localhost.com:8443/delete_account?password=password",
+							"protocol": "https",
+							"host": [
+								"www",
+								"localhost",
+								"com"
+							],
+							"port": "8443",
+							"path": [
+								"delete_account"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "password"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "public_apis",
+			"item": [
+				{
+					"name": "[news] currents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "sTv4hcibMrFZMfqxRfL1Q8IvWQ5Y1zkfbhFPOtYEs9YKXYNB",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.currentsapi.services/v1/search",
+							"protocol": "https",
+							"host": [
+								"api",
+								"currentsapi",
+								"services"
+							],
+							"path": [
+								"v1",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[songs] openwhyd",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&format=json&limit=100&api_key=fetch(apiOpenwhyd, {\n        method: 'get'\n    })\n        .catch(err => console.log('ERROR_API_OPENWHYD:' + err))\n        .then(response => {\n            if (response.ok) {\n                return response.json();\n            } else {\n                console.log('RESPONSE_API_OPENWHYD:');\n            }\n        })\n        .then(json => {\n            let resources = [];\n\n            try {\n                json = JSON.stringify(json);\n\n                const tracks = JSON.parse(json).tracks;\n\n                let r = Math.floor(Math.random() * tracks.length);\n                const split = tracks[r].eId.split('/');\n                let url = '';\n\n                switch (split[1]) {\n                    case 'sc':\n                        url = 'https://www.soundcloud.com/' + split[2] + '/' + split[3];\n                        url = url.replace('%23https:', '')\n                        break; s\n                    case 'dz':\n                        url = 'https://www.deezer.com/en/track' + split[2];\n                        break;\n                    case 'yt':\n                        url = 'https://www.youtube.com/watch?v=' + split[2];\n                        break;\n                    case 'bc':\n                        url = 'https://www.' + split[2] + '.bandcamp.com/track/' + split[3];\n                        break;\n                    case 'vi':\n                        url = 'https://www.vimeo.com/' + split[2];\n                        break;\n                    case 'dm':\n                        url = 'https://www.dailymotion.com/video/' + split[2];\n                        break;\n                    case 'fi':\n                        for (let i = 2; i < split.length(); i++)\n                            url += split[i];\n                        break;\n                }\n\n                const Resource = new resourceModel({\n                    _id: mongoose.Types.ObjectId(),\n                    title: tracks[r].name,\n                    description: tracks[r].text,\n                    domains: 'music',\n                    url: url,\n                    website: url.split('/')[2],\n                    published: new Date(),\n                    image: tracks[r].img\n                });\n\n                resources.push(Resource);\n                save(resources);\n            } catch {\n                console.log('ERROR_JSONPARSE_OPENWHYD');\n            }\n        });",
+							"protocol": "https",
+							"host": [
+								"ws",
+								"audioscrobbler",
+								"com"
+							],
+							"path": [
+								"2.0",
+								""
+							],
+							"query": [
+								{
+									"key": "method",
+									"value": "chart.gettoptracks"
+								},
+								{
+									"key": "format",
+									"value": "json"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								},
+								{
+									"key": "api_key",
+									"value": "fetch(apiOpenwhyd, {\n        method: 'get'\n    })\n        .catch(err => console.log('ERROR_API_OPENWHYD:' + err))\n        .then(response => {\n            if (response.ok) {\n                return response.json();\n            } else {\n                console.log('RESPONSE_API_OPENWHYD:');\n            }\n        })\n        .then(json => {\n            let resources = [];\n\n            try {\n                json = JSON.stringify(json);\n\n                const tracks = JSON.parse(json).tracks;\n\n                let r = Math.floor(Math.random() * tracks.length);\n                const split = tracks[r].eId.split('/');\n                let url = '';\n\n                switch (split[1]) {\n                    case 'sc':\n                        url = 'https://www.soundcloud.com/' + split[2] + '/' + split[3];\n                        url = url.replace('#https:', '')\n                        break; s\n                    case 'dz':\n                        url = 'https://www.deezer.com/en/track' + split[2];\n                        break;\n                    case 'yt':\n                        url = 'https://www.youtube.com/watch?v=' + split[2];\n                        break;\n                    case 'bc':\n                        url = 'https://www.' + split[2] + '.bandcamp.com/track/' + split[3];\n                        break;\n                    case 'vi':\n                        url = 'https://www.vimeo.com/' + split[2];\n                        break;\n                    case 'dm':\n                        url = 'https://www.dailymotion.com/video/' + split[2];\n                        break;\n                    case 'fi':\n                        for (let i = 2; i < split.length(); i++)\n                            url += split[i];\n                        break;\n                }\n\n                const Resource = new resourceModel({\n                    _id: mongoose.Types.ObjectId(),\n                    title: tracks[r].name,\n                    description: tracks[r].text,\n                    domains: 'music',\n                    url: url,\n                    website: url.split('/')[2],\n                    published: new Date(),\n                    image: tracks[r].img\n                });\n\n                resources.push(Resource);\n                save(resources);\n            } catch {\n                console.log('ERROR_JSONPARSE_OPENWHYD');\n            }\n        });"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[songs] lastfm",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&format=json&limit=100&api_key=59b51d81ec6bfdcb07936525f47f2e06",
+							"protocol": "https",
+							"host": [
+								"ws",
+								"audioscrobbler",
+								"com"
+							],
+							"path": [
+								"2.0",
+								""
+							],
+							"query": [
+								{
+									"key": "method",
+									"value": "chart.gettoptracks"
+								},
+								{
+									"key": "format",
+									"value": "json"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								},
+								{
+									"key": "api_key",
+									"value": "59b51d81ec6bfdcb07936525f47f2e06"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[videos] vimeo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer df438c2001ba4accfae0b45b1538c680",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vimeo.*+json;version=3.4",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"grant_type\": \"client_credentials\",\r\n  \"scope\": \"public\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.vimeo.com/videos?filter=trending",
+							"protocol": "https",
+							"host": [
+								"api",
+								"vimeo",
+								"com"
+							],
+							"path": [
+								"videos"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "trending"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[videos] youtube",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.googleapis.com/youtube/v3/videos?key=AIzaSyAfvFJElWELRneYcS6YHXSzV72mv1TQ1u0&part=snippet&chart=mostPopular",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"youtube",
+								"v3",
+								"videos"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "AIzaSyAfvFJElWELRneYcS6YHXSzV72mv1TQ1u0"
+								},
+								{
+									"key": "part",
+									"value": "snippet"
+								},
+								{
+									"key": "chart",
+									"value": "mostPopular"
+								},
+								{
+									"key": "regionCode",
+									"value": "ro",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[images] unsplash",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Client-ID 6yFEl35qLvjj8ukn6EY8NDasfd0DcPIt2_C5YJAIGXM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.unsplash.com/photos?order_by=latest&per_page=100",
+							"protocol": "https",
+							"host": [
+								"api",
+								"unsplash",
+								"com"
+							],
+							"path": [
+								"photos"
+							],
+							"query": [
+								{
+									"key": "order_by",
+									"value": "latest"
+								},
+								{
+									"key": "per_page",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[images] pexels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "563492ad6f91700001000001d9bf39e566d04377baa78c35de99871e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.pexels.com/v1/curated",
+							"protocol": "https",
+							"host": [
+								"api",
+								"pexels",
+								"com"
+							],
+							"path": [
+								"v1",
+								"curated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[docs] core",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://core.ac.uk/articles/search?query=molecules&apiKey=",
+							"protocol": "https",
+							"host": [
+								"core",
+								"ac",
+								"uk"
+							],
+							"path": [
+								"articles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "molecules"
+								},
+								{
+									"key": "apiKey",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[docs] springer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.springernature.com/meta/v2/json?q=type:Journal&p=100&api_key=294f0e0f67b85c279b284ed651b73f08",
+							"protocol": "http",
+							"host": [
+								"api",
+								"springernature",
+								"com"
+							],
+							"path": [
+								"meta",
+								"v2",
+								"json"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "type:Journal"
+								},
+								{
+									"key": "p",
+									"value": "100"
+								},
+								{
+									"key": "api_key",
+									"value": "294f0e0f67b85c279b284ed651b73f08"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

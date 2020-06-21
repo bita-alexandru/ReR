@@ -1,0 +1,15 @@
+News
+- https://currentsapi.services/en
+technology,lifestyle,business,science,entertainment,world,sports,politics,health,environment,travel,music,video,photography,food,game,research
+Music
+- https://openwhyd.github.io/openwhyd/API
+- https://www.last.fm/api
+Videos
+- https://developer.vimeo.com/
+- https://developers.google.com/youtube/v3
+Images
+- https://unsplash.com/developers
+- https://www.pexels.com/api/documentation
+Documents
+- https://core.ac.uk/services/#api
+- https://dev.springernature.com/docs
